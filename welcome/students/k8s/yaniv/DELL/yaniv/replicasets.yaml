@@ -8,11 +8,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: fe-v1
+      yaniv: fe-v1
   template:
     metadata:
       labels:
-        app: fe-v1
+        yaniv: fe-v1
     spec:
       containers:
       - name: redis
