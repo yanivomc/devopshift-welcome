@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: frontend
+  name: myreplicaset
   labels:
-    app: spring
+    app: spring-app
     tier: fe
 spec:
   replicas: 2
   selector:  
     matchLabels:
-      tier: frontend
+      tier: myreplicaset
   template: 
     metadata:
       labels:
-        tier: frontend
-  spec:      
-    containers:
-    - name: bear-app
-      image: supergiantkir/animals:bear
-      volumeMounts:
-      - name: app-storage
-        mountPath: /storage
-    - name: spring-music
-      image: yanivomc/spring-music:latest
-      volumeMounts:
-      - name: app-storage
-        mountPath: /storage
-    volumes:
-      - name: app-storage  
-        hostPath:
-        path:  /storage
-        type: DirectoryOrCreate
+        tier: myreplicaset
+    spec:      
+      containers:
+      - name: bear-app
+        image: supergiantkir/animals:bear
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      - name: spring-music
+        image: yanivomc/spring-music:latest
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      volumes:
+        - name: app-storage  
+          hostPath:
+          path:  /tmp/files
+          type: DirectoryOrCreate
 
  
 
