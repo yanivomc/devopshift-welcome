@@ -1,4 +1,4 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: frontend
@@ -14,19 +14,20 @@ spec:
     metadata:
       labels:
         tier: frontend
-    containers:
-    - name: app1
-      image: supergiantkir/animals:bear
-      volumeMounts:
+    spec:
+      containers:
+      - name: app1
+        image: supergiantkir/animals:bear
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      - name: app2
+        image: yanivomc/spring-music:latest
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      volumes:
       - name: app-storage
-        mountPath: /storage
-    - name: app2
-      image: yanivomc/spring-music:latest
-      volumeMounts:
-      - name: app-storage
-        mountPath: /storage
-    volumes:
-    - name: app-storage
-      hostPath:
-        path: /tmp/files
-        type: DirectoryOrCreate
+        hostPath:
+          path: /tmp/files
+          type: DirectoryOrCreate
