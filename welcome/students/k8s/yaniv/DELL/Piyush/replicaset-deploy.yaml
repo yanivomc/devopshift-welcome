@@ -29,8 +29,8 @@ spec:
       volumes:
         - name: app-storage  
           hostPath:
-          path: /tmp/files
-          type: DirectoryOrCreate
+            path: /tmp/files
+            type: DirectoryOrCreate
 
  
 
