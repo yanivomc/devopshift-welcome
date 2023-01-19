@@ -1,3 +1,8 @@
+# Create the file pod-storage.yaml
+# kubectl apply -f pod-storage.yaml
+# kubectl exec -ti redis -c redis -- bash
+# kubectl exec -ti redis -c spring-app -- bash
+
 apiVersion: v1
 kind: Pod
 metadata:
@@ -5,18 +10,18 @@ metadata:
 spec:
   containers:
   - name: redis
-    image: redis
+    image: redis:latest
     volumeMounts:
-    - name: redis-persistent-storage
+    - name: hostpathvolume
       mountPath: /data/redis
   - name: springapp
     image: yanivomc/spring-music:latest
     volumeMounts:
-    - name: redis-persistent-storage
+    - name: hostpathvolume
       mountPath: /app/data
   volumes:
-  - name: redis-persistent-storage
-    emptyDir: {}
+  - name: hostpathvolume
+    hostPath:
 
 
 
