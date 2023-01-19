@@ -8,13 +8,14 @@ spec:
     image: supergiantkir/animals:bear
     volumeMounts:
     - name: app-storage
-      mountPath: /tmp/files
+      mountPath: /storage
   - name: spring-music
     image: yanivomc/spring-music:latest
     volumeMounts:
     - name: app-storage
-      mountPath: /app/data
+      mountPath: /storage
   volumes:
     - name: app-storage  
       hostPath:
        path:  /storage
+      emptyDir: {}
