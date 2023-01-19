@@ -18,4 +18,5 @@ spec:
     - name: app-storage  
       hostPath:
        path:  /storage
+       type: DirectoryOrCreate
       
