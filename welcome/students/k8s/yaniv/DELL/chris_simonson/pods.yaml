@@ -16,6 +16,6 @@ spec:
       mountPath: /storage
   volumes:
   - name: app-storage
-    HostPath:
+    hostPath:
       path: /tmp/files
       type: DirectoryOrCreate
