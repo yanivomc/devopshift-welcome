@@ -13,15 +13,16 @@ spec:
     image: redis:latest
     volumeMounts:
     - name: hostpathvolume
-      mountPath: /data/redis
+      mountPath: /storage
   - name: springapp
     image: yanivomc/spring-music:latest
     volumeMounts:
     - name: hostpathvolume
-      mountPath: /app/data
+      mountPath: /sotrage
   volumes:
   - name: hostpathvolume
     hostPath:
+       path: /data
 
 
 
