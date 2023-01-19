@@ -1,7 +1,7 @@
 # Create the file pod-storage.yaml
 # kubectl apply -f pod-storage.yaml
 # kubectl exec -ti redis -c redis -- bash
-# kubectl exec -ti redis -c spring-app -- bash
+# kubectl exec -ti redis -c springapp -- bash
 
 apiVersion: v1
 kind: Pod
