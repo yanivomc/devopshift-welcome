@@ -18,3 +18,5 @@ To allow global rebase when commit without pull:
 ~~~
 git config --global pull.rebase false
 ~~~
+
+testing
