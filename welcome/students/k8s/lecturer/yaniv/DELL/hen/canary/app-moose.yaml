@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: animals-moose
+  labels:
+    app: animals  
+spec:
+  selector:
+    matchLabels:
+      app: animals  
+  replicas: 1 
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 100%
+        maxUnavailable: 0%
+  template:
+    metadata:
+      labels:
+        app: animals
+    spec:
+      containers:
+      - name: animals
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
