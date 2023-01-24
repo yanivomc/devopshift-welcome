@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment-recreate
 spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 1
+  replicas: 2 
   strategy:
-    type: Recreate
+      type: Recreate
   template: 
     metadata:
       labels:
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: supergiantkir/animals:moose
+        image: nginx:latest
         ports:
         - containerPort: 80

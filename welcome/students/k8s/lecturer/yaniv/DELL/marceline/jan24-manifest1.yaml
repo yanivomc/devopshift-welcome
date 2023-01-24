@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: animals-bear
+spec:
+  selector:
+    matchLabels:
+      app: animals
+  template:
+    metadata:
+      labels:
+        app: animals
+    spec:
+      containers:
+      - name: animals-bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80

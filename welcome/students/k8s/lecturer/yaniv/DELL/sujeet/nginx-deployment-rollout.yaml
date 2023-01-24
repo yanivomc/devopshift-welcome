@@ -1,14 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment-rollout
 spec:
   selector:
     matchLabels:
       app: nginx
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
   template: 
     metadata:
       labels:
@@ -16,6 +19,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: supergiantkir/animals:moose
+        image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
