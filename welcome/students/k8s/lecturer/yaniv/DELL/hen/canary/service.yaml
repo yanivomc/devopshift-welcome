@@ -1,0 +1,13 @@
+apiVersion: v1 
+kind: Service      # Create new service   
+metadata:
+  name: animals-service # Name of the service
+spec:
+  selector:
+    app: animals    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
