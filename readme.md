@@ -9,7 +9,12 @@ please use the following:
 http://REMOTEIP:5000
 ~~~
 
-please run on your CLI the following command to allow global rebase when commit without pull:
+please run on your CLI the following commands:
+~~~
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
+~~~
+To allow global rebase when commit without pull:
+~~~
 git config --global pull.rebase false
+~~~
