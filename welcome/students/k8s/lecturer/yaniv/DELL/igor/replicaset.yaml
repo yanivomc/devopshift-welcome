@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-replicaset
+  namespace: igor
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2 # tells replicaset to run 2 pods matching the template using the ReplicaSet
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:mainline-alpine
+        ports:
+        - containerPort: 80
