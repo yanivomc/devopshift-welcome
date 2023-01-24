@@ -6,12 +6,13 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 
+  replicas: 3
+  strategy:
+    type: Recreate
   template: 
     metadata:
       labels:
         app: nginx
-        student: marceline
     spec:
       containers:
       - name: nginx

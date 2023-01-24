@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: animals
+    client: "v1.2"
+  name: moose
+spec:       
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 0%
+  replicas: 1
+  selector:
+    matchLabels:
+        app: animals
+  template:
+    metadata:
+      labels:
+          app: animals
+    spec:
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose

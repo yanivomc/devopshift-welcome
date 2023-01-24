@@ -2,17 +2,18 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   labels:
-    app: fe  
+    app: fe
+    clienta/domain/fe: "v1.2"
   name: redis
 spec:
   replicas: 2
   selector:
     matchLabels:
-      yaniv: fe-v1
+        app: fe
   template:
     metadata:
       labels:
-        yaniv: fe-v1
+          app: fe
     spec:
       containers:
       - name: redis

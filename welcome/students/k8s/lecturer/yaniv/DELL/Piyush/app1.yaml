@@ -1,20 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment-test
+  name:  nginx-1
+  labels:
+    app: fe
+    client: "v1.2"
 spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 
+  replicas: 1
+  strategy:
+    type: Recreate
   template: 
     metadata:
       labels:
         app: nginx
-        student: marceline
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: nginx:mainline-alpine
         ports:
         - containerPort: 80

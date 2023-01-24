@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: animals
+spec:
+  selector:
+    matchLabels:
+      app: nginx  
+  replicas: 1 # tells deployment to run 2 pods matching the template using the ReplicaSet
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0
+  template: # create pods using pod definition in this template
+    metadata:
+      # unlike pod-nginx.yaml, the name is not included in the meta data as a unique name is
+      # generated from the deployment name
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        #image: nginx:1.7.9
+        ports:
+        - containerPort: 80

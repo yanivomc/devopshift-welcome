@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear
+  namespace: igor
+  labels:
+    app: animals
+    animal: bear
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+  selector:
+    matchLabels:
+      animal: bear
+  replicas: 1 # tells deployment to run 2 pods matching the template using the ReplicaSet
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: animals
+        animal: bear
+    spec:
+      containers:
+      - name: app2
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -1,20 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment-test
+  name: nginx-deployment-rollout
 spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
   template: 
     metadata:
       labels:
         app: nginx
-        student: marceline
     spec:
       containers:
       - name: nginx
-        image: nginx:latest
+        image: supergiantkir/animals:bear
         ports:
         - containerPort: 80

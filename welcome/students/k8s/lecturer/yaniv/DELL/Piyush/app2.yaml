@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-two
+  labels:
+    app: fe
+    client: "v1.2"
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+  template: 
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:mainline-alpine
+        ports:
+        - containerPort: 80
