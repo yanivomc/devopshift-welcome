@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 5 
+  replicas: 1 
   strategy:
     type: RollingUpdate
     rollingUpdate:

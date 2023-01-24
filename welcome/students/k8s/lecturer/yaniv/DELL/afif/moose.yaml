@@ -1,18 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: animals
 spec:
   selector:
     matchLabels:
       app: nginx  
   replicas: 1 # tells deployment to run 2 pods matching the template using the ReplicaSet
-  type: LoadBalancer
-  ports:
-  - name:  http-web
-    port:  80
-    protocol: TCP
-    targetPort: 80
   strategy:
     type: RollingUpdate
     rollingUpdate:
