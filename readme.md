@@ -8,3 +8,6 @@ please use the following:
 ~~~
 http://REMOTEIP:5000
 ~~~
+
+please run on your CLI the following command to allow global rebase when commit without pull:
+git config --global pull.rebase false
