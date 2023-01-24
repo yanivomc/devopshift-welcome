@@ -10,4 +10,6 @@ http://REMOTEIP:5000
 ~~~
 
 please run on your CLI the following command to allow global rebase when commit without pull:
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 git config --global pull.rebase false
