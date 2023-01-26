@@ -14,7 +14,7 @@ spec:
       - path: /bear(/|$)(.*)
         pathType: Prefix
         backend:
-          service:
+          service:ingre
              name: bear-service
              port:
                 number: 80
