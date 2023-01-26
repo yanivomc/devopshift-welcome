@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: bear
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -15,7 +15,7 @@ spec:
   template: 
     metadata:
       labels:
-        app: nginx
+        app: bear
     spec:
       containers:
       - name: nginx

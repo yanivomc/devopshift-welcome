@@ -1,21 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: bear
 spec:
   selector:
     matchLabels:
-      app: moose
+      app: bear
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
   template: 
     metadata:
       labels:
-        app: moose
+        app: bear
     spec:
       containers:
       - name: nginx
-        image: supergiantkir/animals:moose
+        image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
