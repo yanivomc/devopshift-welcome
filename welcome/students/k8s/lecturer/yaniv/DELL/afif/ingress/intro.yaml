@@ -17,6 +17,15 @@ spec:
         pathType: Prefix
         backend:
           service:
-             name: bear-svc
+             name: animals-srv-bear
+             port:
+                number: 80
+  - http:
+      paths:
+      - path: /app2(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: animals-srv-moose
              port:
                 number: 80

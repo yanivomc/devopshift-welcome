@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: animals
+    client: "v1.2"
+  name: bear
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+        app: animals
+  template:
+    metadata:
+      labels:
+          app: animals
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+  

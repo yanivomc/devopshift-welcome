@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bear
+    client: "v1.2"
+  name: bear
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+        app: bear
+  template:
+    metadata:
+      labels:
+          app: bear
+    spec:
+      containers:
+      - name: bear-pod
+        image: supergiantkir/animals:bear
+       
