@@ -1,0 +1,12 @@
+kind: Service      
+apiVersion: v1     
+metadata:
+  name: moose-svc 
+spec:
+  selector:
+    app: moose   
+  ports:          
+  - name: http-web    
+    protocol: TCP
+    port: 80
+    targetPort: 80

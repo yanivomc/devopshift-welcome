@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose
+spec:
+  selector:
+    matchLabels:
+      app: moose
+  replicas: 1
+  strategy:
+    type: Recreate
+  template: 
+    metadata:
+      labels:
+        app: moose
+    spec:
+      containers:
+      - name: nginx
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
