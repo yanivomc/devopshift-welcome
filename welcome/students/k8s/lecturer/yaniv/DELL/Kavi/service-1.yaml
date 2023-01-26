@@ -1,10 +1,10 @@
 kind: Service      # Create new service
 apiVersion: v1     
 metadata:
-  name: kavi-service # Name of the service
+  name: bear-service # Name of the service
 spec:
   selector:
-    app: nginx    # Run on any pod(s) with label - app: myapp
+    app: bear    # Run on any pod(s) with label - app: myapp
   ports:          # Map incoming port to target port
   - name: http-web    # Setting multiple ports listterns 
     protocol: TCP
