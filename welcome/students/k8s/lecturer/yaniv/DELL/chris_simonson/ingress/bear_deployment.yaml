@@ -7,14 +7,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: animal
+      app: bear
   strategy:
     type: Recreate
   replicas: 1
   template: 
     metadata:
       labels:
-        app: animal
+        app: bear
     spec:
       containers:
       - name: animal
