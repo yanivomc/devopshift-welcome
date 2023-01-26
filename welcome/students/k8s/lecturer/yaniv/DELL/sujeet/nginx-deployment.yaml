@@ -5,14 +5,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: moose
   replicas: 1
   strategy:
     type: Recreate
   template: 
     metadata:
       labels:
-        app: nginx
+        app: moose
     spec:
       containers:
       - name: nginx

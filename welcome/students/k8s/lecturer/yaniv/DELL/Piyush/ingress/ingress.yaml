@@ -7,16 +7,25 @@ metadata:
   annotations:
    nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
 
-
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /app1(/|$)(.*)
+      - path: /bear(/|$)(.*)
         pathType: Prefix
         backend:
           service:
              name: bear-svc
              port:
-                number: 80
+                name: http-web
+  - http:
+      paths:
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: moose-svc
+            port:
+                name: http-web
+  

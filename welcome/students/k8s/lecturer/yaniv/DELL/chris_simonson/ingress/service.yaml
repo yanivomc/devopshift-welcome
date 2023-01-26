@@ -1,7 +1,7 @@
 apiVersion: v1     
 kind: Service
 metadata:
-  name: bear # Name of the service
+  name: bear-svc # Name of the service
 spec:
   selector:
     app: bear    # Run on any pod(s) with label - app: myapp
@@ -15,7 +15,7 @@ spec:
 apiVersion: v1     
 kind: Service
 metadata:
-  name: moose # Name of the service
+  name: moose-svc # Name of the service
 spec:
   selector:
     app: moose    # Run on any pod(s) with label - app: myapp

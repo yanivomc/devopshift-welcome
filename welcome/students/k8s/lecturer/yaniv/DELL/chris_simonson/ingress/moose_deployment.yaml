@@ -3,11 +3,11 @@ kind: Deployment
 metadata:
   name: moose
   labels:
-    app: animal
+    app: moose
 spec:
   selector:
     matchLabels:
-      app: animal
+      app: moose
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -17,7 +17,7 @@ spec:
   template: 
     metadata:
       labels:
-        app: animal
+        app: moose
     spec:
       containers:
       - name: animal

@@ -1,0 +1,13 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: canary-service1 # Name of the service
+spec:
+  type: ClusterIP
+  selector:
+    app: canary-app2    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 80
