@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-animals
+  namespace: igor
+  labels:
+    app: animals
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /bear(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: bear-svc
+            port:
+              name: web
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: moose-svc
+            port:
+              name: web
