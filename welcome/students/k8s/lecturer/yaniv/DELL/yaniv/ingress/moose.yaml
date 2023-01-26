@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: moose
+    client: "v1.2"
+  name: moose
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+        app: moose
+  template:
+    metadata:
+      labels:
+          app: moose
+    spec:
+      containers:
+      - name: moose-pod
+        image: supergiantkir/animals:moose
+       
