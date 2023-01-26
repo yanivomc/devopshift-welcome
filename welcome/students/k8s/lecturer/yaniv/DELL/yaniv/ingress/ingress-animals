@@ -13,10 +13,19 @@ spec:
   rules:
   - http:
       paths:
-      - path: /app1(/|$)(.*)
+      - path: /bear(/|$)(.*)
         pathType: Prefix
         backend:
           service:
-             name: bear-svc
+             name: bear-srv
+             port:
+                number: 80
+  - http:
+      paths:
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-srv
              port:
                 number: 80
