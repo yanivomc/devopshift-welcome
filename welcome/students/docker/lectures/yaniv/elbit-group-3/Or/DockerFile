@@ -1,0 +1,5 @@
+FROM alpine:latest
+
+WORKDIR /usr/src/app
+
+CMD  echo "this is my first image"
