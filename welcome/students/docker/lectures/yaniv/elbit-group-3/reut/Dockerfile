@@ -1,0 +1,1 @@
+From alpine:latest
