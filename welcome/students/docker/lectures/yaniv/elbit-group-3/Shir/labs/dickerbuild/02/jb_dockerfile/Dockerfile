@@ -1,4 +1,7 @@
-FROM yanivomc/alpine-oraclejdk8:slim
+FROM yanivomc/a
+
+
+
 WORKDIR /app
 COPY ./spring-music.jar /app/
 EXPOSE 8080
