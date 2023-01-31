@@ -1,2 +1,2 @@
-From alpine:latest
-CMD echo ["this is my first image"]
+FROM alpine:latest
+CMD  ["echo", "this is my first image"]
