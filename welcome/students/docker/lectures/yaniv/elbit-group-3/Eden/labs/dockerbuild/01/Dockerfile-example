@@ -1,0 +1,18 @@
+# Java8 Alpine Release
+FROM frolvlad/alpine-oraclejdk8:slim
+
+RUN echo $VERSION > image_version 
+# Label Use Labels for descriptions and view it with docker inspect 
+LABEL multi.label1="value1" \  
+      description="Bug fix x.0 for client y" 
+# configure WorkDir inside the container
+WORKDIR /app
+# Mount HOST Folder 
+VOLUME ["./spring-boot-rest-example/dockerfile/artifact/"]
+# Copy Spring Boot File to target
+COPY ./spring-boot-rest-example-0.4.0.war ./spring-boot-rest-example-0.4.0.war
+#Expose Ports - ONLY EXPOSED - IT'S NOT Mapped. -p will be needed on run
+EXPOSE 8091
+EXPOSE 8090
+# The main purpose of a CMD is to provide defaults for an executing container
+CMD java -jar ./spring-boot-rest-example-0.4.0.war -Dspring.profiles.active=test 
