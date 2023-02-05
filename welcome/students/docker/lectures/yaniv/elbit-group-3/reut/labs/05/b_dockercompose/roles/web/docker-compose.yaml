@@ -6,10 +6,10 @@ services:
      - db_mysql     
    ports: 
      - 8080:8080
-   volumes: 
-       - ./artifacts:/code
+ #  volumes: 
+  #     - ./artifactsa:/code
    networks: 
-     - app_layer
+     - db_layer
    entrypoint: 
      - java 
      - -jar 
