@@ -6,10 +6,10 @@ services:
      - db_mysql     
    ports: 
      - 8080:8080
-   volumes: 
-       - ./artifactsa:/code
+#   volumes: 
+#       - ./artifactsa:/code
    networks: 
-     - app_layer
+     - db_layer
    entrypoint: 
      - java 
      - -jar 
@@ -33,4 +33,4 @@ networks:
  db_layer:
   driver: bridge
  app_layer:
-  driver: bridge
+  driver: bridgecic
