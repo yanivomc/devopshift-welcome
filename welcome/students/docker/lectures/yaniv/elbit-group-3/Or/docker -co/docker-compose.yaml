@@ -1,0 +1,26 @@
+version: "3.9"
+networks:
+ db-lan:
+ fe-lan:
+
+
+services:
+ spring-app: # ROLE NAME
+   # build: .
+   image: yanivomc/spring-music:latest
+   volumes:
+      - ./data:/mydata
+   ports:
+     - "80:8080"
+     - "90:9090"
+   networks:
+     - db-lan
+     - fe-lan
+ redis: # ROLE NAME
+   image: "redis:alpine"
+   networks:
+     - db-lan
+   volumes:
+      - ./data:/yourdata
+
+
