@@ -2,12 +2,12 @@ version: '3'
 services: 
   web: 
    build: .
-   depends_on:
-     - db_mysql     
+#   depends_on:
+#     - db_mysql     
    ports: 
      - 8080:8080
 #   volumes: 
-#       - ./artifactsa:/code
+#     - ./artifactsa:/code
    networks: 
      - db_layer
    entrypoint: 
@@ -33,4 +33,4 @@ networks:
  db_layer:
   driver: bridge
  app_layer:
-  driver: bridgecic
+  driver: bridge
