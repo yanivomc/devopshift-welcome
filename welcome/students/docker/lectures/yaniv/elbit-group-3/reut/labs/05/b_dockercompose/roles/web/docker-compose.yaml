@@ -1,13 +1,13 @@
 version: '3' 
 services: 
   web: 
-    build: ./roles/web/
+   build: ./roles/web/
    depends_on:
      - db_mysql     
    ports: 
      - 8080:8080
    volumes: 
-       - ./artifacts:/code
+       - ./artifactsa:/code
    networks: 
      - app_layer
    entrypoint: 
