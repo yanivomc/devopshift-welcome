@@ -7,7 +7,7 @@ services:
    ports: 
      - 8080:8080
    volumes: 
-       - ./artifactsa:/code
+       - ./artifacts:/code
    networks: 
      - app_layer
    entrypoint: 
