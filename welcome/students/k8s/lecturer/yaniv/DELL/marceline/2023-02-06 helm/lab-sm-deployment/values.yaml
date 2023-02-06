@@ -4,7 +4,7 @@
 
 appname: music
 
-replicas: 1
+replicas: 3
 
 image:
   image: yanivomc/spring-music
