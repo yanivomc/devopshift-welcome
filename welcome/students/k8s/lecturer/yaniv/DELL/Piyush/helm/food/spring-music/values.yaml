@@ -1,9 +1,0 @@
-database: 
-  dbname: db_mysql
-  dbtable: music
-pods: 
-  image: yanivomc/spring-music
-  tag: latest
-food:
-  drink: beer
-  eat: Peanut Butter and Jelly sandwich

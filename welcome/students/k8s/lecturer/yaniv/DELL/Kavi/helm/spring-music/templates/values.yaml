@@ -6,3 +6,11 @@ database_test:
   dbtable: music
 pods: 
   image: yanivomc/spring-music
+  tag: latest
+appName: spring-music
+serviceType: LoadBalancer
+replicas: 1
+
+food:
+  drink: beer
+  eat: Peanut Butter and Jelly Sandwich

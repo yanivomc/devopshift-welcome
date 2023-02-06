@@ -5,3 +5,5 @@ metadata:
 data:
   dbname: {{ .Values.database_prod.dbname }}
   dbtable: {{ .Values.database_prod.dbtable }}
+  drink: {{ .Values.food.drink | upper }}
+  eat: {{ .Values.food.eat | upper | trunc 13 | quote}}
