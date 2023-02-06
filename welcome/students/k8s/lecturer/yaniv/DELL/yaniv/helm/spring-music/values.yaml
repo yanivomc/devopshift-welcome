@@ -8,3 +8,6 @@ pods:
   image: spring-music
   repo: yanivomc
   tag: latest
+food:
+  drink: beer
+  eat: Peanut Butter and Jelly sandwich
