@@ -6,3 +6,14 @@ database_test:
   dbtable: music
 pods: 
   image: yanivomc/spring-music
+  tag: "latest"
+drink: "beer"
+eat: Peanut Butter and Jelly sandwich
+release:
+  port: 80
+  targetPort: 8080
+  replicas: 1
+  image: yanivomc/spring-music
+  tag: "latest"
+  service_type: LoadBalancer
+

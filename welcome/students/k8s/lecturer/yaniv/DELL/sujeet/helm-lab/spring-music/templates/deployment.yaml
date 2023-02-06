@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.name}}-music
+  name: {{ .Release.Name }}-music
 spec:
   selector: 
     matchLabels:
       app: music  
-  replicas: {{.Values.appenv.replicas}}
+  replicas: {{ .Values.appenv.replicas }}
   template:
     metadata:
       labels:
         app: music
     spec:
       containers:
-      - name: {{.Values.appname}}
-        image: {{.Values.appenv.image}}
+      - name: {{ .Values.appname }}
+        image: yanivomc/spring-music:{{ .Values.appenv.imagetag }}
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.appenv.targetPort }}
