@@ -5,6 +5,8 @@ metadata:
 data:
   dbname: {{ .Values.database_test.dbname }}
   dbtable: {{ .Values.database_test.dbtable }}
-  image: {{ .Values.image }}
-  tag: {{ .Values.tag }}
+  image: {{ .Values.pods.image }}:{{ .Values.pods.tag }}
+  drink: {{ .Values.drink | upper }} 
+  eat: {{ .Values.eat | upper | trunc 13 | quote}}
+
 

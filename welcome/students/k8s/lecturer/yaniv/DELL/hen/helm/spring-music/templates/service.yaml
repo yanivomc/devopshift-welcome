@@ -1,0 +1,14 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }}-spring-service 
+spec:
+  selector:
+    app: music    
+  type: {{ .Values.release.service_type }}  
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ .Values.release.port }}
+    targetPort: {{ .Values.release.targetPort }}
+
