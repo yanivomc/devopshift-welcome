@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Release.Name }}-configmap
-data:
-  dbname: {{ .Values.database.dbname_prod }}
-  dbtable: {{ .Values.dbtable }}
