@@ -12,5 +12,7 @@ food:
 appname: myspring1
 appenv:
   replicas: 1
-  image: yanivomc/spring-music:latest
+  imagetag: latest
+  port: 80
+  targetPort: 8080
 svc_type: LoadBalancer
