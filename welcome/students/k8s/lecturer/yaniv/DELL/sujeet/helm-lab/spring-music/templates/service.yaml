@@ -1,13 +1,13 @@
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: {{.Release.name}}-service #from RELEASE NAME
+  name: {{ .Release.Name }}-service #from RELEASE NAME
 spec:
   selector:
     app: music    
-  type: {{.Values.svc_tpe | default "NodePort" }}  #from values | DEFAULT TO NODEPORT
+  type: {{ .Values.svc_tpe | default "NodePort" }}  #from values | DEFAULT TO NODEPORT
   ports:         
   - name: http   
     protocol: TCP
-    port: 80
-    targetPort: 8080
+    port: {{ .Values.appenv.port }}
+    targetPort: {{ .Values.appenv.targetPort }}
