@@ -5,3 +5,4 @@ metadata:
 data:
   dbname: {{ .Values.database_test.dbname | upper}}
   dbtable: {{ .Values.database_test.dbtable | upper}}
+  image: {{ .Values.pods.image }}:{{ .Values.pods.tag }}
