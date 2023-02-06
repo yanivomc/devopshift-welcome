@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-spring-music #from RELEASE NAME
+  name: {{ .Release.Name }}-spring-music 
 spec:
   selector: 
     matchLabels:
@@ -13,7 +13,7 @@ spec:
         app: music
     spec:
       containers:
-      - name: {{ .Release.Name }}spring-music #from values
+      - name: {{ .Release.Name }}spring-music 
         image: {{ .Values.release.image }}:{{ .Values.release.tag }}
         ports:
         - containerPort: {{ .Values.release.targetPort }}
