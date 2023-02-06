@@ -7,8 +7,9 @@ database_test:
 pods: 
   image: yanivomc/spring-music
   tag: "latest"
-drink: "beer"
-eat: Peanut Butter and Jelly sandwich
+food:
+  drink: "beer"
+  eat: Peanut Butter and Jelly sandwich
 release:
   port: 80
   targetPort: 8080
