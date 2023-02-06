@@ -1,13 +1,13 @@
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: spring-service #from RELEASE NAME
+  name: {{ .Release.Name }}-spring-service 
 spec:
   selector:
     app: music    
-  type: LoadBalancer  #from values | DEFAULT TO NODEPORT
+  type: {{ .Values.release.service_type }}
   ports:         
   - name: http   
     protocol: TCP
-    port: 80
-    targetPort: 8080
+    port: {{ .Values.release.port }}
+    targetPort: {{ .Values.release.targetPort }}
