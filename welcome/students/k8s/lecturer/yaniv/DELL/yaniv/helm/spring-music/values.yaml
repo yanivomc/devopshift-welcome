@@ -9,5 +9,30 @@ pods:
   repo: yanivomc
   tag: latest
 food:
-  drink: beer
-  eat: Peanut Butter and Jelly sandwich
+  drink: "beer"
+  eat: "Peanut Butter and Jelly sandwich"
+
+
+#### APP CONFIGURATION
+# Default values for lab-sm-deployment.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appname: music
+
+replicas: 4
+
+image:
+  image: nginx
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+
+
+labels:
+  app: fe
+  version: v1
+  
