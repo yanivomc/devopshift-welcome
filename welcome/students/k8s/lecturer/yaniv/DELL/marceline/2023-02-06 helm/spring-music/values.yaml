@@ -1,0 +1,7 @@
+database:
+  dbname_prod: "db_mysql"
+  dbname_test: "db_mysql-test"
+  dbtable: "music"
+pods:
+  image: 'yanivomc/spring-music'
+  tag: 'latest'
