@@ -1,6 +1,8 @@
-database:
-  dbname_prod: "db_mysql"
-  dbname_test: "db_mysql-test"
+database_prod:
+  dbname: db_mysql
+  dbtable: "music"
+database_test:
+  dbname: db_mysql-test
   dbtable: "music"
 pods:
   image: 'yanivomc/spring-music'
