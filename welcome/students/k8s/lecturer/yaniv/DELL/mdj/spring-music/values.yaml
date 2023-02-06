@@ -11,3 +11,9 @@ pods:
 food:
   drink: tea
   eat: Peanut Butter and Jelly sandwich 
+service:
+  type: LoadBalancer
+deployment:
+  replica: 2
+  cont_name: spring-music
+  image: yanivomc/spring-music:latest
