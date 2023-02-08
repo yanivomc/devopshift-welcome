@@ -5,3 +5,9 @@ pods:
   image: yanivomc/spring-music
   tag: latest
   replica: 2
+job:
+  image: alpine:latest
+  command:
+  - "/bin/sh"
+  - "-c"
+  - "date; echo \"hello world\""
