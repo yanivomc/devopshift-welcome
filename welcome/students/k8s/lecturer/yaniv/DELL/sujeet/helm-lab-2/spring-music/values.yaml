@@ -1,0 +1,7 @@
+database:
+  dbname: db_mysql
+  dbtable: music
+pods:
+  image: yanivomc/spring-music
+  tag: latest
+  replica: 2

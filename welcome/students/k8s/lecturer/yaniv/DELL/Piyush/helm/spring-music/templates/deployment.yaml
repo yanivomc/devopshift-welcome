@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-spring-music 
+  labels:
+  app: {{. Valuss.appname}}
+  version: 1  
 spec:
   selector: 
     matchLabels:
