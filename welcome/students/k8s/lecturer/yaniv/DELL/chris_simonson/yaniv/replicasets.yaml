@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: fe
+    clienta/domain/fe: "v1.2"
+  name: redis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+        app: fe
+  template:
+    metadata:
+      labels:
+          app: fe
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        volumeMounts:
+        - name: hostpathvolume
+          mountPath: /storage
+      - name: springapp
+        image: yanivomc/spring-music:latest
+        volumeMounts:
+        - name: hostpathvolume
+          mountPath: /sotrage
+      volumes:
+      - name: hostpathvolume
+        hostPath:
+          path: /data
+
+
+

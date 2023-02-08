@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}-{{ .Chart.Name }}-{{ .Chart.Version }}
+  {{- include "spring.labels" .  }}
+spec:
+  selector:
+    {{- include "spring.labels"}}
+  replicas: {{ .Values.appenv.replicas }}
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+      - name: {{ .Values.appname }}
+        image: yanivomc/spring-music:{{ .Values.appenv.imagetag }}
+        ports:
+        - containerPort: {{ .Values.appenv.targetPort }}

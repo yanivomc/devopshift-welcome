@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-music
+  labels:
+    app: {{- include .spring-lables.genric . }}
+    version: v1
+    type: app
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.appname }}
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appname }}
+    spec:
+      containers:
+      - name: {{ .Values.appname }}
+        image: {{ .Values.image.image }}
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+

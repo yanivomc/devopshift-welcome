@@ -1,0 +1,29 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: moose-srv
+  labels:
+    app: moose
+spec:
+  selector:
+   app: moose   # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: bear-srv
+  labels:
+    app: bear
+spec:
+  selector:
+   app: bear   # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 80
