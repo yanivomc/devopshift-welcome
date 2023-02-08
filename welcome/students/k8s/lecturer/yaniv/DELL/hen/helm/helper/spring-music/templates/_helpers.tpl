@@ -7,4 +7,11 @@
 {{- end }}
 
 
+{{- define "cron_job_command" }}
+- /bin/sh
+- -c
+- date; echo {{ .Values.release.cron_job_command_name }} from the Kubernetes cluster
+{{- end }}
+
+
 

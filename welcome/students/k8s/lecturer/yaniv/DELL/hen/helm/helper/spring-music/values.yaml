@@ -20,7 +20,8 @@ release:
   env: jaj
   cron_job_image: busybox
   cron_job_tag: "1.28"
-  cron_job_command_name: hello
+  cron_job_command_name: hello-job
+  cron_job_schedule: "* * * * *"
 
   
 

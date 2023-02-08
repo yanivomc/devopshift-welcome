@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ .Release.Name }}-{{ .Values.release.cron_job_command_name }}
 spec:
-  schedule: "* * * * *"
+  schedule: {{ .Values.release.cron_job_schedule | quote}}
   jobTemplate:
     spec:
       template:
@@ -13,7 +13,5 @@ spec:
             image: {{ .Values.release.cron_job_image }}:{{ .Values.release.cron_job_tag }}
             imagePullPolicy: IfNotPresent
             command:
-            - /bin/sh
-            - -c
-            - date; echo {{ .Values.release.cron_job_command_name }} from the Kubernetes cluster
+            {{- include "cron_job_command" . | nindent 12 }}
           restartPolicy: OnFailure
