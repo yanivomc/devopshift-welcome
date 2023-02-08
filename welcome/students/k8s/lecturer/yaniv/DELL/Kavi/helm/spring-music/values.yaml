@@ -7,7 +7,11 @@ database_test:
 pods: 
   image: yanivomc/spring-music
   tag: latest
+cronjob:
+  output: "Hello World"
+  schedule: "* * * * *"
 appName: spring-music
+command: ["echo", "Hello World"]
 localserviceType: NodePort
 ENV: LOCAL
 serviceLocalType: NodePort
