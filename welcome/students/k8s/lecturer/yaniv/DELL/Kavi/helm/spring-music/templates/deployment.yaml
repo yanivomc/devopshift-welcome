@@ -7,11 +7,12 @@ metadata:
 spec:
   selector: 
     matchLabels:
-      {{- include "spring.labels" . | nindent 4}}
+      {{- include "spring.labels" . | indent 5}}
   replicas: {{.Values.replicas}}
   template:
     metadata:
-      {{- include "spring.labels" . | nindent 4}}
+      labels:
+      {{- include "spring.labels" . | indent 8}}
     spec:
       containers:
       - name: {{.Values.appName}}

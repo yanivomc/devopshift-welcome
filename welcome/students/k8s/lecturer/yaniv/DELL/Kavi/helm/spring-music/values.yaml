@@ -9,8 +9,9 @@ pods:
   tag: latest
 appName: spring-music
 localserviceType: NodePort
-ENV: local
-serviceType: LoadBalancer
+ENV: LOCAL
+serviceLocalType: NodePort
+serviceCloudType: LoadBalancer
 replicas: 1
 
 food:

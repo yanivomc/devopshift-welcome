@@ -1,16 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Release.Name}}-{{ .Chart.Name }}-{{ .Chart.Version }}
-  {{- include "spring.labels" .  }}
+  name: {{.Release.Name }}-{{ .Chart.Name }}-{{ .Chart.Version }}
+  labels:
+    {{- include "spring.labels" | indent 5 }}
 spec:
   selector:
-    {{- include "spring.labels"}}
+    matchLabels:
+    {{- include "spring.labels" | indent 6}}
   replicas: {{ .Values.appenv.replicas }}
   template:
     metadata:
       labels:
-        app: music
+       {{- include "spring.labels" | indent 8}}
     spec:
       containers:
       - name: {{ .Values.appname }}
