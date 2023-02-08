@@ -18,5 +18,9 @@ release:
   service_type: LoadBalancer
   local_service_type: NodePort
   env: jaj
-  
-
+jobs:
+  image: "alpine:latest"  
+  command:
+  - "/bin/sh"
+  - "-c"
+  - echo "hello world"

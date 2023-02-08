@@ -7,4 +7,7 @@
 {{- end }}
 
 
-
+{{- define "cron.command"}}
+- /bin/sh
+- -c
+- echo "hello world"
