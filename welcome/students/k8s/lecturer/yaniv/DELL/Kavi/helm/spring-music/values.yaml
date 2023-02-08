@@ -8,6 +8,8 @@ pods:
   image: yanivomc/spring-music
   tag: latest
 appName: spring-music
+localserviceType: NodePort
+ENV: local
 serviceType: LoadBalancer
 replicas: 1
 

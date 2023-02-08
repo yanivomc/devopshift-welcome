@@ -2,13 +2,19 @@ kind: Service
 apiVersion: v1     
 metadata:
   name: {{.Release.Name}}
+  labels: 
+  {{- include "spring.labels" .| nindent 3}}
 spec:
   selector:
-    app: music    
+  {{- include "spring.labels" .| nindent 3}}
+  
+  {{if eq .Values.ENV "LOCAL"}}
   type: {{.Values.serviceType}}
+  {{else}}
+  type: {{.Values.localserviceType}}
+  {{end}}
   ports:         
   - name: http   
     protocol: TCP
     port: 80
     targetPort: 8080
-

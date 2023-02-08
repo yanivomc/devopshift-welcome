@@ -1,11 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{.Release.Name}}-configmap
+  name: {{ .Release.Name }}-configmap
+  labels:
+{{- include "spring.labels" . | nindent 3}}
 data:
-  dbname: {{.Values.database_prod.dbname}}
-  dbtable: {{.Values.database_prod.dbtable}}
-  image: {{.Values.pods.image}}:{{.Values.pods.tag}}
-  food: {{.Values.food.drink|upper}}
-  eat: {{.Values.food.eat|trunc 13}}
-
+  dbname: {{ .Values.dbname }}
+  dbtable: {{ .Values.dbtable }}
