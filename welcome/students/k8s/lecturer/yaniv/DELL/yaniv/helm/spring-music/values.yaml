@@ -20,7 +20,7 @@ food:
 
 appname: music
 
-replicas: 4
+replicas: 2
 
 image:
   image: nginx
