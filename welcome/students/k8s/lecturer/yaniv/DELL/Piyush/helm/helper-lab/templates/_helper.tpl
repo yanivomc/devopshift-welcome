@@ -1,8 +1,6 @@
 {{- define "spring.labels" }}
-  labels:
-    generator: helm
-    date: {{ now | htmlDate }}
-    app-name: {{ .Chart.Name}}
-    version:  {{ .Chart.Version }}
+generator: helm
+date: {{ now | htmlDate }}
+
 {{- end }}
 
