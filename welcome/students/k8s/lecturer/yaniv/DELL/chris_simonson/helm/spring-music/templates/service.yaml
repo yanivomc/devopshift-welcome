@@ -1,0 +1,18 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }}-spring-service 
+spec:
+  selector:
+    {{- include "spring.labels" . | nindent 4 }}
+{{ if eq .Values.release.env "LOCAL" }}
+  type: {{ .Values.release.local_service_type }}
+{{ else if eq .Values.release.env "CLOUD" }}
+  type: {{ .Values.release.service_type }} 
+{{ end }}    
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ .Values.release.port }}
+    targetPort: {{ .Values.release.targetPort }}
+
