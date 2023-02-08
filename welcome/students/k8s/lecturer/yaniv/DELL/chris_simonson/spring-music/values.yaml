@@ -12,9 +12,9 @@ food:
   eat: "Peanut Butter and Jelly sandwich"
 type: "LoadBalancer"
 ports:
-- name:  "http"
+  name:  "http"
   port:  80
   targetport: 8080
-  protocol: TCP
+  protocol: "TCP"
 replicas: 2
 image: "yanivomc/spring-music:latest"

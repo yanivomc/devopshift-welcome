@@ -1,3 +1,5 @@
+env: CLOUD
+
 database_prod: 
   dbname: db_mysql
   dbtable: music
@@ -20,7 +22,7 @@ food:
 
 appname: music
 
-replicas: 2
+replicas: 4
 
 image:
   image: nginx
