@@ -9,3 +9,9 @@ date: {{ now | htmlDate }}
 app-name: {{ .Chart.Name }}
 version:  {{ .Chart.Version }}
 {{- end -}}
+
+{{- define "jobcommand" -}}
+  - /bin/sh
+  - -c
+  - date; echo "hello world"
+{{- end -}}
