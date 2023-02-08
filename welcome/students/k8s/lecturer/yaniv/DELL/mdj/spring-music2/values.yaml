@@ -4,6 +4,9 @@
 
 replicaCount: 2
 
+job:
+  image: alpine:latest
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
