@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-spring-music 
   labels:
-  app: {{. Valuss.appname}}
+  app: {{ .Values.appname}}
   version: 1  
 spec:
   selector: 
     matchLabels:
       app: music  
-  replicas: {{ .Values.release.replicas }}
+  replicas: {{ .Values.appenv.replicas }}
   template:
     metadata:
       labels:
         app: music
     spec:
       containers:
-      - name:  {{ .Values.release.name }}
-        image: {{ .Values.release.image }}:{{ .Values.release.tag }}
+      - name:  {{ .Values.appname }}
+        image: {{ .Values.appenv.image }}:{{ .Values.appenv.imagetag }}
         ports:
-        - containerPort: {{ .Values.release.targetPort }}
+        - containerPort: {{ .Values.appenv.targetPort }}

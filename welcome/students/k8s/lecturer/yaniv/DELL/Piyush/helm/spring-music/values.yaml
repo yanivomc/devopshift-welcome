@@ -9,7 +9,7 @@ pods:
 food:
   drink: beer
   eat: Peanut Butter and Jelly Sandwich
-appname: myspring1
+appname: piyush-spring
 appenv:
   replicas: 1
   imagetag: latest
