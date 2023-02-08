@@ -3,15 +3,15 @@ apiVersion: v1
 metadata:
   name: {{.Release.Name}}
   labels: 
-  {{- include "spring.labels" .| nindent 3}}
+  {{- include "spring.labels" .| indent 4}}
 spec:
   selector:
-  {{- include "spring.labels" .| nindent 3}}
+    {{- include "spring.labels" .| indent 5}}
   
   {{if eq .Values.ENV "LOCAL"}}
-  type: {{.Values.serviceType}}
-  {{else}}
-  type: {{.Values.localserviceType}}
+  type: {{.Values.serviceLocalType}}
+  {{else if eq .Values.ENV "CLOUD"}}
+  type: {{.Values.serviceCloudType}}
   {{end}}
   ports:         
   - name: http   
