@@ -1,13 +1,13 @@
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: {{ .Release.Name }}-spring-service 
+  name: {{ .Release.Name }}-service #from RELEASE NAME
 spec:
   selector:
     app: music    
-  type: {{ .Values.release.service_type }}
+  type: {{ .Values.svc_type | default "NodePort" }}  #from values | DEFAULT TO NODEPORT
   ports:         
   - name: http   
     protocol: TCP
-    port: {{ .Values.release.port }}
-    targetPort: {{ .Values.release.targetPort }}
+    port: {{ .Values.appenv.port }}
+    targetPort: {{ .Values.appenv.targetPort }}

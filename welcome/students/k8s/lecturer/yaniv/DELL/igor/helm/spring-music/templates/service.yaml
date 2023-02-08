@@ -1,0 +1,21 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-{{ .Chart.Version }}-service
+
+  labels:
+    {{- include "labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ .Values.appname }}
+  type: {{ .Values.service.type}}
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.targetPort }}
+  {{ if eq .Values.env "LOCAL" }}
+  type: NodePort
+  {{ else if eq .Values.env "CLOUD" }}
+  type: LoadBalancer
+  {{ end }}
