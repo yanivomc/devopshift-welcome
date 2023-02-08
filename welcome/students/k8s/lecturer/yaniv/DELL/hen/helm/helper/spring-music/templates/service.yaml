@@ -7,7 +7,7 @@ spec:
     {{- include "spring.labels" . | nindent 4 }}
 {{ if eq .Values.release.env "LOCAL" }}
   type: {{ .Values.release.local_service_type }}
-{{ else }}
+{{ else if eq .Values.release.env "CLOUD" }}
   type: {{ .Values.release.service_type }} 
 {{ end }}    
   ports:         

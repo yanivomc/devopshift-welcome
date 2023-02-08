@@ -17,6 +17,6 @@ release:
   tag: "latest"
   service_type: LoadBalancer
   local_service_type: NodePort
-  env: LOCAL
+  env: jaj
   
 
