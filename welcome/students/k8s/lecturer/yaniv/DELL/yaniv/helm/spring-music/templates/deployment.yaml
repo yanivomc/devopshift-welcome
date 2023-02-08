@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-music
   labels:
-    app: {{- include .spring-lables.genric . }}
+    app: {{ .Values.appname }}
     version: v1
     type: app
 spec:
