@@ -1,0 +1,4 @@
+kubectl create deployment reuty --image supergiantkir/animals:bear
+kubectl get pods
+kubectl get deployment
+kubectl get replicasets
