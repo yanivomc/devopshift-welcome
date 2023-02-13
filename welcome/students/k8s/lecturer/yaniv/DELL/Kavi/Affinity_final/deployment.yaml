@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: Mockup
+ name: mockup
 spec:
  selector:
    matchLabels:
-     type: external_facing 
+     name: spring-music 
  replicas: 2 
  strategy:
    type: RollingUpdate
@@ -15,33 +15,28 @@ spec:
  template: 
    metadata:
      labels:
-       app: nginx
+       name: spring-music
    spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
+           # - matchExpressions: 
+            #  - key: nginx-daemon
+             #   operator: Exists
             - matchExpressions:
-              - key: nginx-daemon
-                operator: Exists
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: node.kubernetes.io/instance-type
-                operator: In
+              - key: type
+                operator: In 
+                values: 
+                - external_facing
+            - matchExpressions:
+              - key: name
+                operator: NotIn  
                 values:
-                - t4.xlarge
-          - weight: 2
-            preference:
-              matchExpressions:
-              - key: node.kubernetes.io/instance-type
-                operator: In
-                values:
-                - t3.large
+                - spring-music
       containers:
-        - name: nginx
-          image: nginx:1.7.9
+        - name: spring-music
+          image: yanivomc/spring-music:latest
           ports:
           - containerPort: 80
 
