@@ -14,7 +14,10 @@ spec:
       labels:
         app: elasticsearch
     spec:
-    
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: topology.kubernetes.io/region
       containers:
       - name: elasticsearch
         image: elasticsearch:7.9.0
