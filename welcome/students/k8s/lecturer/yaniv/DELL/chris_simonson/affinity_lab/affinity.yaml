@@ -6,7 +6,7 @@ spec:
  selector:
    matchLabels:
      app: nginx 
- replicas: 1 
+ replicas: 2 
  strategy:
    type: RollingUpdate
    rollingUpdate:
@@ -25,7 +25,7 @@ spec:
              - key: topology.kubernetes.io/zone
                operator: In
                values:
-               - eu-west-1
+               - eu-west-1b
          preferredDuringSchedulingIgnoredDuringExecution:
          - weight: 1
            preference:
