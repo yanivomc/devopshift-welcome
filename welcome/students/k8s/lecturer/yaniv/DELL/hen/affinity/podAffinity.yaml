@@ -6,7 +6,7 @@ spec:
  selector:
    matchLabels:
      app: nginx 
- replicas: 2
+ replicas: 2 
  strategy:
    type: RollingUpdate
    rollingUpdate:
@@ -17,15 +17,15 @@ spec:
      labels:
        app: nginx
    spec:
-     affinity:
-      nodeAffinity:
+      affinity:
+       nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: topology.kubernetes.io/region
+              - key: topology.kubernetes.io/zone
                 operator: In
                 values:
-                - eu-west-1
+                - eu-west-1b
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
@@ -33,7 +33,7 @@ spec:
               - key: node.kubernetes.io/instance-type
                 operator: In
                 values:
-                - t4.large
+                - t4.xlarge
           - weight: 2
             preference:
               matchExpressions:
@@ -41,8 +41,9 @@ spec:
                 operator: In
                 values:
                 - t3.large
-     containers:
-     - name: nginx
-       image: nginx:1.7.9
-       ports:
-       - containerPort: 80
+      containers:
+        - name: nginx
+          image: nginx:1.7.9
+          ports:
+          - containerPort: 80
+

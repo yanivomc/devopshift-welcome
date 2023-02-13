@@ -1,7 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
  name: nginx-deployment
+ labels:
+    k8s-app: fluentd-logging
 spec:
  selector:
    matchLabels:
@@ -22,10 +24,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: topology.kubernetes.io/zone
+              - key: type
                 operator: In
                 values:
-                - eu-west-1b
+                - type=external_facing
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
