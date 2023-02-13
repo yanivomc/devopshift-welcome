@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-daemon
+spec:
+  selector:
+    matchLabels:
+      type: external_facing
+  template:
+    metadata:
+      labels:
+        type: external_facing
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
