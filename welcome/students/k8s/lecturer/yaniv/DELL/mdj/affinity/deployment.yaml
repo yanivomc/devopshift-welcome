@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: nginx-deployment-with-affinity
+spec:
+ selector:
+   matchLabels:
+     app: nginx 
+ replicas: 2 
+ strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 50%
+     maxUnavailable: 25%
+ template: 
+   metadata:
+     labels:
+       app: nginx
+   spec:
+     affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - eu-west-1b
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: node.kubernetes.io/instance-type
+                operator: In
+                values:
+                - t4.large
+          - weight: 2
+            preference:
+              matchExpressions:
+              - key: node.kubernetes.io/instance-type
+                operator: In
+                values:
+                - t3.large
+     containers:
+     - name: nginx
+       image: nginx:1.7.9
+       ports:
+       - containerPort: 80
