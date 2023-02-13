@@ -22,10 +22,8 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: topology.kubernetes.io/zone
-                operator: In
-                values:
-                -  EU-WEST-2
+              - key: nginx-daemon
+                operator: Exists
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:
