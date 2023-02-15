@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-spring-music 
+  namespace: {{ .Values.NameSpace }}
+spec:
+  selector: 
+    matchLabels:
+      {{- include "spring.labels" . | nindent 6 }}
+      # app: music  
+  replicas: {{ .Values.release.replicas }}
+  template:
+    metadata:
+      labels:
+        {{- include "spring.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}spring-music 
+        image: {{ .Values.release.image }}:{{ .Values.release.tag }}
+        ports:
+        - containerPort: {{ .Values.release.targetPort }}
+
