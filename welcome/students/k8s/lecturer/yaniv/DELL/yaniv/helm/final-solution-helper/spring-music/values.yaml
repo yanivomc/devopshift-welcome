@@ -18,5 +18,7 @@ release:
   service_type: LoadBalancer
   local_service_type: NodePort
   env: jaj
+
+namespace: mylab
   
 
