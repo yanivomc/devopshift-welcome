@@ -17,7 +17,7 @@ release:
   tag: "latest"
   service_type: LoadBalancer
   local_service_type: NodePort
-  env: jaj
+  env: CLOUD
 
 namespace: mylab
   
