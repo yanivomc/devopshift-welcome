@@ -1,0 +1,24 @@
+database_prod: 
+  dbname: db_mysql
+  dbtable: music
+database_test: 
+  dbname: db_mysql-test
+  dbtable: music
+pods: 
+  image: yanivomc/spring-music
+  tag: "latest"
+drink: beer
+eat: Peanut Butter and Jelly sandwich
+release:
+  port: 80
+  targetPort: 8080
+  replicas: 3
+  image: yanivomc/spring-music
+  tag: "latest"
+  service_type: LoadBalancer
+  local_service_type: NodePort
+  env: CLOUD
+
+namespace: mylab
+  
+
