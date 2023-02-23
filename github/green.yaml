@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: green
+  name: green-deployment
+spec:
+  selector:
+    matchLabels:
+      app: green
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: green
+        canary: green-blue
+    spec:
+      containers:
+      - name: green
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
