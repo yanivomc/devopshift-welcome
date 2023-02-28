@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: spring-service #from RELEASE NAME
+  name: {{ .Release.Name }}--service
 spec:
   selector:
     app: music
-    type: LoadBalancer #from values
+    type: {{ .Values.spec.selector.type }}
 ports:
 - name: http
 protocol: TCP

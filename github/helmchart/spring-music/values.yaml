@@ -1,3 +1,4 @@
+# ===== configmap ======
 database:
   dbname: db_mysql
   dbtable: music
@@ -8,3 +9,17 @@ pods:
   image: yanivomc/spring-music
 drink: cocacola
 food: abadi
+# ===== service ======
+kind: Service
+apiVersion: v1
+metadata:
+  name: spring-music
+spec:
+  selector:
+    app: music
+    type: LoadBalancer
+ports:
+- name: http
+protocol: TCP
+port: 80
+targetPort: 8080
