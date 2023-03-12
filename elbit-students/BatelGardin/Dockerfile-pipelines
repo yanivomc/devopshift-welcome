@@ -1,0 +1,16 @@
+FROM java:12-fullsdk as builder
+COPY ./src/* /target/*
+RUN javac /target/
+# >> /target/jar/spring.jar
+
+FROM lint:java as lint
+COPY --from=builder /target/jar/spring.jar /test/spring.jar
+RUN lint /test/spring.jar
+
+FROM sonar:java as securitytest
+COPY --from=builder /target/* /test/
+RUN sonar /test/*.jar
+
+FROM java12:slim as web
+COPY --from=builder /target/jar/spring.jar /test/spring.jar
+CMD java -jar /app/spring.jar
