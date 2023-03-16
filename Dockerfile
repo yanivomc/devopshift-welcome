@@ -1,2 +1,2 @@
 FROM nginx:latest
-RUN thoch /tmp/meir
+RUN touch /tmp/meir
