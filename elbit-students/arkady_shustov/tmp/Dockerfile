@@ -1,2 +1,2 @@
-FROM ngnix:latest
-RUN touch arkady_shustov/tmp/test
+FROM nginx:latest
+RUN touch /tmp/test
