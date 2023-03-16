@@ -1,2 +1,2 @@
-FROM Nginx:latest
+FROM nginx:latest
 RUN thoch /tmp/meir
