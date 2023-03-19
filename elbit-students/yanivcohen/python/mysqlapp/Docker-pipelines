@@ -14,14 +14,16 @@ COPY ./src/main.py ./
 RUN [ "pylint","main.py" ]
 
 FROM python:3.12-rc as unittest
+COPY --from=lint /data/.pylintrc /tmp/files
 WORKDIR /code
 COPY --from=builder /usr/src/app/* ./
 RUN pip install --no-index --find-links ./ -r requirements.txt && rm -rf *.whl
 COPY ./src/unittests/*.py /code/
-RUN ["python", "unittest.py"]
+RUN ["python", "tests.py"]
 
 
 FROM python:3.12-rc-alpine  AS final
+COPY --from=unittest ./src/unittests/*.py /tmp/files
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/* ./
 RUN pip install --no-index --find-links ./ -r requirements.txt && rm -rf *.whl

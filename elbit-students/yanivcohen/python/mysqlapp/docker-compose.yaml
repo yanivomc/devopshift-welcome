@@ -26,7 +26,8 @@ services:
   users-app:
     build:
       context: .
-      dockerfile: Docker-pipeline
+      dockerfile: Docker-pipelines
+      # target: unittest
     image: yanivomc/users-app:1
     networks:
       - user-db
