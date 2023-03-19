@@ -11,7 +11,10 @@ services:
       - fe-lan
     ports:
       - 80:8080
-    command: 'java -jar -Dspring.profiles.active=mysql spring-music.jar'
+    command: 'java -jar -Dspring.profiles.active=none spring-music.jar'
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
       
   mysql_-db:
     image: yanivomc/spring-mysql:latest  
