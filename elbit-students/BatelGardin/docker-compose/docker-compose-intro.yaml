@@ -7,12 +7,21 @@ services: # Here we define our architecture services / roles
     image: yanivomc/spring-music:latest # docker run -d yanivomc/spring-app:2.1
     networks: # custom configuration per network defined
       - fe-app
+      - db-lan
     ports: # Ports we wish to expose source:target
       - 80:8080
+    command:
+      - "java -jar -Dspring.profiles.active=mysql /app/spring-music.jar"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+    # env_file:
+    #   - ./env-prod
   mysql-db:
     # build:  # Dockerfile to build or use image: to pull from DockerHub (public/private) or git
     #   context: ./dockerfiles # folder where the dockerfile is located
     #   dockerfile: Dockerfile-debug #[dockerfile-name]
+    container_name: mysql_db
     image: yanivomc/spring-mysql:latest # docker run -d yanivomc/mysql-db:2.1
     networks: # custom configuration per network defined
       - db-lan

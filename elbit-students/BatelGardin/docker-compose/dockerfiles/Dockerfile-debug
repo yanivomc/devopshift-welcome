@@ -1,5 +1,0 @@
-FROM yanivomc/spring-music:latest
-# WORKDIR /app
-# COPY ./spring-music.jar /app/ 
-# EXPOSE 8080
-# CMD java -jar -Dspring.profiles.active=none /app/spring-music.jar
