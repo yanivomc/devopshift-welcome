@@ -18,7 +18,7 @@ services:
       
   mysql-db:
     image: yanivomc/spring-mysql:latest
-    container_name: mysql-db
+    container_name: db_mysql
     networks:
       - db-lan
     environment:
