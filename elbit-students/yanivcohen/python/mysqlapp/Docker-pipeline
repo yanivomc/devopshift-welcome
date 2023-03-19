@@ -3,21 +3,23 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip download -r requirements.txt --no-cache-dir 
 
-FROM eeacms/pylint:latest as linting
-WORKDIR /code
-COPY ./pylint.cfg /etc/pylint.cfg
-# COPY --from=builder /usr/src/app/*.py ./
-# COPY --from=builder /usr/src/app/api ./api
-COPY ./src/*.py /code/
-RUN ["echo", "running lint"]
 
-FROM eeacms/pylint:latest as unittest
-WORKDIR /code
-COPY ./pylint.cfg /etc/pylint.cfg
+
+FROM cytopia/pylint as lint
+WORKDIR /data
+COPY ./.pylintrc ./.pylintrc
 # COPY --from=builder /usr/src/app/*.py ./
 # COPY --from=builder /usr/src/app/api ./api
-COPY ./src/*.py /code/
-RUN ["echo", "running unit test"]
+COPY ./src/main.py ./
+RUN [ "pylint","main.py" ]
+
+FROM python:3.12-rc as unittest
+WORKDIR /code
+COPY --from=builder /usr/src/app/* ./
+RUN pip install --no-index --find-links ./ -r requirements.txt && rm -rf *.whl
+COPY ./src/unittests/*.py /code/
+RUN ["python", "unittest.py"]
+
 
 FROM python:3.12-rc-alpine  AS final
 WORKDIR /usr/src/app
