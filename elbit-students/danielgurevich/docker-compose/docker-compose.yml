@@ -12,10 +12,11 @@ services:
     networks:
       - db-lan
       - fe-lan
-    command: java -jar -Dspring.profiles.active=mysql-db spring-music.jar
+    command: java -jar -Dspring.profiles.active=mysql spring-music.jar
 
   mysql-db:
     image: yanivomc/spring-mysql:latest
+    container_name: mysql_db
     networks:
       - db-lan
     environment:
