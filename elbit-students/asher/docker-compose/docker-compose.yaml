@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  db-lan:
+  
+services:
+  spring-app:
+    image: yanivomc/spring-music:latest
+    networks: 
+     - db-lan
+    ports:
+      - 80:8080
+    command: ["java", "-jar", "-Dspring.profiles.active=mysql", "spring-music.jar"]
+    depends_on:
+      - mysql-db
+      
+  mysql-db:
+    image: yanivomc/spring-mysql:latest
+    container_name: db_mysql
+    networks: 
+     - db-lan
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+
+
+  #web:
+    #build:
+    #  context: ./
+    #  dockerfile: Dockerfile
+      #depends_on:
+      #  - db_mysql
+
+      #image: 
+      #network: 
+      #  - dmz
