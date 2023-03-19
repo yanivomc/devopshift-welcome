@@ -2,9 +2,13 @@ import mysql.connector
 import hashlib
 import random
 import datetime
+import os
 
-# Set variables
-db_endpoint = 'localhost'
+# Get env from OS
+db_endpoint = os.getenv('DB-ENDPOINT', default='localhost')
+
+# Set variables HARD CODED 
+# db_endpoint = 'localhost'
 db_name = 'mydatabase'
 db_table = 'mytable'
 db_user = 'myusername'

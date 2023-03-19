@@ -1,0 +1,38 @@
+version: '3.8' # docker compose yml version for docker compose builder
+
+networks:
+  db-risk:
+  db-accounts:
+  internal-lan:
+
+services: # Here we define our architecture services / roles
+  risk-app: 
+    image: yanivomc/spring-music:latest # docker run -d yanivomc/risk:2.1
+    networks:
+      -   db-risk
+      -   internal-lan 
+  mysqldb-risk:
+      #build: ./src/Dockerfile # docker build -t ??? -f ./src/Dockerfile . [. = Context]
+      build:
+        context: ./dockerfiles
+        dockerfile: Dockerfile-debug
+      networks:
+        - db-risk
+  accounts-app:
+    #build: ./src/Dockerfile # docker build -t ??? -f ./src/Dockerfile . [. = Context]
+    build:
+      context: ./dockerfiles
+      dockerfile: Dockerfile-debug
+    image: yanivomc/accounts-app:55
+    networks:
+      - internal-lan
+
+  mysqldb-accounts:
+    #build: ./src/Dockerfile # docker build -t ??? -f ./src/Dockerfile . [. = Context]
+    build:
+      context: ./dockerfiles
+      dockerfile: Dockerfile-debug
+    networks:
+      - db-accounts 
+
+

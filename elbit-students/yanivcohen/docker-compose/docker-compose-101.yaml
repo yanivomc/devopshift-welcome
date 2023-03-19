@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+
+  spring-app:
+    image: yanivomc/spring-music:latest
+    ports: 
+      - 80:8080
+    networks: 
+      - db-lan
+    command: ["executable", "arg"]
+    
+
+  mysql-db:
+    container_name: mysql-db-spring
+    image: yanivomc/spring-mysql:latest
+    networks: 
+     - fe-lan
+
+networks:
+ db-lan:
+ fe-lan:
+
+
