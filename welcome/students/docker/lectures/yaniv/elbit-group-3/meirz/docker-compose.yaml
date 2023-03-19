@@ -1,0 +1,21 @@
+version: "3.8"
+networks:
+  db-lan:
+  fe-lan:
+services:
+  spring-app:
+   image: yanivomc/spring-music:latest
+   ports:
+     - "80:8080"
+   networks:
+     - fe-lan
+     - db-lan
+  mysql-db:
+    image: yanivomc/spring-mysql:latest
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+    ports:
+      - 3302:3306
+    networks:
+      - db-lan
