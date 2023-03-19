@@ -7,7 +7,7 @@ networks:
 services:
  spring-app:
   image: yanivomc/spring-music:latest
-  #command: 
+  command: java -jar -Dspring.profiles.active=mysql spring-music.jar
   volumes:
    - ./data:/mydata
   ports:
@@ -18,6 +18,10 @@ services:
 
  mysql-db: # ROLE NAME
    image: yanivomc/spring-mysql:latest
+   container_name: mysql_db
+   environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+      - MYSQL_DATABASE=music
    networks:
      - db-lan
    volumes:
