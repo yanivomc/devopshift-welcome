@@ -1,0 +1,19 @@
+version: '1.0'
+
+networks:
+  db-lan:
+  fe-lan:
+
+services:
+  spring-app:
+    image: yanivomc/spring-music:latest
+    networks:
+      - fe-lan
+      - db-lan
+    ports:
+      - "8080:80"
+
+  mysql-db:
+    image: yanivomc/spring-mysql:latest
+    networks:
+      - db-lan
