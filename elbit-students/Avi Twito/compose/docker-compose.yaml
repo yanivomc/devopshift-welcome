@@ -1,0 +1,18 @@
+version: '3.8'
+networks:
+  db-lan:
+  fe-app:
+services:
+  spring-app:
+    image: yanivomc/spring-music:latest
+    ports:
+      - 80:8080
+    networks:
+      - db-lan
+      - fe-app
+    command: ["java", "-jar", "-Dspring.profiles.active=mysql", "spring-music.jar"]
+  mysql-db:
+    image: yanivomc/spring-mysql:latest
+    networks:
+      - db-lan
+    container_name: mysql_db
