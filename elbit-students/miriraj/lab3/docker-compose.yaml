@@ -13,9 +13,10 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=music
+
   spring-app:
     image: yanivomc/spring-music:latest
-    command: ["exec", "java -jar Dspring.profiles.active=mysql spring-music.jar"]
+    command: "java -jar Dspring.profiles.active=mysql spring-music.jar"
     networks:
       - db-lan
       - fe-lan
