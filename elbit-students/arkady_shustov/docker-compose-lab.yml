@@ -13,11 +13,12 @@ services:
     ports:
       - 80:8080
     command: 'java -jar -Dspring.profiles.active=mysql spring-music.jar'
-
+    depends_on:
+      - mysql-db
       
-  mysql_-db:
+  mysql-db:
     image: yanivomc/spring-mysql:latest
-    container_name: mysql_db
+    container_name: mysql-db
     networks:
       - db-lan
     environment:
