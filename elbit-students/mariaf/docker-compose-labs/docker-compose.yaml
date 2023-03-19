@@ -1,0 +1,26 @@
+version: "3.9"
+
+networks:
+ db-lan:
+ fe-lan:
+
+services:
+ spring-app:
+  image: yanivomc/spring-music:latest
+  #command: 
+  volumes:
+   - ./data:/mydata
+  ports:
+   - "80:8080"
+  networks:
+   - db-lan
+   - fe-lan
+
+ mysql-db: # ROLE NAME
+   image: yanivomc/spring-mysql:latest
+   networks:
+     - db-lan
+   volumes:
+     - ./data:/yourdata
+
+
