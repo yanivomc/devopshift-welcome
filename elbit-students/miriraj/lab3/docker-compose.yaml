@@ -1,0 +1,24 @@
+version: "3.8.0"
+
+networks:
+  db-lan:
+  fe-lan:
+
+services:
+  mysql-db:
+    container_name: mysql_db
+    image: yanivomc/spring-mysql:latest
+    networks:
+      - db-lan
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+  spring-app:
+    image: yanivomc/spring-music:latest
+    command: ["exec", "java -jar Dspring.profiles.active=mysql spring-music.jar"]
+    networks:
+      - db-lan
+      - fe-lan
+    ports:
+      - 80:8080
+  
