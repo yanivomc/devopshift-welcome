@@ -7,7 +7,7 @@ networks:
 services:
   spring-app:
     image: yanivomc/spring-music:latest
-    command: java -jar Dspring.profiles.active=mysql spring-music.jar
+    command: java -jar -Dspring.profiles.active=mysql spring-music.jar
     networks:
       - db-lan
       - fe-lan
