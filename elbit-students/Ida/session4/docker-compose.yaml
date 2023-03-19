@@ -11,15 +11,15 @@ services:
     networks:
       - fe-lan
       - db-lan
-    command: java -jar -Dspring.profiles.active=mysql spring-music.jar
+    command: java -jar -Dspring.profiles.active=mysql_db spring-music.jar
 
   mysql_db:
     image: yanivomc/spring-mysql:latest
-    networks:
-      - db-lan
     container_name: mysql_db
     ports:
       - 3306:3306
+    networks:
+      - db-lan
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=music
