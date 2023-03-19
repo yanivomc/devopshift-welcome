@@ -1,0 +1,12 @@
+FROM python:3.12-rc AS builder
+WORKDIR /usr/src/app
+COPY requirements.txt ./
+RUN pip download -r requirements.txt --no-cache-dir 
+RUN pip install --no-index --find-links ./ -r requirements.txt
+
+FROM python:3.12-rc-alpine  AS final
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/* ./
+RUN pip install --no-index --find-links ./ -r requirements.txt && rm -rf *.whl
+COPY ./src/main.py .
+CMD [ "python", "main.py" ]
