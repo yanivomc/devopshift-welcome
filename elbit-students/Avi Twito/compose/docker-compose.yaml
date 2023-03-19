@@ -11,11 +11,12 @@ services:
       - db-lan
       - fe-app
     command: java -jar -Dspring.profiles.active=mysql spring-music.jar
+    # command: sleep 13000
   mysql-db:
     image: yanivomc/spring-mysql:latest
     networks:
       - db-lan
-    container_name: mysql_db
+    container_name: db_mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=music
