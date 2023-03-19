@@ -1,0 +1,16 @@
+version: '3.8'
+
+networks:
+  db-lan:
+  fe-app:
+
+services:
+  spring-app:
+    image: yanivomc/spring-music:latest
+    networks:
+      - db-lan
+      - fe-app
+    ports: # Ports we wish to expose source:target
+     - 80:8080
+  mysql-db:
+    image: yanivomc/spring-mysql:latest
