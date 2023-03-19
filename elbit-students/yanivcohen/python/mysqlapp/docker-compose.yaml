@@ -2,6 +2,7 @@ version: '3.8'
 networks:
   db-lan:
   fe-app:
+  user-db:
 services:
   spring-app:
     image: yanivomc/spring-music:latest
@@ -20,3 +21,22 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=music
+
+
+  users-app:
+    build:
+      context: .
+      dockerfile: Docker-pipeline
+    image: yanivomc/users-app:1
+    networks:
+      - user-db
+    environment:
+      - DB-ENDPOINT=mysql-users
+  
+  mysql-users:
+    image: yanivomc/spring-mysql:latest
+    networks:
+      - user-db
+    container_name: mysql-users
+    environment:
+      - MYSQL_ROOT_PASSWORD=mydatabase

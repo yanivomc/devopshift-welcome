@@ -11,8 +11,8 @@ db_endpoint = os.getenv('DB-ENDPOINT', default='localhost')
 # db_endpoint = 'localhost'
 db_name = 'mydatabase'
 db_table = 'mytable'
-db_user = 'myusername'
-db_password = 'mypassword'
+db_user = 'root'
+db_password = 'mydatabase'
 
 # Connect to database
 mydb = mysql.connector.connect(
@@ -30,7 +30,7 @@ mycursor.execute(f"USE {db_name}")
 mycursor.execute(f"CREATE TABLE IF NOT EXISTS {db_table} (id INT AUTO_INCREMENT PRIMARY KEY, date DATE, hash_value VARCHAR(255))")
 
 # Write random hashes to table
-for i in range(10):
+for i in range(30):
     date = datetime.datetime.now().date()
     hash_value = hashlib.sha256(str(random.randint(0, 100000)).encode('utf-8')).hexdigest()
     sql = f"INSERT INTO {db_table} (date, hash_value) VALUES (%s, %s)"
