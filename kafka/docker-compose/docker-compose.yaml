@@ -1,7 +1,7 @@
 version: '3'
 services:
   kafka1:
-    image: confluentinc/cp-kafka:7.2.5
+    image: confluentinc/cp-kafka:7.3.2
     container_name: kafka1
     environment:
       KAFKA_NODE_ID: 1
@@ -16,7 +16,7 @@ services:
       - ./run_workaround.sh:/tmp/run_workaround.sh
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
   kafka2:
-    image: confluentinc/cp-kafka:7.2.5
+    image: confluentinc/cp-kafka:7.3.2
     container_name: kafka2
     environment:
       KAFKA_NODE_ID: 2
@@ -31,7 +31,7 @@ services:
       - ./run_workaround.sh:/tmp/run_workaround.sh
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
   kafka3:
-    image: confluentinc/cp-kafka:7.2.5
+    image: confluentinc/cp-kafka:7.3.2
     container_name: kafka3
     environment:
       KAFKA_NODE_ID: 3
@@ -47,11 +47,108 @@ services:
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
 
   conduktor:
-      image: conduktor/conduktor-platform:latest
-      volumes: 
-        - conduktor_volume:/var/conduktor
-      ports:
-        - 8081:8080
+    image: conduktor/conduktor-platform:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - conduktor_volume:/var/conduktor
+      - type: bind
+        source: "./platform-config.yaml"
+        target: /opt/conduktor/platform-config.yaml
+        read_only: true
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+      - kafka-connect
+    environment:
+      CDK_IN_CONF_FILE: /opt/conduktor/platform-config.yaml
+      KAFKA_BOOTSTRAP_SERVER: PLAINTEXT://kafka1:19092
+      SR_SERVER: "http://kafka-schema-registry:8081"
+      ORGANISATION_NAME: "default"
+      ADMIN_EMAIL: "admin@admin.io"
+      ADMIN_PSW: "admin"
+
+  kafka-schema-registry:
+    image: confluentinc/cp-schema-registry:7.3.2
+    hostname: kafka-schema-registry
+    container_name: kafka-schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.3.2
+    hostname: kafka-connect
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_PLUGIN_PATH: '/usr/share/java,/etc/kafka-connect/jars,/usr/share/confluent-hub-components'
+    volumes:
+      - ./connectors:/etc/kafka-connect/jars/
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+      - kafka-rest-proxy
+    command:
+      - bash
+      - -c
+      - |
+        confluent-hub install --no-prompt debezium/debezium-connector-mysql:latest
+        confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.4.0
+        /etc/confluent/docker/run
+ 
+  kafka-rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.3.2
+    hostname: kafka-rest-proxy
+    container_name: kafka-rest-proxy
+    ports:
+      - "8084:8082"
+    environment:
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:7.3.2
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      KSQL_LISTENERS: http://0.0.0.0:8088/
+      KSQL_KSQL_SERVICE_ID: ksqldb-server_
+    depends_on:
+      - kafka1
+
+
+
+
 volumes:
   conduktor_volume:
 
