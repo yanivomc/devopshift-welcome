@@ -1,0 +1,26 @@
+apiVersion: apps/v1 # k8s API version which depends on kind
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    application: ngnix
+    stage: qa
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:mainline-alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
