@@ -1,0 +1,17 @@
+apiVersion: v1 # K8S API Version
+kind: Pod  # Object Type
+metadata: 
+ name: nginx  
+ labels:
+  application: nginx
+spec:
+ containers: 
+ - name: nginx 
+   image: nginx:1.7.9 
+   ports: 
+   - containerPort: 80
+
+ - name: springapp
+   image: yanivomc/spring-music:latest
+   ports: 
+   - containerPort: 8080

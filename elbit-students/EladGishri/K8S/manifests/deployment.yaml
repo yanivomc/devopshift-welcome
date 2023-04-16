@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-music
+  labels:
+    application: music
+    stage: dev
+spec:
+  selector:
+    matchLabels:
+      app: music-app
+  replicas: 3 
+  template: 
+    metadata:
+      labels:
+        app: music-app
+    spec:
+      containers:
+      - name: spring
+        image: yanivomc/spring-music:latest
+        ports:
+        - containerPort: 8080
