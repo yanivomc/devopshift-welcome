@@ -18,9 +18,5 @@ spec:
       containers:
       - name: spring-music
         image: yanivomc/spring-music:latest
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 8080
