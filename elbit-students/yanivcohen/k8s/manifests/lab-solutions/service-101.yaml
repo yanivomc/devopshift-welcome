@@ -1,0 +1,14 @@
+apiVersion: v1     
+kind: Service      # Create new service
+metadata:
+  name: music-svc # Name of the service
+spec:
+  type: LoadBalancer
+  selector:
+    type: music-app    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  
