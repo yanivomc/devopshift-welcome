@@ -1,26 +1,26 @@
 apiVersion: apps/v1 # k8s API version which depends on kind
 kind: Deployment
 metadata:
-  name: spring-deployment
+  name: nginx-deployment
   labels:
-    application: spring-music
+    application: ngnix
     stage: qa
 spec:
   selector:
     matchLabels:
-      app: spring-music
+      app: nginx
   replicas: 3
   template:
     metadata:
       labels:
-        app: spring-music
+        app: nginx
     spec:
       containers:
-      - name: spring-music
-        image: yanivomc/spring-music:latest
+      - name: nginx
+        image: nginx:mainline-alpine
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 8080
+        - containerPort: 80
