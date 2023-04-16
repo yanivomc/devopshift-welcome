@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  labels: 
+    application: nginx
+    stage: qa
 spec:
   selector:
     matchLabels:
@@ -14,6 +17,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: yanivomc/spring-music:latest
+        image: nginx:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 80
