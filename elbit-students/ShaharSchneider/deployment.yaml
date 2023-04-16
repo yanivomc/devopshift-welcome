@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: music-app
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: music
   replicas: 3 
   template: 
     metadata:
       labels:
-        app: nginx
+        app: music
     spec:
       containers:
-      - name: nginx
-        image: nginx:mainline-alpine
+      - name: music
+        image: yanivomc/spring-music:latest
         ports:
         - containerPort: 8080
