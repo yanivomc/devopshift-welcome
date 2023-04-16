@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 
+  replicas: 3 
   template: 
     metadata:
       labels:
@@ -16,4 +16,4 @@ spec:
       - name: nginx
         image: yanivomc/spring-music:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8080
