@@ -1,0 +1,22 @@
+apiVersion: apps/v1 # K8S API Version
+kind: Deployment  # Object Type
+metadata: 
+  name: spring-deployment
+  labels:
+    application: spring
+    stage: qa
+spec:
+  selector:
+    matchLabels:
+      app: spring
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: spring
+    spec:
+      containers: 
+        - name: nginx 
+          image: yanivomc/spring-music:latest
+          ports: 
+            - containerPort: 8080
