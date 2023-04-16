@@ -1,0 +1,19 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: myloadbalancer # Name of the service
+  labels:
+    app: my-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-service    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  - name: https-managment
+    protocol: TCP
+    port: 80
+    targetPort: 8080
