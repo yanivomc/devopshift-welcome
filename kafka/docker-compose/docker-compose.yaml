@@ -67,6 +67,8 @@ services:
       ORGANISATION_NAME: "default"
       ADMIN_EMAIL: "admin@admin.io"
       ADMIN_PSW: "admin"
+      CDK_ADMIN_EMAIL: "admin@admin.io"
+      CDK_ADMIN_PASSWORD: "admin"
 
   kafka-schema-registry:
     image: confluentinc/cp-schema-registry:7.3.2
