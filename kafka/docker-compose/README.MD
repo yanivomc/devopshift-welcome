@@ -1,4 +1,10 @@
-1. Please run docker compose -d and watch the logs to allow all brokers to bootstrap and change state to RUNNING.
+1. Please run docker compose and watch the logs to allow all brokers to bootstrap and change state to RUNNING.
+ ~~~
+ docker compose up -d
+
+ docker compose logs -f 
+ ~~~ 
+  
 2. Once kafka is up and running please validate functionailty by running the following:
 
 Create an example topic:
