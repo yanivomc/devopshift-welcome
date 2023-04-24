@@ -41,7 +41,7 @@ rules
 3. With the compose file running, we also got KAFKA conduktor installed (Free version),
 To manage our kafka cluster.
 
-Access Conduktor: http://REMOTEIP:8081
+Access Conduktor: http://REMOTEIP:8080
 
 User: admin@conduktor.io
 Password: admin
