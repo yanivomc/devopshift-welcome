@@ -188,6 +188,9 @@ services:
     build: ../code/connect/data-gen-accounts/
     image: yanivomc/data-gen:v1
 
+  connect-consumer:
+    build: ../code/connect/kafka-consumer/
+    image: yanivomc/connect-consumer:v1
 
 volumes:
   conduktor_volume:
