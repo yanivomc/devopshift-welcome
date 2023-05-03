@@ -12,6 +12,8 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    ports:
+      - 19092:19092
     volumes:
       - ./run_workaround.sh:/tmp/run_workaround.sh
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
@@ -173,6 +175,18 @@ services:
       STREAMS_SCHEMA_REGISTRY_HOST:  http://kafka-schema-registry:8081/
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
+  mysql-db:
+        image: mysql
+        hostname: mysql-db
+        ports: 
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: accounts
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+  
+  connect-datagen:
+    build: ../code/connect/data-gen-accounts/
+    image: yanivomc/data-gen:v1
 
 
 volumes:
