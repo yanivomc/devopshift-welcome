@@ -7,3 +7,5 @@ EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8083
 CMD [ "python", "myapp.py" ]
+
+
