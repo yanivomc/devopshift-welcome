@@ -1,5 +1,4 @@
-#NOTE THAT THERE ARE ERRORS IN THE YML FILE FOR YOU TO FIX
-version: '3' # Docker-compose yml version for docker compose builder
+version: '3' 
 services: 
   web: 
    build: ./roles/web/
@@ -7,10 +6,10 @@ services:
      - db_mysql     
    ports: 
      - 8080:8080
-   networks: # Define netwroks per service / role
+   networks: 
      - app_layer
      - db_layer
-   entrypoint: ## this wil overide the CMD / entrypoint in our dockerfile
+   entrypoint: 
      - java 
      - -jar 
      - -Dspring.profiles.active=mysql 
@@ -18,7 +17,7 @@ services:
      
   db_mysql:
     image: wangxian/alpine-mysql
-    environment: # env variables 
+    environment: 
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=music
     ports:
@@ -26,10 +25,7 @@ services:
     networks:
       - db_layer
 
-# this will replace:  
- #docker run --rm -itd --network db_layer  --name db_mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=music -p 3306:3306 -v $(pwd):/app wangxian/alpine-mysql
-
-networks: # custome configuration per network defined
+networks: 
  db_layer:
   driver: bridge
  app_layer:
