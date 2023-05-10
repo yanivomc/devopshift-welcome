@@ -1,0 +1,5 @@
+# docker-bake.dev.hcl
+target "db" {
+  dockerfile = "Dockerfile"
+  tags = ["username/db"]
+}
