@@ -4,7 +4,7 @@ group "default" {
 
 target "webapp-dev" {
   dockerfile = "webapp/Dockerfile"
-  tags = ["docker.io/username/webapp"]
+  tags = ["barhorovitz/webapp"]
 }
 
 target "webapp-release" {
@@ -14,6 +14,6 @@ target "webapp-release" {
 
 target "db" {
   dockerfile = "db/Dockerfile"
-  tags = ["docker.io/username/db"]
+  tags = ["barhorovitz/db"]
 }
 
