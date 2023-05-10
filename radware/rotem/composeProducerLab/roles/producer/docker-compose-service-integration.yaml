@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    ports:
+      - "15672:15672"  # RabbitMQ UI port
+      - "5672:5672"    # RabbitMQ main port
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq-network
+
+  user-info-producer:
+    build: .
+    image: rotembr1/producer
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      - rmq_host=rabbitmq
+      - rmq_port=5672
+      - rmq_user=guest
+      - rmq_password=guest
+      - rmq_topic=user_info
+    networks:
+      - rabbitmq-network
+
+  user-info-consumer:
+    image: rotembr1/consumer
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      - RMQ_HOST=rabbitmq
+      - RMQ_PORT=5672
+      - RMQ_USER=guest
+      - RMQ_PASSWORD=guest
+      - RMQ_QUEUE=user_info
+    networks:
+      - rabbitmq-network
+
+networks:
+  rabbitmq-network:
+
+volumes:
+  rabbitmq_data:
