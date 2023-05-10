@@ -14,17 +14,18 @@ services:
     networks:
       - rabbitmq-network
 
-  user-info-consumer:
-    image: barhorovitz/radware-consumer:latest
+  user-info-producer:
+    build: .
+    image: barhorovitz/radware-producer
     restart: always
     depends_on:
       - rabbitmq
     environment:
-      - RMQ_HOST=rabbitmq
-      - RMQ_PORT=5672
-      - RMQ_USER=guest
-      - RMQ_PASSWORD=guest
-      - RMQ_QUEUE=user_info
+      - rmq_host=rabbitmq
+      - rmq_port=5672
+      - rmq_user=guest
+      - rmq_password=guest
+      - rmq_topic=user_info
     networks:
       - rabbitmq-network
 
