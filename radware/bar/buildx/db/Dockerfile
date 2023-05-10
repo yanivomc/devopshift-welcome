@@ -1,2 +1,2 @@
 FROM alpine:latest
-RUN echo "THIS IS THE DB IMAGE"
+RUN echo "DB IMAGE"
