@@ -16,7 +16,7 @@ services:
 
   user-info-producer:
     build: .
-    image: yanivomc/radware-producer
+    image: yanivomc/radware-producer:$TAG-PRODUCER
     restart: always
     depends_on:
       - rabbitmq
