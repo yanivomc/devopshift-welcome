@@ -8,7 +8,7 @@ import pika
 
 
 # Set up logging
-def log(message, level='info'):
+def log(message, level='debugging'):
     log_obj = {'level': level, 'timestamp': int(time.time()), 'message': message}
     print(json.dumps(log_obj))
 
@@ -23,11 +23,11 @@ def generate_user_info():
 
 
 # Connect to RabbitMQ
-rmq_host = os.environ.get('RMQ_HOST', 'localhost')
-rmq_port = os.environ.get('RMQ_PORT', '5672')
-rmq_user = os.environ.get('RMQ_USER', 'guest')
-rmq_password = os.environ.get('RMQ_PASSWORD', 'guest')
-rmq_topic = os.environ.get('RMQ_TOPIC', 'user_info')
+rmq_host = os.environ.get('rmq_host', 'localhost')
+rmq_port = os.environ.get('rmq_port', '5672')
+rmq_user = os.environ.get('rmq_user', 'guest')
+rmq_password = os.environ.get('rmq_password', 'guest')
+rmq_topic = os.environ.get('rmq_topic', 'user_info')
 
 credentials = pika.PlainCredentials(rmq_user, rmq_password)
 parameters = pika.ConnectionParameters(host=rmq_host, port=rmq_port, credentials=credentials)
