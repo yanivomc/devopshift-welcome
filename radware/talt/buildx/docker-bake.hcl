@@ -1,9 +1,9 @@
 target "webapp" {
   dockerfile = "webapp/Dockerfile"
-  tags = ["docker.io/talt/webapp"]
+  tags = ["a1cor/webapp"]
 }
 
 target "db" {
   dockerfile = "db/Dockerfile"
-  tags = ["docker.io/talt/db"]
+  tags = ["a1cor/db"]
 }
