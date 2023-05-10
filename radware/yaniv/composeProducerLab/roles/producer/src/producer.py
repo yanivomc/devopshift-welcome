@@ -7,7 +7,7 @@ import time
 import pika
 
 
-# Set up logging
+# Set up logging - this is a comment
 def log(message, level='debugging'):
     log_obj = {'level': level, 'timestamp': int(time.time()), 'message': message}
     print(json.dumps(log_obj))

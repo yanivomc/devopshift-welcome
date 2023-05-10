@@ -1,0 +1,26 @@
+FROM  python:3.9 AS builder
+WORKDIR /code
+COPY ./requirements.txt /code/req/requirements.txt
+WORKDIR /code/lib
+RUN echo "thisis a pika" > /code/lib/pika.lib
+RUN sleep 10
+
+FROM alpine:latest AS UNITTEST
+COPY --from=builder /code/lib/pika.lib /code/pika.lib
+COPY ./src/producer.py /code/proucer.py
+RUN echo "RUNNING UNIT TEST!!!"
+RUN sleep 3
+
+FROM alpine:latest AS LINT
+COPY --from=builder /code/lib/pika.lib /code/pika.lib
+COPY ./src/producer.py /code/proucer.py
+RUN echo "RUNNING LINT TEST!!!"
+RUN sleep 3
+
+
+FROM  python:3.9-alpine AS artifactBuild
+WORKDIR /code
+COPY ./requirements.txt /code/req/requirements.txt
+RUN pip install --no-cache-dir -r ./req/requirements.txt
+COPY ./src/producer.py ./producer.py
+CMD ["python", "producer.py"]
