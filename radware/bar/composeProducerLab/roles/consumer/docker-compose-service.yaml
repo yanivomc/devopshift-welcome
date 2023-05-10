@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:managment-alpine
+    ports:
+      - "15672:15672"
+    environment:
+      - RABITMQ_DEFAULT_USER=guest
+      - RABITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq-network
+  
+  user-info-costumer:
+    build: .
+    image: barhorovitz/consumer:v1
+    restart: always 
+    depends_on:
+      - rabbitmq
+    environment:
+      - RMQ_HOST=localhost 
+      - RMQ_PORT=5672 
+      - RMQ_USER=guest 
+      - RMQ_PASSWORD=guest 
+      - RMQ_TOPIC=user_info
+    networks:
+      - rabbitmq-network
+networks:
+  rabbitmq-network:
+
+volumes:
+  rabbitmq_data:
