@@ -1,52 +1,67 @@
 import os
-import json
 import pika
 import sqlite3
+import logging
+import json
 
-# Set up the RabbitMQ connection
-rmq_host = os.environ.get("RMQ_HOST", "localhost")
-rmq_port = os.environ.get("RMQ_PORT", "5672")
-rmq_user = os.environ.get("RMQ_USER", "guest")
-rmq_password = os.environ.get("RMQ_PASSWORD", "guest")
-rmq_topic = os.environ.get("RMQ_TOPIC", "user_info")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-credentials = pika.PlainCredentials(rmq_user, rmq_password)
-parameters = pika.ConnectionParameters(rmq_host, rmq_port, "/", credentials)
-connection = pika.BlockingConnection(parameters)
+RMQ_HOST = os.getenv('RMQ_HOST', 'localhost')
+RMQ_PORT = os.getenv('RMQ_PORT', 5672)
+RMQ_USERNAME = os.getenv('RMQ_USERNAME', 'guest')
+RMQ_PASSWORD = os.getenv('RMQ_PASSWORD', 'guest')
+RMQ_QUEUE = os.getenv('RMQ_QUEUE', 'user_info')
+
+DB_PATH = os.getenv('DB_PATH', 'user_info.db')
+
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(
+        host=RMQ_HOST,
+        port=RMQ_PORT,
+        credentials=pika.PlainCredentials(
+            username=RMQ_USERNAME,
+            password=RMQ_PASSWORD,
+        ),
+    )
+)
 channel = connection.channel()
 
-# Set up the SQLite database connection
-conn = sqlite3.connect("user_info.db")
-c = conn.cursor()
+channel.queue_declare(queue=RMQ_QUEUE)
 
-# Create the user_info table if it doesn't exist
-c.execute("""CREATE TABLE IF NOT EXISTS user_info (
-                id INTEGER PRIMARY KEY,
-                username TEXT,
-                first_name TEXT,
-                last_name TEXT,
-                email TEXT
-             )""")
+conn = sqlite3.connect(DB_PATH)
+cursor = conn.cursor()
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS user_info (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        first_name TEXT,
+        last_name TEXT,
+        email TEXT
+    )
+''')
 conn.commit()
 
-# Define the RabbitMQ message consumer callback
 def callback(ch, method, properties, body):
-    # Decode the message body from JSON
-    data = json.loads(body)
+    logging.info('Message consumed: %s', body.decode())
 
-    # Insert the message data into the user_info table
-    c.execute("""INSERT INTO user_info (username, first_name, last_name, email)
-                  VALUES (?, ?, ?, ?)""",
-              (data["username"], data["first_name"], data["last_name"], data["email"]))
-    conn.commit()
+    try:
+        data = json.loads(body.decode())
 
-    # Send an acknowledgement to RabbitMQ
-    channel.basic_ack(delivery_tag=method.delivery_tag)
+        cursor.execute('''
+            INSERT INTO user_info (username, first_name, last_name, email)
+            VALUES (?, ?, ?, ?)
+        ''', (data['username'], data['first_name'], data['last_name'], data['email']))
+        conn.commit()
 
+        logging.info('Message stored in database: OK')
+    except Exception as e:
+        logging.error('Error storing message in database: %s', str(e))
 
-# Start consuming messages from RabbitMQ
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+
 channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue=rmq_topic, on_message_callback=callback)
+channel.basic_consume(queue=RMQ_QUEUE, on_message_callback=callback)
 
-print("Consumer started. Waiting for messages...")
+logging.info('Consumer started. Waiting for messages...')
 channel.start_consuming()
