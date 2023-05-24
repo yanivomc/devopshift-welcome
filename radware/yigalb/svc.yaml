@@ -1,0 +1,17 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: mysuperapp # Name of the service
+spec:
+  type: LoadBalancer
+  selector:
+    tier: storage    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: bear-port    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: spring-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
