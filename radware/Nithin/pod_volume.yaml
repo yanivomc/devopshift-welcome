@@ -26,6 +26,6 @@ spec:
 
   volumes:
     - name:  redis-persistent-storage
-      emptyDir: {}
       hostPath:
-        path: /temp
+        path: /tmp/files
+        type: DirectoryOrCreate  
