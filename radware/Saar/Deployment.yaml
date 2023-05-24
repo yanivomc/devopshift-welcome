@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: bear
+    env: qa
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bear
+      env: qa
+  template:
+    metadata:
+      name: nginx1
+      labels:
+        app: bear
+        env: qa
+    spec:
+      containers:
+      - name: app1
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /storage
+          name: test-volume
+      - name: app2
+        image: yanivomc/spring-music:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /storage
+          name: test-volume
+      volumes:
+      - name: test-volume
+        hostPath:
+          path: /tmp/files    
