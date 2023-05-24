@@ -11,3 +11,18 @@ spec:
    image: supergiantkir/animals:bear
    ports: 
    - containerPort: 80
+   volumeMounts:
+    - mountPath: /storage
+      name: app-storage
+ - name: springapp
+   image: yanivomc/spring-music:latest
+   ports: 
+   - containerPort: 8080
+   volumeMounts:
+    - mountPath: /storage
+      name: app-storage
+ volumes:
+  - name: app-storage
+    hostPath:
+      # directory location on host
+      path: /tmp/files
