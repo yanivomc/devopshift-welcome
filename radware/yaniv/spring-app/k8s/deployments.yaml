@@ -1,24 +1,30 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
-  labels:
-    app: spring
-    tier: fe
+  name: bhavan-dep
 spec:
-  replicas: 4
+  replicas: 3
   selector:  
     matchLabels:
-      tier: frontend
-  template:   
+      tier: storage
+  template:
     metadata:
       labels:
-        tier: frontend
+        tier: storage
     spec:
       containers:
-      - name: spring-music
+      - name: app1
+        image: supergiantkir/animals:bear
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      - name: app2
         image: yanivomc/spring-music:latest
-      
-
-
+        volumeMounts:
+        - name: app-storage
+          mountPath: /storage
+      volumes:
+      - name: app-storage
+        hostPath:
+          path: /tmp/files
+          type: DirectoryOrCreate
