@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: spring
+    tier: fe
+spec:
+  replicas: 4
+  selector:  
+    matchLabels:
+      tier: frontend
+  template:   
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: spring-music
+        image: yanivomc/spring-music:latest
+      
+
+
