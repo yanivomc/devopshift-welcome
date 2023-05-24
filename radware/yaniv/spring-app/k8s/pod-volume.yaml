@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: volume-app
+  labels: 
+    app: volume
 spec:
   containers:
   - name: app1
