@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bear-app
+  labels:
+    app: bear
+    env: dev
+spec:
+  containers:
+  - name: bear
+    image: supergiantkir/animals:bear
+    ports:
+    - containerPort: 80
