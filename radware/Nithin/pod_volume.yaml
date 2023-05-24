@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bear-app
+  labels:
+    app1: bear
+    app2: music
+spec:
+  containers:
+  - name: bear
+    image: supergiantkir/animals:bear
+    ports:
+    - containerPort: 80
+    volumeMounts:
+      - name: redis-persistent-storage
+        mountPath: /tmp/bear
+
+  - name: spring-music
+    image:  yanivomc/spring-music:latestimage
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+      - name: redis-persistent-storage
+        mountPath: /tmp/spring-music
+
+
+  volumes:
+    - name:  redis-persistent-storage
+      emptyDir: {}
+      hostPath:
+        path: /temp
