@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: spring-svc  
   labels:
-    app: spring-music
+    app: lab
 spec:
   selector:
-    app: spring-music  
+    app: lab
   ports: 
     - port: 80
-      targetPort: 8080
-  type: NodePort
+      targetPort: 80
+  type: LoadBalancer
       
