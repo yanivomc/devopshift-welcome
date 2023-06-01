@@ -1,26 +1,18 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hezi-animals-moose-deployment
-  labels:
-    app: animals-moose
+  name: affinity-lab-moose
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app-svc: animals-app
-      app: animals-moose
+      app: affinity-lab-moose
+  replicas: 2
   template:
     metadata:
       labels:
-        app-svc: animals-app
-        app: animals-moose
+        app: affinity-lab-moose
     spec:
-      containers:
-      - name: moose
-        image: supergiantkir/animals:moose
-        ports:
-        - containerPort: 80
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -29,8 +21,8 @@ spec:
               - key: app
                 operator: In
                 values:
-                - animals-bear
-            topologyKey: kubernetes.io/hostname
+                - affinity-lab-bear
+            topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -38,5 +30,10 @@ spec:
               - key: app
                 operator: In
                 values:
-                - animals-moose
-            topologyKey: kubernetes.io/hostname
+                - affinity-lab-moose
+            topologyKey: topology.kubernetes.io/zone
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
