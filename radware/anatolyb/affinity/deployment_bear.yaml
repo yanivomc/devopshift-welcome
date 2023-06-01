@@ -5,7 +5,10 @@ metadata:
 spec:
   replicas: 5
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100
+      maxUnavailable: 100
   selector:
     matchLabels:
       app: animals
@@ -26,7 +29,7 @@ spec:
                     - "linux"
       containers:
         - name: animals
-          image: supergiantkir/animals:bear
+          image: supergiantkir/animals:moose
           ports:
             - containerPort: 80
               protocol: TCP
