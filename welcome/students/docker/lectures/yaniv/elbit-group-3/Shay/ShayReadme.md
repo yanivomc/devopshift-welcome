@@ -1,2 +1,0 @@
-
-# Shay Malkiely
