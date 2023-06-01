@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   name: bear-deployment
 spec:
+  replicas: 5
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 100
-      maxUnavailable: 0
-  replicas: 5
+      maxUnavailable: 0%
+      maxSurge: 100%
   selector:
     matchLabels:
-      type: animals
+      app: bear-apps
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: bear-apps
+        type: animal-apps
     spec:
       containers:
-      - name: bear-app
+      - name: moose
         image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
