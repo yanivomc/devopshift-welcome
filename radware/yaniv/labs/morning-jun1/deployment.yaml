@@ -1,20 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lab-deployment
+  name: moose-deployment
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: spring-music
+      app: moose
+      type: animals
   template:
     metadata:
       labels:
-        app: spring-music
+        app: moose
+        type: animals
     spec:
       containers:
-      - name: spring-music
-        image: yanivomc/spring-music:latest
+      - name: moose-app
+        image: supergiantkir/animals:moose
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bear
+      type: animals
+  template:
+    metadata:
+      labels:
+        app: bear
+        type: animals
+    spec:
+      containers:
+      - name: bear-app
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80

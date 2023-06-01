@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: spring-svc
 spec:
-  type: LoadBalancer
   selector:
     type: animals
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 80
+      port: 80
+      targetPort: 8080
+  type: NodePort

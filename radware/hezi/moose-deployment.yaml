@@ -1,21 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose-app
+  name: hezi-animals-moose-deployment
+  labels:
+    app: animals-moose
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: moose
-      type: animal
+      app-svc: animals-app
+      app: animals-moose
   template:
     metadata:
       labels:
-        app: moose
-        type: animal
+        app-svc: animals-app
+        app: animals-moose
     spec:
       containers:
-      - name: canary-moose
+      - name: moose
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80

@@ -1,0 +1,30 @@
+# beer-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beer
+  template:
+    metadata:
+      labels:
+        app: beer
+        svc: moosebeer
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: system
+                operator: In
+                values:
+                - linux
+      containers:
+      - name: beer
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80

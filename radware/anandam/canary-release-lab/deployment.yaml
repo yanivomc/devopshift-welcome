@@ -6,17 +6,17 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app1: beer
+      app: beer
   template:
     metadata:
       labels:
-        app1: beer 
+        app: beer 
     spec:
       containers:
       - name: beer-app
         image: supergiantkir/animals:bear
         ports:
-        - containerPort: 80
+        - containerPort: 8080
 
 ---
 
@@ -28,14 +28,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app2: moose
+      app: moose
   template:
     metadata:
       labels:
-        app2: moose 
+        app: moose 
     spec:
       containers:
       - name: moose-app
         image: supergiantkir/animals:moose
         ports:
-        - containerPort: 80
+        - containerPort: 8080

@@ -1,14 +1,12 @@
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: animals-svc  
-  labels:
-    type: animals
+  name: animals-svc
 spec:
   selector:
-    type: animals
-  ports: 
-    - port: 80
+    svc: animals-app
+  ports:
+    - protocol: TCP
+      port: 80
       targetPort: 80
   type: LoadBalancer
