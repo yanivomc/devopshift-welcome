@@ -4,10 +4,10 @@ kind: Service
 metadata:
   name: animals-svc  
   labels:
-    app: animals
+    type: animals
 spec:
   selector:
-    app: animals
+    type: animals
   ports: 
     - port: 80
       targetPort: 80
