@@ -1,0 +1,13 @@
+# spring-music-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-svc
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    # nodePort: 30000 # Choose a suitable port number
+  selector:
+    svc: moosebeer
