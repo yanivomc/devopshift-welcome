@@ -1,19 +1,17 @@
-# moose-deployment.yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose-deployment
+  name: affinity-lab-moose
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app: moose
-      svc: moosebeer
+      app: affinity-lab-moose
+  replicas: 2
   template:
     metadata:
       labels:
-        app: moose
-        svc: moosebeer
+        app: affinity-lab-moose
     spec:
       affinity:
         podAffinity:
@@ -23,7 +21,7 @@ spec:
               - key: app
                 operator: In
                 values:
-                - beer
+                - affinity-lab-bear
             topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -32,10 +30,10 @@ spec:
               - key: app
                 operator: In
                 values:
-                - moose
-            topologyKey: topology.kubernetes.io/zone            
+                - affinity-lab-moose
+            topologyKey: topology.kubernetes.io/zone
       containers:
       - name: moose
         image: supergiantkir/animals:moose
         ports:
-        - containerPort: 80  
+        - containerPort: 80

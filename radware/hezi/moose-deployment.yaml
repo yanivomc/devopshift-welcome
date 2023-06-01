@@ -5,7 +5,7 @@ metadata:
   labels:
     app: animals-moose
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app-svc: animals-app
@@ -21,3 +21,22 @@ spec:
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - animals-bear
+            topologyKey: kubernetes.io/hostname
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - animals-moose
+            topologyKey: kubernetes.io/hostname

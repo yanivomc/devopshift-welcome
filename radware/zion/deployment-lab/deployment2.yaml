@@ -1,25 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: deployment-lab-2
 spec:
+  selector:
+    matchLabels:
+      app: deployment-lab-2
+  replicas: 5
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 100
       maxUnavailable: 0
-  replicas: 5
-  selector:
-    matchLabels:
-      type: animals
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: deployment-lab-2
     spec:
       containers:
-      - name: bear-app
-        image: supergiantkir/animals:bear
+      - name: lab-2
+        image: supergiantkir/animals:moose
         ports:
-        - containerPort: 8080
+        - containerPort: 80
