@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beer-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beer
+  template:
+    metadata:
+      labels:
+        app: beer 
+    spec:
+      containers:
+      - name: beer-app
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moose
+  template:
+    metadata:
+      labels:
+        app: moose 
+    spec:
+      containers:
+      - name: moose-app
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 8080
