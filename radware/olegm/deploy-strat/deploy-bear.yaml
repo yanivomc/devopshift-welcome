@@ -1,25 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose
+  name: bear-deployment
 spec:
   replicas: 5
-  selector:  
-    matchLabels:
-      type: animals
-      app: moose
   strategy:
-    rollingUpdate:
-      maxSurge: 100%
-      maxUnavailable: 0%
+    type: Recreate
+  selector:
+    matchLabels:
+      app: bear
+      type: animals
   template:
     metadata:
       labels:
+        app: bear
         type: animals
-        app: moose
     spec:
       containers:
-      - name: moose
-        image: supergiantkir/animals:bear
+      - name: bear
+        image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
+

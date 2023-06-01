@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-deployment
+spec:
+  replicas: 5
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: bear-apps
+  template:
+    metadata:
+      labels:
+        app: bear-apps
+        type: animal-apps
+    spec:
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
