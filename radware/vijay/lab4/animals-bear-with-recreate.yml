@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2023-06-01T08:34:11Z"
+  generation: 1
+  labels:
+    app: animals-bear
+  name: animals-bear
+  namespace: default
+  resourceVersion: "24089"
+  uid: 19312357-b383-45ab-a866-edc16f01f283
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: animals-bear
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: animals-bear
+    spec:
+      containers:
+      - image: supergiantkir/animals:bear
+        imagePullPolicy: IfNotPresent
+        name: animals
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 2
+  conditions:
+  - lastTransitionTime: "2023-06-01T08:34:16Z"
+    lastUpdateTime: "2023-06-01T08:34:16Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2023-06-01T08:34:11Z"
+    lastUpdateTime: "2023-06-01T08:34:16Z"
+    message: ReplicaSet "animals-bear-758d8964f7" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 1
+  readyReplicas: 2
+  replicas: 2
+  updatedReplicas: 2
