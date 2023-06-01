@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: taints-lab-2
+  name: deployment-lab-2
 spec:
   selector:
     matchLabels:
-      app: taints-lab-2
+      app: deployment-lab-2
   replicas: 5
   strategy:
     type: RollingUpdate
@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        app: taints-lab-2
+        app: deployment-lab-2
     spec:
       containers:
       - name: lab-2
