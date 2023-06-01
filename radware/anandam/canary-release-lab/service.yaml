@@ -4,12 +4,11 @@ kind: Service
 metadata:
   name: animal-svc  
   labels:
-    app1: beer
-    app2: moose
+    app: beer, moose
 spec:
   selector:
     app: animal-app  
   ports: 
     - port: 80
-      targetPort: 80
+      targetPort: 8080
   type: LoadBalancer
