@@ -18,4 +18,4 @@ spec:
       - name: moose-app
         image: supergiantkir/animals:moose
         ports:
-        - containerPort: 80
+        - containerPort: 8080
