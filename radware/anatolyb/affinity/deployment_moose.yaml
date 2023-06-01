@@ -29,7 +29,7 @@ spec:
             operator: In
             values:
             - moose
-        topologyKey: "kubernetes.io/hostname"
+        topologyKey: "system"
       containers:
         - name: animals
           image: supergiantkir/animals:moose

@@ -1,12 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: bear
 spec:
-  selector:
+  replicas: 1
+  selector:  
     matchLabels:
       app: bear
-  replicas: 1
+      type: animals
   template:
     metadata:
       labels:
@@ -18,53 +19,45 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: beta.kubernetes.io/os
+              - key: system
                 operator: In
-                values:
+                values: 
                   - linux
       containers:
-      - name: app
+      - name: bear
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose-deployment
+  name: moose
 spec:
-  selector:
-    matchLabels:
-      app: moose
   replicas: 2
+  selector:  
+    matchLabels:
+      type: animals
+      app: moose
   template:
     metadata:
       labels:
-        app: moose
         type: animals
+        app: moose
     spec:
       affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - bear
-            topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - moose
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - moose
             topologyKey: topology.kubernetes.io/zone
       containers:
-      - name: app
+      - name: moose
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
+

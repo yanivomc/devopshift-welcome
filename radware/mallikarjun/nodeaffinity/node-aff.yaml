@@ -1,17 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: bear-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bear-apps
+      app: bear
+      type: animal
   template:
     metadata:
       labels:
-        app: bear-apps
-        type: animal-apps
+        app: bear
+        type: animal
     spec:
       affinity:
         nodeAffinity:
@@ -23,7 +24,7 @@ spec:
                 values:
                 - linux
       containers:
-      - name: bear
+      - name: canary-bear
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
