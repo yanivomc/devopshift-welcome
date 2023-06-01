@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-deployment
+  labels:
+    app: moose
+    type: animal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: moose-container
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
