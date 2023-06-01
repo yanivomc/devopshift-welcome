@@ -4,6 +4,7 @@ metadata:
   name: bear-deployment
 spec:
   replicas: 1
+  
   selector:
     matchLabels:
       app: bear
@@ -14,6 +15,15 @@ spec:
         app: bear
         type: animals
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+          - key: node.kubernetes.io/os
+            operator: In
+            values:
+            - linux
       containers:
       - name: bear-app
         image: supergiantkir/animals:bear
