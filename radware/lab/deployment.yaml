@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-app
+spec:
+  selector:
+    matchLabels:
+      app: lab-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: lab-app
+    spec:
+      containers:
+      - name: lab
+        image: yanivomc/spring-music:latest
+        ports:
+        - containerPort: 8080
