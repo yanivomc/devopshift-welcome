@@ -53,18 +53,16 @@ spec:
                 operator: In
                 values:
                 - bear
-            topologyKey: topology.kubernetes.io/node
+            topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - moose
-              topologyKey: topology.kubernetes.io/node
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - moose
+            topologyKey: topology.kubernetes.io/zone
       containers:
       - name: app
         image: supergiantkir/animals:moose
