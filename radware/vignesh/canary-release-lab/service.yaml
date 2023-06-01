@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: animal-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: animals
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
