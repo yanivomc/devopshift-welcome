@@ -1,16 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-<<<<<<< HEAD
   name: spring-music
-=======
-  name: spring-deployment
->>>>>>> 8f0c7ede6adc9b2a2ff9e340d38590854a6848b5
 spec:
   replicas: 2
   selector:
     matchLabels:
-<<<<<<< HEAD
       app: spring-music
   template:
     metadata:
@@ -27,7 +22,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-nginx
+  name: spring-music
   labels:
     app: spring-music
 spec:
@@ -36,16 +31,3 @@ spec:
       protocol: TCP
   selector:
     app: spring-music
-=======
-      app: spring
-  template:
-    metadata:
-      labels:
-        app: spring
-    spec:
-      containers:
-      - name: spring
-        image: yanivomc/spring-music:latest
-        ports:
-        - containerPort: 8080
->>>>>>> 8f0c7ede6adc9b2a2ff9e340d38590854a6848b5
