@@ -1,0 +1,28 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moose-app
+  template:
+    metadata:
+      labels:
+        app: moose-app
+    spec:
+      containers:
+      - name: moose-container
+        image: supergiantkir/animals:moose
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - bear-app
+            topologyKey: "kubernetes.io/hostname"
