@@ -16,5 +16,5 @@ spec:
       - name: bear
         image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 
