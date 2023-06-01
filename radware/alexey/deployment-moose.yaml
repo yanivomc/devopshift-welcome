@@ -19,4 +19,4 @@ spec:
       - name: moose-container
         image: supergiantkir/animals:moose
         ports:
-        - containerPort: 80
+        - containerPort: 8080
