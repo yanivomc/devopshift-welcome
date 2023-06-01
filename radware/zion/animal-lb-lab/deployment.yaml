@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-lb-bear
+spec:
+  selector:
+    matchLabels:
+      app: lab-lb-bear
+      lb: lab-lb-animal
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: lab-lb-bear
+        lb: lab-lb-animal
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-lb-moose
+spec:
+  selector:
+    matchLabels:
+      app: lab-lb-moose
+      lb: lab-lb-animal
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lab-lb-moose
+        lb: lab-lb-animal
+    spec:
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80

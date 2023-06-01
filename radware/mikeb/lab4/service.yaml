@@ -1,0 +1,13 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: animals-svc
+spec:
+  selector:
+    type: animals
+  ports:          # Map incoming port to target port
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
