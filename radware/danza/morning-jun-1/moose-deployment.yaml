@@ -26,16 +26,14 @@ spec:
                 - beer
             topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - moose
-              topologyKey: topology.kubernetes.io/zone            
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - moose
+            topologyKey: topology.kubernetes.io/zone            
       containers:
       - name: moose
         image: supergiantkir/animals:moose
