@@ -5,7 +5,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: bear
@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
       - name: canary-bear
-        image: supergiantkir/animals:bear
+        image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
