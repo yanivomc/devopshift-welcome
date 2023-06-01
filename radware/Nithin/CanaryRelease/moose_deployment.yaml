@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nithin-dep
+spec:
+  replicas: 1
+  selector:  
+    matchLabels:
+      lab: moose
+      type: animals
+  template:
+    metadata:
+      labels:
+        lab: moose
+        type: animals
+    spec:
+      containers:
+      - name: app2
+        image: supergiantkir/animals:moose
+        ports:
+          - containerPort: 80
