@@ -1,18 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear
+  name: affinity-lab-bear
 spec:
-  replicas: 1
-  selector:  
+  selector:
     matchLabels:
-      app: bear
-      type: animals
+      app: affinity-lab-bear
+  replicas: 1
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: affinity-lab-bear
     spec:
       affinity:
         nodeAffinity:
@@ -21,8 +19,8 @@ spec:
             - matchExpressions:
               - key: system
                 operator: In
-                values: 
-                  - linux
+                values:
+                - linux
       containers:
       - name: bear
         image: supergiantkir/animals:bear

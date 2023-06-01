@@ -1,0 +1,39 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affinity-lab-moose
+spec:
+  selector:
+    matchLabels:
+      app: affinity-lab-moose
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: affinity-lab-moose
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - affinity-lab-bear
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - affinity-lab-moose
+            topologyKey: topology.kubernetes.io/zone
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
