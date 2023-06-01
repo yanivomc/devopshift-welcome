@@ -17,17 +17,3 @@ spec:
           image: yanivomc/spring-music:latest
           ports:
             - containerPort: 8080
-              protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: spring-music
-  labels:
-    app: spring-music
-spec:
-  ports:
-    - port: 8080
-      protocol: TCP
-  selector:
-    app: spring-music

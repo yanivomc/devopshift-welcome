@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lab-deployment
+  name: bear-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: spring-music
+      app: canary-bear
   template:
     metadata:
       labels:
-        app: spring-music
+        app: canary-bear
     spec:
       containers:
-      - name: spring-music
-        image: yanivomc/spring-music:latest
+      - name: canary-bear
+        image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
