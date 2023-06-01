@@ -1,12 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-svc  
-  labels:
-    app: lab
+  name: animal-svc  
 spec:
   selector:
-    app: lab
+    type: animal-apps
   ports: 
     - port: 80
       targetPort: 80

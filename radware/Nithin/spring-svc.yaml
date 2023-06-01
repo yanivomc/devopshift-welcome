@@ -1,0 +1,13 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: spring-svc # Name of the service
+spec:
+  selector:
+    lab: morninglab    
+  ports:          # Map incoming port to target port
+  - name: spring-port
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: NodePort #using Nodeport
