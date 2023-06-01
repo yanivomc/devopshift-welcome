@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: moose-deploy
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: moose-app
@@ -28,7 +28,7 @@ spec:
               matchExpressions:
               - key: app
                 operator: In
-                values: ["moose"]
+                values: ["moose-app"]
             topologyKey: failure-domain.beta.kubernetes.io/zone
       containers:
       - image: supergiantkir/animals:moose
