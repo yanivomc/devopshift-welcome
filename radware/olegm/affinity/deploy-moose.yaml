@@ -6,22 +6,23 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: moose-apps
+      app: moose
+      type: animals
   template:
     metadata:
       labels:
-        app: moose-apps
-        type: animal-apps
+        app: moose
+        type: animals
     spec:
-      affinity:  
-        podAffinity:  
+      affinity:
+        podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
               - key: app
                 operator: In
-                values: 
-                - "bear-apps"
+                values:
+                - bear
             topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -30,11 +31,11 @@ spec:
               - key: app
                 operator: In
                 values:
-                - moose-apps
+                - moose
             topologyKey: topology.kubernetes.io/zone
-
       containers:
       - name: moose
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
+

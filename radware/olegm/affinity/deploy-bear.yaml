@@ -6,12 +6,13 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bear-apps
+      app: bear
+      type: animals
   template:
     metadata:
       labels:
-        app: bear-apps
-        type: animal-apps
+        app: bear
+        type: animals
     spec:
       affinity:
         nodeAffinity:
@@ -27,3 +28,4 @@ spec:
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
+
