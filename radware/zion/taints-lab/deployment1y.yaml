@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taints-lab-1
+spec:
+  selector:
+    matchLabels:
+      app: taints-lab-1
+  replicas: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: taints-lab-1
+    spec:
+      containers:
+      - name: lab-1
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
