@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-deployment
+spec:
+  selector:
+    matchLabels:
+      app: bear
+  replicas: 1
+  template: 
+    metadata:
+      labels:
+        app: bear
+        grp: bearmoose
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nkey
+                operator: In
+                values:
+                - node1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-deployment
+spec:
+  selector:
+    matchLabels:
+      app: moose
+  replicas: 2
+  template: 
+    metadata:
+      labels:
+        app: moose
+        grp: bearmoose
+    spec:
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
+      affinity:   
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: security
+                operator: In
+                values:
+                - S1
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - moose
+            topologyKey: topology.kubernetes.io/zone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bear-moose-service
+spec:
+  selector:
+    grp: bearmoose
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
