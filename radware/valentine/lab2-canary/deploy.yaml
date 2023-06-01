@@ -20,6 +20,10 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
       restartPolicy: Always
 ---
 apiVersion: apps/v1
@@ -44,6 +48,10 @@ spec:
         ports:
         - containerPort: 80
           protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
       restartPolicy: Always
 ---
 apiVersion: v1
