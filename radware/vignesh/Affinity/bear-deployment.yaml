@@ -1,30 +1,27 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear
+  name: bear-app
 spec:
   replicas: 1
-  selector:  
+  selector:
     matchLabels:
-      app: bear
-      type: animals
+      app: bear-app
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: bear-app
     spec:
+      containers:
+      - name: bear-container
+        image: supergiantkir/animals:bear
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: system
+              - key: beta.kubernetes.io/os
                 operator: In
-                values: 
-                  - linux
-      containers:
-      - name: bear
-        image: supergiantkir/animals:bear
-        ports:
-        - containerPort: 80
+                values:
+                - linux

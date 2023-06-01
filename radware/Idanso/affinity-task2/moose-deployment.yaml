@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: moose-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: moose-apps
@@ -23,16 +23,6 @@ spec:
                 values: 
                 - "bear-apps"
             topologyKey: topology.kubernetes.io/zone
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - moose-apps
-            topologyKey: topology.kubernetes.io/zone
-
       containers:
       - name: moose
         image: supergiantkir/animals:moose
