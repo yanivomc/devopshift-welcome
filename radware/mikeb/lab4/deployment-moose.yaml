@@ -11,7 +11,7 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 100%
-      maxUnavailable: 100%
+      maxUnavailable: 0%
   template:
     metadata:
       labels:
@@ -20,6 +20,6 @@ spec:
     spec:
       containers:
       - name: moose
-        image: supergiantkir/animals:moose
+        image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
