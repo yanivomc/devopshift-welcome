@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nithin-dep
+  name: moose-deployment
 spec:
-  replicas: 1
-  selector:  
+  replicas: 3
+  selector:
     matchLabels:
-      lab: moose
+      app: moose
       type: animals
   template:
     metadata:
       labels:
-        lab: moose
+        app: moose
         type: animals
     spec:
       containers:
-      - name: app2
+      - name: moose-app
         image: supergiantkir/animals:moose
         ports:
-          - containerPort: 80
+        - containerPort: 80
