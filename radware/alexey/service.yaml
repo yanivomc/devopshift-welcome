@@ -4,8 +4,9 @@ metadata:
   name: spring-svc
 spec:
   selector:
-    type: animal
+    type: animals
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+  type: NodePort
