@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2023-06-01T06:34:52Z"
+  labels:
+    app: morning-lab
+  name: morning-lab
+  namespace: default
+  resourceVersion: "5002"
+  uid: d9c92b83-78bd-4cda-824a-7c96b5206781
+spec:
+  clusterIP: 100.71.212.159
+  clusterIPs:
+  - 100.71.212.159
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 31558
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: morning-lab
+  sessionAffinity: None
+  type: NodePort
