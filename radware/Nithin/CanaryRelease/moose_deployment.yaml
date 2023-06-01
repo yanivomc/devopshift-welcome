@@ -13,26 +13,6 @@ spec:
         app: moose-apps
         type: animal-apps
     spec:
-      affinity:  
-        podAffinity:  
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values: 
-                - "bear-apps"
-            topologyKey: topology.kubernetes.io/zone
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - moose-apps
-            topologyKey: topology.kubernetes.io/zone
-
       containers:
       - name: moose
         image: supergiantkir/animals:moose

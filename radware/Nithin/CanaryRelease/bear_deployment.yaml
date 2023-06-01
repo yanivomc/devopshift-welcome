@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: bear-deployment
 spec:
-  replicas: 1
+  replicas: 5
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: bear-apps
@@ -13,17 +15,8 @@ spec:
         app: bear-apps
         type: animal-apps
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: system
-                operator: In
-                values:
-                - linux
       containers:
       - name: bear
-        image: supergiantkir/animals:bear
+        image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
