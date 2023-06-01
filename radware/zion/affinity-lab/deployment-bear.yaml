@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affinity-lab-bear
+spec:
+  selector:
+    matchLabels:
+      app: affinity-lab-bear
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: affinity-lab-bear
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: system
+                operator: In
+                values:
+                - linux
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
