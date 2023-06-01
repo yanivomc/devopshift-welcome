@@ -18,15 +18,6 @@ spec:
         app: animals
         type: bear
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: "system"
-                  operator: In
-                  values:
-                    - "linux"
       containers:
         - name: animals
           image: supergiantkir/animals:moose
