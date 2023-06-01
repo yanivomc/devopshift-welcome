@@ -3,7 +3,12 @@ kind: Deployment
 metadata:
   name: moose-deployment
 spec:
-  replicas: 3
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
   selector:
     matchLabels:
       app: moose
@@ -15,7 +20,8 @@ spec:
         type: animals
     spec:
       containers:
-      - name: moose-app
-        image: supergiantkir/animals:moose
+      - name: moose
+        image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+
