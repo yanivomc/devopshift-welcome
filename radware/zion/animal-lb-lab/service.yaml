@@ -4,7 +4,7 @@ metadata:
   name: lab-service-animals
 spec:
   selector:
-    app: lab-lb
+    lb: lab-lb-animal
   ports:
     - protocol: TCP
       port: 80
