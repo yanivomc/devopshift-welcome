@@ -5,7 +5,7 @@ metadata:
   labels:
     app: animals-bear
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: animals-bear
@@ -21,3 +21,12 @@ spec:
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: system
+                  operator: In
+                  values:
+                    - linux

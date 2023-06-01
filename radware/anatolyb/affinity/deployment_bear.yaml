@@ -3,7 +3,12 @@ kind: Deployment
 metadata:
   name: animals-bear
 spec:
-  replicas: 1
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100
+      maxUnavailable: 100
   selector:
     matchLabels:
       app: animals
@@ -13,18 +18,9 @@ spec:
         app: animals
         type: bear
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                - key: "system"
-                  operator: In
-                  values:
-                    - "linux"
       containers:
         - name: animals
-          image: supergiantkir/animals:bear
+          image: supergiantkir/animals:moose
           ports:
             - containerPort: 80
               protocol: TCP
