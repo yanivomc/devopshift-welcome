@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hezi-animals-bear-deployment
+  labels:
+    app: animals-bear
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: animals-bear
+      svc: animals-app      
+  template:
+    metadata:
+      labels:
+        app: animals-bear
+        svc: animals-app
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
