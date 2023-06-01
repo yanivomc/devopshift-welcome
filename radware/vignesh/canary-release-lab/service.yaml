@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-svc
+  name: animal-service
 spec:
+  type: LoadBalancer
   selector:
-    type: animals
+    app: animals
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
-  type: NodePort
+      targetPort: 80
