@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosse-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: moose
+      type: animal
+  template:
+    metadata:
+      labels:
+        app: moose
+        type: animal
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - bear
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - moose
+            topologyKey: topology.kubernetes.io/zone
+      containers:
+      - name: canary-moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
