@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-lab-2
+spec:
+  selector:
+    matchLabels:
+      app: deployment-lab-2
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: deployment-lab-2
+    spec:
+      containers:
+      - name: lab-2
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
