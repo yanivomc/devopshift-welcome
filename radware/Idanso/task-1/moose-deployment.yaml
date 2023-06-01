@@ -3,20 +3,18 @@ kind: Deployment
 metadata:
   name: moose-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: moose
-      type: animals
+      app: moose-apps
   template:
     metadata:
       labels:
-        app: moose
-        type: animals
+        app: moose-apps
+        type: animal-apps
     spec:
       containers:
       - name: moose
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
-
