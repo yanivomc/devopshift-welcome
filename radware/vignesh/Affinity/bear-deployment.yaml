@@ -1,0 +1,27 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bear-app
+  template:
+    metadata:
+      labels:
+        app: bear-app
+    spec:
+      containers:
+      - name: bear-container
+        image: supergiantkir/animals:bear
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/os
+                operator: In
+                values:
+                - linux
