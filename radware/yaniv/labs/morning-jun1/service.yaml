@@ -1,14 +1,13 @@
-
-apiVersion: v1
-kind: Service
+kind: Service     
+apiVersion: v1     
 metadata:
-  name: spring-svc  
-  labels:
-    app: spring-music
+  name: animals-svc #from RELEASE NAME
 spec:
   selector:
-    app: spring-music  
-  ports: 
-    - port: 80
-      targetPort: 8080
-  type: NodePort
+    type: animals    
+  type: LoadBalancer  #from values | DEFAULT TO NODEPORT
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
