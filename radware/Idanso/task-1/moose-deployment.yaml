@@ -1,18 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose
+  name: moose-deployment
 spec:
-  replicas: 1
-  selector:  
+  replicas: 2
+  selector:
     matchLabels:
-      type: animals
-      app: moose
+      app: moose-apps
   template:
     metadata:
       labels:
-        type: animals
-        app: moose
+        app: moose-apps
+        type: animal-apps
     spec:
       containers:
       - name: moose

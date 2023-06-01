@@ -1,14 +1,14 @@
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: animal-svc  
+  name: spring-svc
   labels:
-    app: beer, moose
+    app: spring-music
 spec:
   selector:
-    app: animal-app  
-  ports: 
+    app: spring-music
+  ports:
     - port: 80
       targetPort: 8080
-  type: LoadBalancer
+  type: NodePort
+  

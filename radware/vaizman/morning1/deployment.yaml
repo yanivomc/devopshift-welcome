@@ -5,12 +5,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: app
+      app: bear
   replicas: 2 
   template:
     metadata:
       labels:
-        app: app
+        app: bear
+        type: animals
     spec:
       containers:
       - name: app
@@ -26,12 +27,13 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: app
+      app: moose
   replicas: 1
   template:
     metadata:
       labels:
-        app: app
+        app: moose
+        type: animals
     spec:
       containers:
       - name: app

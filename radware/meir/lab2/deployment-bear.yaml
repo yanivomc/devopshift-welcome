@@ -15,8 +15,7 @@ spec:
         type: animals
     spec:
       containers:
-      - name: bear
+      - name: bear-app
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
-

@@ -9,6 +9,5 @@ spec:
     - port: 80
       protocol: TCP
   selector:
-    app: animals-bear
-    app2: animals-moose
+    app: animals
   type: LoadBalancer

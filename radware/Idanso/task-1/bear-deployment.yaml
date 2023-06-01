@@ -3,20 +3,18 @@ kind: Deployment
 metadata:
   name: bear-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: bear
-      type: animals
+      app: bear-apps
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: bear-apps
+        type: animal-apps
     spec:
       containers:
       - name: bear
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
-
