@@ -1,11 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app-deployment
+  name: bear-deployment
   labels:
-    app: my-app
+    app: bear
+    type: animal
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: my-app
@@ -15,7 +16,7 @@ spec:
         app: my-app
     spec:
       containers:
-      - name: my-app-container
-        image: my-app-image:latest
+      - name: bear-container
+        image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
