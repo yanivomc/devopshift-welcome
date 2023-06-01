@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: animals-moose
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
-      app2: animals-moose
+      app: animals
   template:
     metadata:
       labels:
-        app2: animals-moose
+        app: animals
     spec:
       containers:
         - name: animals
