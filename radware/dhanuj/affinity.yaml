@@ -7,27 +7,26 @@ spec:
     matchLabels:
       app: bear
   replicas: 1
-  template:
+  template: 
     metadata:
       labels:
         app: bear
-        type: animals
+        grp: bearmoose
     spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: beta.kubernetes.io/os
+              - key: nkey
                 operator: In
                 values:
-                  - linux
-      containers:
-      - name: app
-        image: supergiantkir/animals:bear
-        ports:
-        - containerPort: 80
-
+                - node1
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,13 +37,18 @@ spec:
     matchLabels:
       app: moose
   replicas: 2
-  template:
+  template: 
     metadata:
       labels:
         app: moose
-        type: animals
+        grp: bearmoose
     spec:
-      affinity:
+      containers:
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
+      affinity:   
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -63,8 +67,16 @@ spec:
                 values:
                 - moose
             topologyKey: topology.kubernetes.io/zone
-      containers:
-      - name: app
-        image: supergiantkir/animals:moose
-        ports:
-        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bear-moose-service
+spec:
+  selector:
+    grp: bearmoose
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
