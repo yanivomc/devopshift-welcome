@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lab-deployment
+  name: nithin-dep
 spec:
   replicas: 2
-  selector:
+  selector:  
     matchLabels:
-      app: spring-music
+      lab: morninglab
   template:
     metadata:
       labels:
-        app: spring-music
+        lab: morninglab
     spec:
       containers:
-      - name: spring-music
+      - name: app1
         image: yanivomc/spring-music:latest
         ports:
-        - containerPort: 8080
-
+          - containerPort: 8080
