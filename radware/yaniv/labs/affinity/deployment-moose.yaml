@@ -1,41 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose
+  name: moose-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: animals
-      animal: moose
+      app: moose-apps
   template:
     metadata:
       labels:
-        app: animals
-        animal: moose
+        app: moose-apps
+        type: animal-apps
     spec:
-      affinity:
-        podAffinity:
+      affinity:  
+        podAffinity:  
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: animal
+              - key: app
                 operator: In
-                values:
-                - bear
+                values: 
+                - "bear-apps"
             topologyKey: topology.kubernetes.io/zone
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: animal
+              - key: app
                 operator: In
                 values:
-                - moose
-            topologyKey: "topology.kubernetes.io/zone"
+                - moose-apps
+            topologyKey: topology.kubernetes.io/zone
 
       containers:
-        - name: moose
-          image: supergiantkir/animals:moose
-          ports:
-            - containerPort: 80
+      - name: moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
