@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend1
+spec:
+  containers:
+  - name: app1
+    image: nginx
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "64Mi"
+        cpu: "250m"
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend2
+spec:
+  containers:
+  - name: app2
+    image: nginx
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend3
+spec:
+  containers:
+  - name: app3
+    image: nginx
