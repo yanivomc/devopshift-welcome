@@ -14,17 +14,18 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - http:
-       paths:
-        - path: /
-          pathType: Prefix
+    - host: animals.52.30.63.97.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
 
-          backend:
-            service:
-              name: bear-svc
-              port:
-                 number: 80
-                 
+            backend:
+              service:
+                name: bear-svc
+                port:
+                  number: 80
+                  
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -36,7 +37,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - http:
+   - host: animals.52.30.63.97.nip.io
+     http:
        paths:
         - path: /
           pathType: Prefix
