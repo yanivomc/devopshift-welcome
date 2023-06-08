@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prom-agent
+  labels:
+    agent: prom
+spec:
+  selector:
+    matchLabels:
+      name: prom
+  template:
+    metadata:
+      labels:
+        name: prom
+    spec:
+      tolerations:  # Add toleration to allow running on control plane nodes
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      containers:
+        - image: nginx:latest
+          name: nginx

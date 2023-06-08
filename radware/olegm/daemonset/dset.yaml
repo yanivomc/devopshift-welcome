@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prom-agent
+  labels:
+    agent: prom
+spec:
+  selector:
+    matchLabels:
+      name: prom
+  template:
+    metadata:
+      labels:
+        name: prom
+    spec:
+      containers:
+        - image:  nginx:latest
+          name:  nginx
+      tolerations:
+        - key: "node-role.kubernetes.io"
+          operator: "Equal"
+          value: "control-plane"
+          effect: "NoSchedule"
