@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear
+spec:
+  replicas: 5
+  selector:  
+    matchLabels:
+      app: bear
+      type: animals
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: bear
+        type: animals
+    spec:
+      containers:
+      - name: bear
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+
