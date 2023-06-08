@@ -1,47 +1,3 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ingress
-  annotations:
-   nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
-
-
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: bear.100.70.251.121.nip.io
-    http:
-      - backend:
-          service:
-            name: bear-svc
-            port:
-                number: 80
-        paths: /
-  - host: moose.100.70.251.121.nip.io
-    http:
-      - backend:
-          service:
-            name: moose-svc
-            port:
-                number: 80
-        paths: /
-  - host: animals.100.70.251.121.nip.io
-      paths:
-        - path: /
-          backend:
-            service:
-              name: moose-svc
-              port:
-                  number: 80
-        - path: /
-          backend:
-            service:
-              name: bear-svc
-              port:
-                  number: 80
-            
-
-
 # apiVersion: networking.k8s.io/v1
 # kind: Ingress
 # metadata:
@@ -53,19 +9,63 @@ spec:
 # spec:
 #   ingressClassName: nginx
 #   rules:
-#   - http:
-#       paths:
-#       - path: /animal(/|$)(.*)
-#         pathType: Prefix
-#         backend:
+#   - host: bear.100.70.251.121.nip.io
+#     http:
+#       - backend:
 #           service:
-#              name: animal-svc
-#              port:
+#             name: bear-svc
+#             port:
 #                 number: 80
-#       # - path: /animal(/|$)(.*)
-#       #   pathType: Prefix
-#       #   backend:
-#       #     service:
-#       #        name: moose-svc
-#       #        port:
-#       #           number: 80
+#         paths: /
+#   - host: moose.100.70.251.121.nip.io
+#     http:
+#       - backend:
+#           service:
+#             name: moose-svc
+#             port:
+#                 number: 80
+#         paths: /
+#   - host: animals.100.70.251.121.nip.io
+#       paths:
+#         - path: /
+#           backend:
+#             service:
+#               name: moose-svc
+#               port:
+#                   number: 80
+#         - path: /
+#           backend:
+#             service:
+#               name: bear-svc
+#               port:
+#                   number: 80
+            
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+   nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
+
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /animal(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: animal-svc
+             port:
+                number: 80
+      # - path: /animal(/|$)(.*)
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #        name: moose-svc
+      #        port:
+      #           number: 80
