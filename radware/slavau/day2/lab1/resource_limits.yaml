@@ -5,7 +5,7 @@ metadata:
 spec:
   limits:
   - default:
-      memory: Mi
+      memory: 0Mi
     defaultRequest:
       memory: 0Mi
     type: Container
