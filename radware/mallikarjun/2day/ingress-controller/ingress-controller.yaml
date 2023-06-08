@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: bear-100.67.31.189.nip.io
+  - host: bear.52.210.194.95.nip.io
     http:
       paths:
       - path: /bear(/|$)(.*)
@@ -19,6 +19,22 @@ spec:
              name: bear-svc
              port:
                 number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-moose
+  annotations:
+   nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
+
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: moose.52.210.194.95.nip.io
+    http:
+      paths:
       - path: /moose(/|$)(.*)
         pathType: Prefix
         backend:
