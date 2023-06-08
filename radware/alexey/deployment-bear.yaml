@@ -21,5 +21,12 @@ spec:
       containers:
       - name: bear-app
         image: supergiantkir/animals:bear
+        resources:
+          limits:
+            cpu: "1000"
+            memory: "500Mi"
+          requests:
+            cpu: "500"
+            memory: "250Mi"        
         ports:
         - containerPort: 8080
