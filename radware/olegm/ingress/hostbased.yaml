@@ -31,3 +31,30 @@ spec:
              name: moose-svc
              port:
                 number: 80              
+  - host: bear.52.31.3.201.nip.io
+    http:
+      paths:
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80
+  - host: animals-52.31.3.201.nip.io
+    http:
+      paths:
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+      - path: /bear(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80                                      
