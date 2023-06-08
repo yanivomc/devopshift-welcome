@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qos-burs-pod
+spec:
+  containers:
+  - name: qos-burspod
+    image: nginx
+    resources:
+      limits:
+        memory: "400Mi"
+        cpu: "1000m"
+      requests:
+        memory: "200Mi"
+        cpu: "700m"
