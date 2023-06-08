@@ -13,14 +13,10 @@ spec:
       labels:
         name: prom
     spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
       containers:
         - image:  nginx:latest
           name:  nginx
-      tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
-          operator: "Exists"
-          effect: "NoSchedule"
-        - key: "prom"
-          operator: "Equal"
-          value: "prom"
-          effect: "NoSchedule"  

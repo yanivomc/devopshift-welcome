@@ -17,10 +17,6 @@ spec:
         - image:  nginx:latest
           name:  nginx
       tolerations:
-        - key: "node-role.kubernetes.io/control-plane"
+        - key: node-role.kubernetes.io/control-plane
           operator: "Exists"
-          effect: "NoSchedule"
-        - key: "prom"
-          operator: "Equal"
-          value: "prom"
-          effect: "NoSchedule"  
+          effect: NoSchedule
