@@ -1,11 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-with-auth
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
-    
-
+  name: hostbased
 
 spec:
   ingressClassName: nginx
@@ -14,7 +10,7 @@ spec:
   - host: bear.52.31.3.201.nip.io
     http:
       paths:
-      - path: /(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -24,23 +20,24 @@ spec:
   - host: moose.52.31.3.201.nip.io
     http:
       paths:
-      - path: /(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
              name: moose-svc
              port:
                 number: 80              
-  - host: bear.52.31.3.201.nip.io
-    http:
-      paths:
-      - path: /(.*)
-        pathType: Prefix
-        backend:
-          service:
-             name: bear-svc
-             port:
-                number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: animals
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
+
+spec:
+  ingressClassName: nginx
+  rules:
   - host: animals-52.31.3.201.nip.io
     http:
       paths:
@@ -57,4 +54,30 @@ spec:
           service:
              name: bear-svc
              port:
-                number: 80                                      
+                number: 80         
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-animals
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-animals.52.31.3.201.nip.io
+    http:
+      paths:
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+      - path: /bear(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80                                                    
