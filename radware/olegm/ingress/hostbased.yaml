@@ -41,14 +41,14 @@ spec:
   - host: animals-52.31.3.201.nip.io
     http:
       paths:
-      - path: /moose(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
              name: moose-svc
              port:
                 number: 80
-      - path: /bear(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
