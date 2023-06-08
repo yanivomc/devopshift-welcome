@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bear
+spec:
+  ingressClassName: nginx
+  rules:
+  # change the IP below based on the DNS resolution of your LB (under kubectl get svc -n ingress-nginx)
+  - host: bear.79.125.86.183.nip.io 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80
