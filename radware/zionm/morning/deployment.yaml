@@ -1,7 +1,15 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8slab
+
+---
+
+apiVersion: v1
 kind: Pod
 metadata:
   name: frontend1
+  namespace: k8slab
 spec:
   containers:
   - name: app1
@@ -20,6 +28,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: frontend2
+  namespace: k8slab
 spec:
   containers:
   - name: app2
@@ -38,6 +47,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: frontend3
+  namespace: k8slab
 spec:
   containers:
   - name: app3
