@@ -1,0 +1,123 @@
+import os
+import sys
+import pika
+import json
+import mysql.connector
+import logging
+DEBUG = True
+
+# RabbitMQ Configuration
+RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
+RMQ_QUEUE = os.getenv("RMQ_QUEUE", "queue_name")
+RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
+RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
+
+# MySQL Configuration
+MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
+MYSQL_USER = os.getenv("MYSQL_USER", "username")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "password")
+MYSQL_DB = os.getenv("MYSQL_DB", "db_name")
+
+# Logging Configuration
+logging.basicConfig(level=logging.DEBUG if os.getenv("DEBUG") == "true" else logging.INFO)
+
+# Message validation
+REQUIRED_KEYS = {"clientname", "nftid", "nftprice", "nftimage_url"}
+
+
+# RabbitMQ Connection
+rmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
+rmq_channel = rmq_connection.channel()
+
+# MySQL Connection
+mysql_conn = mysql.connector.connect(
+    host=MYSQL_HOST,
+    user=MYSQL_USER,
+    password=MYSQL_PASSWORD,
+    database=MYSQL_DB,
+)
+mysql_cursor = mysql_conn.cursor()
+
+
+def handle_message(ch, method, properties, body):
+    logging.debug(f"Received {body}")
+
+    # Parse and validate message
+    try:
+        message = json.loads(body)
+        if not REQUIRED_KEYS.issubset(message):
+            raise ValueError("Missing required keys")
+        if any(not message[key] for key in REQUIRED_KEYS):
+            raise ValueError("One or more keys have empty values")
+
+        # Save to MySQL
+        mysql_cursor.execute(
+            "INSERT INTO sold_nfts (clientname, nftid, nftprice, nftimage_url) VALUES (%s, %s, %s, %s)",
+            (message["clientname"], message["nftid"], message["nftprice"], message["nftimage_url"]),
+        )
+        mysql_conn.commit()
+        logging.debug("Saved to MySQL")
+
+        # Publish to RMQ
+        rmq_channel.basic_publish(
+            exchange="",
+            routing_key=RMQ_QUEUE_MV,
+            body=body,
+        )
+        logging.debug("Published to RMQ")
+
+        # Acknowledge message
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        logging.debug("Acknowledged message")
+
+    except Exception as e:
+        logging.error(f"Failed to process message: {e}")
+        rmq_channel.basic_publish(
+            exchange="",
+            routing_key=RMQ_QUEUE_DLX,
+            body=body,
+        )
+        ch.basic_nack(delivery_tag=method.delivery_tag)
+
+
+
+
+def init_rmq_mysql():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
+    channel = connection.channel()
+
+    # Create RMQ queue if not exists
+    try:
+        channel.queue_declare(queue=RMQ_QUEUE)
+        channel.queue_declare(queue=RMQ_QUEUE_DLX)
+        channel.queue_declare(queue=RMQ_QUEUE_MV)
+    except Exception as e:
+        if DEBUG:
+            print(f"Failed to create RMQ queue: {e}")
+        sys.exit(1)
+
+    # Create MySQL table if not exists
+    cnx = mysql.connector.connect(user=MYSQL_USER, database=MYSQL_DB)
+    cursor = cnx.cursor()
+    table_create_query = f"""
+    CREATE TABLE IF NOT EXISTS {'sold_nfts'} (
+        clientname VARCHAR(255),
+        nftid VARCHAR(255),
+        nftprice FLOAT,
+        nftimage_url VARCHAR(255)
+    );
+    """
+    try:
+        cursor.execute(table_create_query)
+        cnx.commit()
+    except Exception as e:
+        if DEBUG:
+            print(f"Failed to create MySQL table: {e}")
+        sys.exit(1)
+    rmq_channel.basic_consume(queue=RMQ_QUEUE, on_message_callback=handle_message, auto_ack=False)
+    rmq_channel.start_consuming()
+
+
+if __name__ == "__main__":
+    init_rmq_mysql()
+    # Rest of the script...
