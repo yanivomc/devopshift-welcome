@@ -8,9 +8,11 @@ DEBUG = True
 
 # RabbitMQ Configuration
 RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
-RMQ_QUEUE = os.getenv("RMQ_QUEUE", "queue_name")
+RMQ_QUEUE = os.getenv("RMQ_QUEUE", "nft-mv")
 RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
 RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
+RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
+RMQ_PASSWORD = os.getenv("RMQ_PASSWORD", "123456")
 
 # MySQL Configuration
 MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
@@ -24,19 +26,26 @@ logging.basicConfig(level=logging.DEBUG if os.getenv("DEBUG") == "true" else log
 # Message validation
 REQUIRED_KEYS = {"clientname", "nftid", "nftprice", "nftimage_url"}
 
+DEBUG_RMQ = os.environ.get('DEBUG_RMQ', False)
+DEBUG_MYSQL = os.environ.get('DEBUG_MYSQL', True)
 
-# RabbitMQ Connection
-rmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
-rmq_channel = rmq_connection.channel()
+if not DEBUG_RMQ==True:
+    # RabbitMQ Connection
+    credentials = pika.PlainCredentials(RMQ_USERNAME, RMQ_PASSWORD)
+    parameters = pika.ConnectionParameters(host=RMQ_HOST, credentials=credentials)
+    rmq_connection = pika.BlockingConnection(parameters)
+    # rmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
+    rmq_channel = rmq_connection.channel()
 
-# MySQL Connection
-mysql_conn = mysql.connector.connect(
-    host=MYSQL_HOST,
-    user=MYSQL_USER,
-    password=MYSQL_PASSWORD,
-    database=MYSQL_DB,
-)
-mysql_cursor = mysql_conn.cursor()
+if not DEBUG_MYSQL==True:
+    # MySQL Connection
+    mysql_conn = mysql.connector.connect(
+        host=MYSQL_HOST,
+        user=MYSQL_USER,
+        password=MYSQL_PASSWORD,
+        database=MYSQL_DB,
+    )
+    mysql_cursor = mysql_conn.cursor()
 
 
 def handle_message(ch, method, properties, body):
@@ -83,39 +92,41 @@ def handle_message(ch, method, properties, body):
 
 
 def init_rmq_mysql():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
-    channel = connection.channel()
+    # connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
+    # channel = connection.channel()
 
-    # Create RMQ queue if not exists
-    try:
-        channel.queue_declare(queue=RMQ_QUEUE)
-        channel.queue_declare(queue=RMQ_QUEUE_DLX)
-        channel.queue_declare(queue=RMQ_QUEUE_MV)
-    except Exception as e:
-        if DEBUG:
-            print(f"Failed to create RMQ queue: {e}")
-        sys.exit(1)
-
-    # Create MySQL table if not exists
-    cnx = mysql.connector.connect(user=MYSQL_USER, database=MYSQL_DB)
-    cursor = cnx.cursor()
-    table_create_query = f"""
-    CREATE TABLE IF NOT EXISTS {'sold_nfts'} (
-        clientname VARCHAR(255),
-        nftid VARCHAR(255),
-        nftprice FLOAT,
-        nftimage_url VARCHAR(255)
-    );
-    """
-    try:
-        cursor.execute(table_create_query)
-        cnx.commit()
-    except Exception as e:
-        if DEBUG:
-            print(f"Failed to create MySQL table: {e}")
-        sys.exit(1)
-    rmq_channel.basic_consume(queue=RMQ_QUEUE, on_message_callback=handle_message, auto_ack=False)
-    rmq_channel.start_consuming()
+    if not DEBUG_RMQ==True:
+        # Create RMQ queue if not exists
+        try:
+            rmq_channel.queue_declare(queue=RMQ_QUEUE)
+            rmq_channel.queue_declare(queue=RMQ_QUEUE_DLX)
+            rmq_channel.queue_declare(queue=RMQ_QUEUE_MV)
+        except Exception as e:
+            if DEBUG:
+                print(f"Failed to create RMQ queue: {e}")
+            sys.exit(1)
+    if not DEBUG_MYSQL==True:
+        # Create MySQL table if not exists
+        cnx = mysql.connector.connect(user=MYSQL_USER, database=MYSQL_DB)
+        cursor = cnx.cursor()
+        table_create_query = f"""
+        CREATE TABLE IF NOT EXISTS {'sold_nfts'} (
+            clientname VARCHAR(255),
+            nftid VARCHAR(255),
+            nftprice FLOAT,
+            nftimage_url VARCHAR(255)
+        );
+        """
+        try:
+            cursor.execute(table_create_query)
+            cnx.commit()
+        except Exception as e:
+            if DEBUG:
+                print(f"Failed to create MySQL table: {e}")
+            sys.exit(1)
+    if not DEBUG_RMQ==True:            
+        rmq_channel.basic_consume(queue=RMQ_QUEUE, on_message_callback=handle_message, auto_ack=False)
+        rmq_channel.start_consuming()
 
 
 if __name__ == "__main__":

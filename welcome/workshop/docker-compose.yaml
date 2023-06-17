@@ -16,7 +16,7 @@ services:
     depends_on:
       - rmq
       - mongo
-      - myqsl
+      # - myqsl
 
 ############################
   # RMQ - queue layer

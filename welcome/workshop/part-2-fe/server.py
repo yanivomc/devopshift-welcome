@@ -8,6 +8,15 @@ app = Flask(__name__)
 # Debug flag
 app.config['DEBUG'] = os.environ.get('DEBUG', 'True').lower() == 'true'
 
+
+# RabbitMQ Configuration
+RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
+RMQ_QUEUE = os.getenv("RMQ_QUEUE", "nft-mv")
+RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
+RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
+RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
+RMQ_PASSWORD = os.getenv("RMQ_PASSWORD", "123456")
+
 # Mock data
 mock_nfts = [
     {"nftid": "1", "nftimage_url": "https://placekitten.com/200/300", "nftdescription": "Description of NFT 1", "price": "100"},
@@ -30,8 +39,11 @@ if not app.config['DEBUG']:
     from pymongo import MongoClient # to connect to MongoDB
 
     # setup RabbitMQ connection
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost')) # replace 'localhost' with your RMQ server
-    channel = connection.channel()
+    credentials = pika.PlainCredentials(RMQ_USERNAME, RMQ_PASSWORD)
+    parameters = pika.ConnectionParameters(host=RMQ_HOST, credentials=credentials)
+    rmq_connection = pika.BlockingConnection(parameters)
+    # rmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
+    channel = rmq_connection.channel()
 
     # setup MongoDB connection
     client = MongoClient('mongodb://localhost:27017/') # replace with your MongoDB connection string
