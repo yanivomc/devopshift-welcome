@@ -23,3 +23,9 @@ Your job is to take these requirements and build a comprehensive architecture di
 Remember, there's no one 'correct' way to build this diagram. The goal is to understand the role and interaction of each component within the system.
 
 Good luck!
+
+
+
+
+
+**Task 2: Migrate the Docker compose into helm chart and expose it using ingress controller**
