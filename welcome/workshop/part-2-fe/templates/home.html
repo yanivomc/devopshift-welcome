@@ -36,7 +36,9 @@
                         data-nftid="{{ nft.nftid }}" 
                         data-nftimage_url="{{ nft.nftimage_url }}" 
                         data-nftdescription="{{ nft.nftdescription }}" 
-                        data-price="{{ nft.price }}">
+                        data-price="{{ nft.price }}"
+                        data-trx_id="{{ nft.trx_id }}">
+                        
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ nft.nftdescription }}</h5>
                         <p>{{ nft.price }}</p>
@@ -69,6 +71,7 @@
                     <img id="nftimage" src="" alt="NFT image" class="img-fluid">
                     <p id="nftdescription"></p>
                     <p id="nftprice"></p>
+                    <p id="trx_id"></p>
                 </div>
                 <div class="modal-footer">
                     <input type="text" id="clientname" placeholder="Your name" class="form-control">
@@ -86,8 +89,10 @@
         var nftimage_url = $(this).data('nftimage_url');
         var nftdescription = $(this).data('nftdescription');
         var price = $(this).data('price');
+        var trx_id = $(this).data('trx_id');
 
         $('#nftid').text('ID: ' + nftid);
+        $('#trx_id').text('trx_id: ' + trx_id);
         $('#nftimage').attr('src', nftimage_url);
         $('#nftdescription').text(nftdescription);
         $('#nftprice').text('Price: ' + price);
@@ -100,8 +105,9 @@
         var nftid = $('#nftid').text().substring(4);  // Remove 'ID: ' from the string
         var nftprice = $('#nftprice').text().substring(7);  // Remove 'Price: ' from the string
         var nftimage_url = $('#nftimage').attr('src');
-        
-        $.post('/buy', {clientname: clientname, nftid: nftid, nftprice: nftprice, nftimage_url: nftimage_url}, function(data){
+        var trx_id = $('#trx_id').text().substring(8);  // Remove 'trx_id: ' from the string
+
+        $.post('/buy', {trx_id: trx_id ,clientname: clientname, nftid: nftid, nftprice: nftprice, nftimage_url: nftimage_url}, function(data){
             if(data.status === 'success'){
                 alert('Purchase successful!');
                 $('#nftModal').modal('hide');

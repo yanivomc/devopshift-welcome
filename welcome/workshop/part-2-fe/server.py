@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify
-import pika # for RabbitMQ
+import pika # for RabbitMQ 
+import json
 from pymongo import MongoClient # to connect to MongoDB
 import os
+import src.generators.nftGenerator as nftGenerator
 
 app = Flask(__name__)
 
@@ -9,34 +11,42 @@ app = Flask(__name__)
 app.config['DEBUG'] = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 
+DEBUG_RMQ = os.environ.get('DEBUG_RMQ', False)
+DEBUG_MONGO = os.environ.get('DEBUG_MONGO', False)
+
 # RabbitMQ Configuration
 RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
-RMQ_QUEUE = os.getenv("RMQ_QUEUE", "nft-mv")
+RMQ_QUEUE = os.getenv("RMQ_QUEUE", "sold-nft")
 RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
 RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
 RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
 RMQ_PASSWORD = os.getenv("RMQ_PASSWORD", "123456")
-
+# Mongo Configuration
+MONGO_HOST = os.getenv("MONGO_HOST", 'mongodb://root:pass12345@localhost:27017/')
 # Mock data
-mock_nfts = [
-    {"nftid": "1", "nftimage_url": "https://placekitten.com/200/300", "nftdescription": "Description of NFT 1", "price": "100"},
-    {"nftid": "2", "nftimage_url": "https://placekitten.com/200/301", "nftdescription": "Description of NFT 2", "price": "200"},
-    {"nftid": "3", "nftimage_url": "https://placekitten.com/200/302", "nftdescription": "Description of NFT 3", "price": "300"},
-    {"nftid": "4", "nftimage_url": "https://placekitten.com/200/303", "nftdescription": "Description of NFT 4", "price": "400"},
-    {"nftid": "5", "nftimage_url": "https://placekitten.com/200/304", "nftdescription": "Description of NFT 5", "price": "500"},
-    {"nftid": "6", "nftimage_url": "https://placekitten.com/200/305", "nftdescription": "Description of NFT 6", "price": "600"},
-    {"nftid": "7", "nftimage_url": "https://placekitten.com/200/306", "nftdescription": "Description of NFT 7", "price": "700"},
-    {"nftid": "8", "nftimage_url": "https://placekitten.com/200/307", "nftdescription": "Description of NFT 8", "price": "800"},
-    {"nftid": "9", "nftimage_url": "https://placekitten.com/200/308", "nftdescription": "Description of NFT 9", "price": "900"},
-    {"nftid": "10", "nftimage_url": "https://placekitten.com/200/309", "nftdescription": "Description of NFT 10", "price": "1000"},
-]
+x = 0
+mock_nfts = []
+loadingnft="############### LOADING NFT'S PLEASE WAIT ###################"
+print(loadingnft)
+while (x < 10):
+    nft={
+          "nftid": nftGenerator.genearte_random_trxID(), 
+          "nftimage_url": nftGenerator.generate_random_nft(),
+          "nftdescription": "Description of NFT", 
+          "price": nftGenerator.genearte_random_price()
+          }
+    mock_nfts.append(nft)
+    x+=1
+
+
 
 # In-memory data
 sold_nfts_list = []
 
-if not app.config['DEBUG']:
+if not DEBUG_RMQ == True:
     import pika # for RabbitMQ
     from pymongo import MongoClient # to connect to MongoDB
+
 
     # setup RabbitMQ connection
     credentials = pika.PlainCredentials(RMQ_USERNAME, RMQ_PASSWORD)
@@ -46,16 +56,17 @@ if not app.config['DEBUG']:
     channel = rmq_connection.channel()
 
     # setup MongoDB connection
-    client = MongoClient('mongodb://localhost:27017/') # replace with your MongoDB connection string
-    db = client['nft_db'] # replace 'nft_db' with your MongoDB database name
-    nft_collection = db['nft_collection'] # replace 'nft_collection' with your MongoDB collection name
+    if not DEBUG_MONGO == True:
+        client = MongoClient(MONGO_HOST)
+        db = client['nft_db'] # replace 'nft_db' with your MongoDB database name
+        sold_nfts_mv_collections = db['sold_nfts_mv_collections'] # replace 'nft_collection' with your MongoDB collection name
 
 @app.route('/')
 def home():
-    if app.config['DEBUG']:
-        nfts = mock_nfts
-    else:
-        nfts = list(nft_collection.find({}))
+    # if DEBUG_MONGO == True :
+    nfts = mock_nfts
+    # else:
+        # nfts = list(nft_collection.find({}))
     return render_template('home.html', nfts=nfts)
 
 @app.route('/buy', methods=['POST'])
@@ -64,13 +75,15 @@ def buy():
     nftid = request.form.get('nftid')
     nftprice = request.form.get('nftprice')
     nftimage_url = request.form.get('nftimage_url')
+    trx_id = nftGenerator.genearte_random_trxID()
 
-    if app.config['DEBUG']:
+    if DEBUG_RMQ == True:
         sold_nfts_list.append({
             'clientname': clientname,
             'nftid': nftid,
             'nftprice': nftprice,
-            'nftimage_url': nftimage_url
+            'nftimage_url': nftimage_url,
+            'trx_id': trx_id
         })
         
         message={
@@ -81,21 +94,25 @@ def buy():
         print(message)
     else:
         # send data to RabbitMQ!
-        channel.basic_publish(exchange='', routing_key='products', body=f'{clientname},{nftid},{nftprice},{nftimage_url}')
+        body_dict = {"trx_status":"pending", "trx_id": trx_id,"clientname": clientname, "nftid": nftid, "nftprice": nftprice, "nftimage_url": nftimage_url}
+        body = json.dumps(body_dict)
+        channel.basic_publish(exchange='sold_nft_ex', routing_key='', body=body)
+        # channel.basic_publish(exchange='sold_nft_ex', body=body)
+
 
     return jsonify({'status': 'success'})
 
 @app.route('/nft-sold', methods=['GET', 'POST'])
 def sold_nfts():
     if request.method == 'POST':
-        if app.config['DEBUG']:
+        if DEBUG_MONGO == True:
             sold = sold_nfts_list
         else:
-            sold = list(nft_collection.find({}))
+            sold = list(sold_nfts_mv_collections.find({}))
         return jsonify(sold)  # return data as JSON for POST requests
 
     else:  # GET request
-        if app.config['DEBUG']:
+        if  DEBUG_MONGO == True:
             message={
                 'msg': 'Sold nfts list',
                 'soldlist': sold_nfts_list
@@ -103,8 +120,8 @@ def sold_nfts():
             print(message)
             sold = sold_nfts_list
         else:
-            sold = list(nft_collection.find({}))
+            sold = list(sold_nfts_mv_collections.find({}))
         return render_template('sold_nfts.html', data=sold)  # render HTML for GET requests
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=8081 ,debug=True)

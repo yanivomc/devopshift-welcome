@@ -4,11 +4,11 @@ import pika
 import json
 import mysql.connector
 import logging
-DEBUG = True
+
 
 # RabbitMQ Configuration
 RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
-RMQ_QUEUE = os.getenv("RMQ_QUEUE", "nft-mv")
+RMQ_QUEUE = os.getenv("RMQ_QUEUE", "sold-nft")
 RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
 RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
 RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
@@ -24,7 +24,7 @@ MYSQL_DB = os.getenv("MYSQL_DB", "db_name")
 logging.basicConfig(level=logging.DEBUG if os.getenv("DEBUG") == "true" else logging.INFO)
 
 # Message validation
-REQUIRED_KEYS = {"clientname", "nftid", "nftprice", "nftimage_url"}
+REQUIRED_KEYS = {"trx_status", "trx_id","clientname", "nftid", "nftprice", "nftimage_url"}
 
 DEBUG_RMQ = os.environ.get('DEBUG_RMQ', False)
 DEBUG_MYSQL = os.environ.get('DEBUG_MYSQL', True)
@@ -58,20 +58,22 @@ def handle_message(ch, method, properties, body):
             raise ValueError("Missing required keys")
         if any(not message[key] for key in REQUIRED_KEYS):
             raise ValueError("One or more keys have empty values")
-
-        # Save to MySQL
-        mysql_cursor.execute(
-            "INSERT INTO sold_nfts (clientname, nftid, nftprice, nftimage_url) VALUES (%s, %s, %s, %s)",
-            (message["clientname"], message["nftid"], message["nftprice"], message["nftimage_url"]),
-        )
-        mysql_conn.commit()
-        logging.debug("Saved to MySQL")
+        # Update body trx_status with status stored in PROCESSED
+        message["trx_status"] = "Processed"
+        if not DEBUG_MYSQL==True:
+            # Save to MySQL
+            mysql_cursor.execute(
+                "INSERT INTO sold_nfts (trx_status,trx_id, clientname, nftid, nftprice, nftimage_url) VALUES (%s, %s, %s, %s)",
+                (message["trx_status"],message["trx_id"],message["clientname"], message["nftid"], message["nftprice"], message["nftimage_url"]),
+            )
+            mysql_conn.commit()
+            logging.debug("Saved to MySQL")
 
         # Publish to RMQ
         rmq_channel.basic_publish(
             exchange="",
             routing_key=RMQ_QUEUE_MV,
-            body=body,
+            body=json.dumps(message),
         )
         logging.debug("Published to RMQ")
 
@@ -111,6 +113,8 @@ def init_rmq_mysql():
         cursor = cnx.cursor()
         table_create_query = f"""
         CREATE TABLE IF NOT EXISTS {'sold_nfts'} (
+            trx_status VARCHAR(255),
+            trx_id VARCHAR(255),
             clientname VARCHAR(255),
             nftid VARCHAR(255),
             nftprice FLOAT,
@@ -121,7 +125,7 @@ def init_rmq_mysql():
             cursor.execute(table_create_query)
             cnx.commit()
         except Exception as e:
-            if DEBUG:
+            if DEBUG_MYSQL:
                 print(f"Failed to create MySQL table: {e}")
             sys.exit(1)
     if not DEBUG_RMQ==True:            
@@ -130,5 +134,6 @@ def init_rmq_mysql():
 
 
 if __name__ == "__main__":
+    logging.root.setLevel(logging.DEBUG)
     init_rmq_mysql()
-    # Rest of the script...
+

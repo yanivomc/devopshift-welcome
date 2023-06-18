@@ -7,6 +7,10 @@ services:
       - cloudframework
     depends_on:
       - product-consumer
+      - rmq
+      - mongo
+    ports:
+      - "8080:8081"
   
   product-consumer:
     image: yanivomc/product-consumer-nft:latest
@@ -17,6 +21,15 @@ services:
       - rmq
       - mongo
       # - myqsl
+  
+  consumer-mv:
+    image: yanivomc/consumer-mv-nft:latest
+    build: ./part-4-mv-consumer
+    networks:
+      - cloudframework
+    depends_on:
+      - rmq
+      - mongo
 
 ############################
   # RMQ - queue layer
@@ -41,6 +54,7 @@ services:
 ############################
   mongo:
     image: "mongo"
+    container_name: mongo
     environment:
         - MONGO_INITDB_ROOT_USERNAME=root
         - MONGO_INITDB_ROOT_PASSWORD=pass12345
@@ -55,7 +69,7 @@ services:
 ############################
   mongo-express:
     image: mongo-express
-    container_name: mongo-express
+    
     environment:
     - ME_CONFIG_MONGODB_SERVER=mongo
     - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
@@ -68,7 +82,7 @@ services:
     networks:
     - cloudframework
     ports:
-    - 8081:8081
+    - 9091:8081
 
 
 networks:

@@ -14,11 +14,10 @@ ADD . /app
 EXPOSE 5000
 
 # Define environment variables
-ENV MONGO_HOST="mongodb://root:pass12345@mongo:27017/"
-ENV MONGO_DB=nft_db
-ENV MONGO_COLLECTION=nft_collection
 ENV RMQ_HOST=rmq
-ENV DEBUG=True
-
+ENV RMQ_QUEUE=sold-nft
+ENV RMQ_QUEUE_DLX=dead-letter-sold-nfts
+ENV RMQ_QUEUE_MV=sold-nfts-mv
+ENV MONGO_HOST="mongodb://root:pass12345@mongo:27017/"
 # Run server.py when the container launches
 CMD ["python", "server.py"]
