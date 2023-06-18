@@ -19,7 +19,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>NFTs for Sale</h1>
+    <h1>HOME - NFTs for Sale  / <a href="/nft-sold">SOLD NFT'S</a></h1>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             {% for nft in nfts %}
@@ -73,6 +73,7 @@
                     <p id="nftprice"></p>
                     <p id="trx_id"></p>
                 </div>
+                <a href="/sold-nft">Link to sold-nft's</a>
                 <div class="modal-footer">
                     <input type="text" id="clientname" placeholder="Your name" class="form-control">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -111,6 +112,8 @@
             if(data.status === 'success'){
                 alert('Purchase successful!');
                 $('#nftModal').modal('hide');
+                window.location.href="/nft-sold"
+
             } else {
                 alert('Purchase failed. Please try again.');
             }

@@ -4,6 +4,7 @@ import pika
 import json
 import mysql.connector
 import logging
+import time
 
 
 # RabbitMQ Configuration
@@ -59,6 +60,7 @@ def handle_message(ch, method, properties, body):
         if any(not message[key] for key in REQUIRED_KEYS):
             raise ValueError("One or more keys have empty values")
         # Update body trx_status with status stored in PROCESSED
+        time.sleep(5)
         message["trx_status"] = "Processed"
         if not DEBUG_MYSQL==True:
             # Save to MySQL

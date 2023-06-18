@@ -11,12 +11,14 @@ services:
       - mongo
     ports:
       - "8080:8081"
+    restart: always
   
   product-consumer:
     image: yanivomc/product-consumer-nft:latest
     build: ./part-3-product-consumer
     networks:
       - cloudframework
+    restart: always
     depends_on:
       - rmq
       - mongo
@@ -27,6 +29,7 @@ services:
     build: ./part-4-mv-consumer
     networks:
       - cloudframework
+    restart: always
     depends_on:
       - rmq
       - mongo
@@ -35,12 +38,13 @@ services:
   # RMQ - queue layer
 ############################
   rmq:
-    image: 504949722475.dkr.ecr.eu-west-1.amazonaws.com/cf-be:rmq-1.0
+    image: yanivomc/nft-rmq:latest
     restart: always
     container_name: 'rmq'
     ports:
         - 5672:5672
         - 15672:15672
+    
     networks:
         - cloudframework
 ############################
@@ -64,6 +68,7 @@ services:
       - cloudframework
     volumes:
       - mongodb:/data/db
+    restart: always
 ############################
   # Mongodb express UI
 ############################
@@ -83,6 +88,7 @@ services:
     - cloudframework
     ports:
     - 9091:8081
+    restart: always
 
 
 networks:
