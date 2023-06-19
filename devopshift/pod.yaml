@@ -1,0 +1,15 @@
+kind: Pod
+apiVersion: v1
+metadata:
+ name: nginx-pod
+spec:
+ containers:
+    - name: jb-nginx
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: pod-volume-html
+ volumes:
+ - name: pod-volume-html
+   persistentVolumeClaim:
+    claimName: jb-claim
