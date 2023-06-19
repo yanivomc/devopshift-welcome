@@ -19,6 +19,9 @@ ENV MONGO_DB=nft_db
 ENV MONGO_COLLECTION=nft_collection
 ENV RMQ_HOST=rmq
 ENV DEBUG=True
+### DISABLE RMQ AND MONGO for im mem 
+ENV DEBUG_RMQ = False 
+ENV DEBUG_MONGO = False
 
 # Run server.py when the container launches
 CMD ["python", "server.py"]
