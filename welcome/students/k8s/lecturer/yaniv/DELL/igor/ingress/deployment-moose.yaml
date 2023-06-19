@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose
+  namespace: igor
+  labels:
+    app: animals
+    animal: moose
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      animal: moose
+  replicas: 1 # tells deployment to run 2 pods matching the template using the ReplicaSet
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: animals
+        animal: moose
+    spec:
+      containers:
+      - name: nginx
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

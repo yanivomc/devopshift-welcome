@@ -1,0 +1,13 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }}-service #from RELEASE NAME
+spec:
+  selector:
+    app: music    
+  type: {{ .Values.svc_type | default "NodePort" }}  #from values | DEFAULT TO NODEPORT
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ .Values.appenv.port }}
+    targetPort: {{ .Values.appenv.targetPort }}

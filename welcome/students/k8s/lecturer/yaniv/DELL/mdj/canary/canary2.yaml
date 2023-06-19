@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: canary-deployment-two
+spec:
+  selector:
+    matchLabels:
+      app: canary-app
+  replicas: 1 
+  template: 
+    metadata:
+      labels:
+        app: canary-app
+    spec:
+      containers:
+      - name: canary-two-cont
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80

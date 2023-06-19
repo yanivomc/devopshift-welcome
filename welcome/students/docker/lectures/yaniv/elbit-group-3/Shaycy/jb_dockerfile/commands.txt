@@ -1,0 +1,13 @@
+docker network create mylan
+docker run -d --name db_mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --network mylan -e MYSQL_DATABASE=music yanivomc/spring-mysql:latest
+docker run -d --rm --name web_api --network mylan -v "$(pwd)":/app -p 80:8080 yanivomc/alpine-oraclejdk8:slim java -jar -Dspring.profiles.active=mysql /app/spring-music.jar
+
+
+docker exec -ti db_mysql mysql
+>>> 
+use music;
+select * from album;
+
+kubectl run shaycy-music --image=yanivomc/spring-music:33 --port=8080
+kubectl create deployment shaycy-music-dep --image=yanivomc/spring-music:latest
+kubectl autoscale deployment shaycy-music-dep --min=2 --max=10

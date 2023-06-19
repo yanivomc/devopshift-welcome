@@ -1,0 +1,16 @@
+# Default values for lab-sm-deployment.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+appname: music
+
+replicas: 3
+
+image:
+  image: yanivomc/spring-music
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080

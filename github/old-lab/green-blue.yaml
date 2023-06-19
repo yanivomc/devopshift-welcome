@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: green-blue
+  labels:
+    app: green-blue
+spec:
+  selector:
+    canary: green-blue    # Run on any pod(s) with label - app: myapp
+  ports:          # Map incoming port to target port
+  - name: green-blue    # Setting multiple ports listterns
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer

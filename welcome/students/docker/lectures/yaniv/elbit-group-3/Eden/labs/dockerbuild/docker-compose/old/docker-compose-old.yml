@@ -1,0 +1,34 @@
+version: "3.9"
+networks:
+  db-lan:
+  fe-lan:
+  # external:
+  #   db-lan:
+
+services:
+  spring-app: #role name
+    # build: . # will always use spring-app as default
+    image: yanivomc/spring-music:latest # minimum requirement
+    healthcheck:
+      test: ["wget", "http://localhost:8080", "-O", "-"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # restart: always #error
+    # depends_on:
+    #   - redis
+    volumes:
+      - ./roles/web:/spring-music.jar
+    ports:
+      - "80:8080"
+      - "90:9090"
+    networks:
+      - db-lan
+      - fe-lan
+  # redis: #role name
+  #   image: "redis:alpine"
+  #   networks:
+  #     - db-lan
+  #   volumes:
+  #    - ./data:/yourdata

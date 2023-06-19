@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name}}-{{.Chart.Version}}
+  labels:
+  {{- include "spring.labels" .}}
+spec:
+  selector: 
+    matchLabels:
+      {{- include "spring.labels" . | indent 5}}
+  replicas: {{.Values.replicas}}
+  template:
+    metadata:
+      labels:
+      {{- include "spring.labels" . | indent 8}}
+    spec:
+      containers:
+      - name: {{.Values.appName}}
+        image: {{.Values.pods.image}}
+        ports:
+        - containerPort: 8080
+

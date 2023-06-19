@@ -1,0 +1,10 @@
+kubectl create deployment reuty --image supergiantkir/animals:bear
+kubectl get pods
+kubectl get deployment
+kubectl get replicasets
+kubectl get all
+kubectl describe pod reuty-7496df585f-grmtv
+kubectl get pods -l app=reuty
+kubectl expose deployment/reuty --type=LoadBalancer --port=80 --target-port=80 --name=reuty-srvi
+kubectl scale deployment/[name] --replicas=[num]
+kubectl set image deployments/[name] [application/container name]=repo/image:version --record

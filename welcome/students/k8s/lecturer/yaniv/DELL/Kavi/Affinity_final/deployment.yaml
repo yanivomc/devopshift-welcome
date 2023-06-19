@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mockup
+spec:
+ selector:
+   matchLabels:
+     name: spring-music 
+ replicas: 2 
+ strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 50%
+     maxUnavailable: 25%
+ template: 
+   metadata:
+     labels:
+       name: spring-music
+   spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+           # - matchExpressions: 
+            #  - key: nginx-daemon
+             #   operator: Exists
+            - matchExpressions:
+              - key: type
+                operator: In 
+                values: 
+                - external_facing
+            - matchExpressions:
+              - key: name
+                operator: NotIn  
+                values:
+                - spring-music
+      containers:
+        - name: spring-music
+          image: yanivomc/spring-music:latest
+          ports:
+          - containerPort: 80
+

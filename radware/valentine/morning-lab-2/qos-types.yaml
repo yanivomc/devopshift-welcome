@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: valentine-qos
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-burstable
+  namespace: valentine-qos
+spec:
+  containers:
+  - image: supergiantkir/animals:bear
+    name: bear
+    resources:
+      limits:
+        memory: "100Mi"
+      requests:
+        memory: "10Mi"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-best-effort
+  namespace: valentine-qos
+spec:
+  containers:
+  - image: supergiantkir/animals:bear
+    name: bear
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-guaranteed
+  namespace: valentine-qos
+spec:
+  containers:
+  - image: supergiantkir/animals:bear
+    name: bear
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"

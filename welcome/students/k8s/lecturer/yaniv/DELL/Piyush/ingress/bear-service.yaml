@@ -1,0 +1,12 @@
+kind: Service      
+apiVersion: v1     
+metadata:
+  name: bear-svc 
+spec:
+  selector:
+    app: bear   
+  ports:          
+  - name: http-web    
+    protocol: TCP
+    port: 80
+    targetPort: 80

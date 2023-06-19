@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear
+spec:
+  selector:
+    matchLabels:
+      app: bear
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+  template: 
+    metadata:
+      labels:
+        app: bear
+    spec:
+      containers:
+      - name: nginx
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80

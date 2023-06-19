@@ -1,0 +1,18 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{.Values.Name}} #from RELEASE NAME
+  {{- include "spring.labels" . | indent 4 }}
+spec:
+  selector:
+    app: "music"
+  {{ if eq .Values.type "LoadBalancer"}}
+  type: "LoadBalancer"
+  {{ else }}
+  type: "NodePort"
+  {{ end }} 
+  ports:         
+  - name: {{.Values.ports.name}}   
+    protocol: "TCP"
+    port: {{.Values.ports.port}}
+    targetPort: {{.Values.ports.targetPort}}

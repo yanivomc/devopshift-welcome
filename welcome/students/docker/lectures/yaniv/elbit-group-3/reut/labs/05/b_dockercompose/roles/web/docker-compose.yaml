@@ -1,0 +1,36 @@
+version: '3' 
+services: 
+  web: 
+   build: ./roles/web/
+   depends_on:
+     - db_mysql     
+   ports: 
+     - 8080:8080
+ #  volumes: 
+  #     - ./artifactsa:/code
+   networks: 
+     - db_layer
+   entrypoint: 
+     - java 
+     - -jar 
+     - -Dspring.profiles.active=mysql 
+     - /code/spring-music.jar
+     
+  
+  
+  db_mysql:
+    image: wangxian/alpine-mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+    ports:
+      - 3302:3306
+    networks:
+      - db_layer
+
+
+networks: 
+ db_layer:
+  driver: bridge
+ app_layer:
+  driver: bridge

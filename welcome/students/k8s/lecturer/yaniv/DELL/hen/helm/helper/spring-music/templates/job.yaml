@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.release.cron_job_command_name }}
+spec:
+  schedule: {{ .Values.release.cron_job_schedule | quote}}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Release.Name }}-{{ .Values.release.cron_job_command_name }}
+            image: {{ .Values.release.cron_job_image }}:{{ .Values.release.cron_job_tag }}
+            imagePullPolicy: IfNotPresent
+            command:
+            {{- include "cron_job_command" . | nindent 12 }}
+          restartPolicy: OnFailure

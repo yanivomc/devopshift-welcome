@@ -1,0 +1,20 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{.Release.Name}}
+  labels: 
+  {{- include "spring.labels" .| indent 4}}
+spec:
+  selector:
+    {{- include "spring.labels" .| indent 5}}
+  
+  {{if eq .Values.ENV "LOCAL"}}
+  type: {{.Values.serviceLocalType}}
+  {{else if eq .Values.ENV "CLOUD"}}
+  type: {{.Values.serviceCloudType}}
+  {{end}}
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 8080

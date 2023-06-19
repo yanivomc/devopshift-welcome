@@ -1,0 +1,20 @@
+database_prod:
+  dbname: "db_mysql"
+  dbtable: "music"
+database_test:
+  dbname: "db_mysql_test"
+  dbtable: "music"
+pods:
+  image: "yanivomc/spring-music"
+tag: "latest"
+food:
+  drink: "beer"
+  eat: "Peanut Butter and Jelly sandwich"
+type: "LoadBalancer"
+ports:
+  name:  "http"
+  port:  80
+  targetport: 8080
+  protocol: "TCP"
+replicas: 2
+image: "yanivomc/spring-music:latest"
