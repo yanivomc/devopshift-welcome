@@ -1,15 +1,13 @@
-apiVersion: v1
-kind: Service
+kind: Service     
+apiVersion: v1     
 metadata:
-  name: {{ include "spring-music.fullname" . }}
-  labels:
-    {{- include "spring-music.labels" . | nindent 4 }}
+  name: {{ .Release.Name }}-service #from RELEASE NAME
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
-    {{- include "spring-music.selectorLabels" . | nindent 4 }}
+    app: music    
+  type: {{ .Values.service.type | default "NODEPORT" }}  #from values | DEFAULT TO NODEPORT
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ .Values.service.port | default 80}}
+    targetPort: {{ .Values.service.targetPort | default 8080}}
