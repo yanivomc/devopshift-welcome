@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector: 
+    matchLabels:
+      app: music  
+  replicas: {{ .Values.pods.replicas }}
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+      - name: {{ .Values.pods.name }}
+        image: {{ .Values.pods.image.base }}:{{ .Values.pods.image.tag }}
+        ports:
+        - containerPort: 8080
