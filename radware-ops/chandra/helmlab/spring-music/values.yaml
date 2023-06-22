@@ -1,0 +1,7 @@
+dbname: "db_mysql"
+dbtable: "music"
+database-prod:
+  dbname: db_mysql-test
+  dbtable: music
+pods: 
+  image: yanivomc/spring-music
