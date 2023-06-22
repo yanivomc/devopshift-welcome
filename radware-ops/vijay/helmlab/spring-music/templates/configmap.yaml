@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  dbname: {{ .Values.dbname }}
-  dbtable: {{ .Values.dbtable }}
+  dbname: {{ .Values.databaseprod.dbname }}
+  dbtable: {{ .Values.databaseprod.dbtable }}
 
