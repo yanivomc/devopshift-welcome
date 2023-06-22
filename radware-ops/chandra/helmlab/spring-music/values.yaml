@@ -6,3 +6,7 @@ databasetest:
   dbtable: music
 pods: 
   image: chandra/spring-music
+  tag: latest
+food:
+  drink: beer
+  eat: Peanut Butter and Jelly sandwich
