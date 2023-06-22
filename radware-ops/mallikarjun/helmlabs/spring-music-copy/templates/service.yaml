@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: music    
-  type: {{ .Values.service.lbtype | default TO NodePort }}
+  type: {{ .Values.service.lbtype | default NodePort }}
   ports:         
   - name: http   
     protocol: TCP
