@@ -5,4 +5,3 @@ metadata:
 data:
   dbname: {{ .Values.databaseprod.dbname }}
   dbtable: {{ .Values.databaseprod.dbtable }}
-
