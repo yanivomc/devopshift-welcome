@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  drint: {{ .Values.newdata.drink | upper }}
+  eat: {{ .Values.newdata.eat | trunc 13 | upper | quote }}

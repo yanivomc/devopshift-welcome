@@ -1,0 +1,14 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: spring-service #from RELEASE NAME
+spec:
+  selector:
+    app: music    
+  type: LoadBalancer  #from values | DEFAULT TO NODEPORT
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+
