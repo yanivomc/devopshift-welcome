@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    app: web
+spec:
+  selector:
+    app: web
+  ports:
+  - name: nginx-service
+    protocol: TCP
+    port: 80
