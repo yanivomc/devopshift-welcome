@@ -1,0 +1,8 @@
+service: 
+  svcname: mysvc
+  lbtype: LoadBalancer
+  port: 80
+  targetport: 8080
+
+deployment:
+  replica: 1
