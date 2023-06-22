@@ -1,0 +1,11 @@
+apiVersion: v2
+name: spring-music
+description: A Helm chart for Kubernetes
+
+type: application
+
+
+version: 0.2.0
+
+
+appVersion: "1.16.0"
