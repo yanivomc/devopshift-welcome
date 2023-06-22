@@ -8,6 +8,6 @@ spec:
   type: {{ .Values.serviceType | default "NodePort" }}
   ports:         
   - name: http   
-    protocol: {{ .Values.ports.protocol }}
-    port: {{ .Values.ports.port }}
-    targetPort: {{ .Values.ports.targetPort }}
+    protocol: TCP
+    port: 80
+    targetPort: 8080

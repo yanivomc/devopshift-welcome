@@ -1,19 +1,9 @@
-service:
-  name: spring-service
-
-deployment:
-  name: spring-music
-  replicas: 1
-
-containers:
-  - name: spring-music
-    image: yanivomc/spring-music:latest
-
-serviceType: LoadBalancer
-
-ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 8080
-
+database: 
+  dbname: db_mysql
+  dbtable: music
+pods: 
+  image: yanivomc/spring-music
+  tag: latest
+food:
+  drink: beer
+  eat: Peanut Butter and Jelly sandwich blabla
