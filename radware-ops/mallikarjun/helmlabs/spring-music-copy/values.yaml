@@ -1,5 +1,3 @@
-default:
-  lbtype: NodePort
 service: 
   svcname: mysvc
   lbtype: LoadBalancer
