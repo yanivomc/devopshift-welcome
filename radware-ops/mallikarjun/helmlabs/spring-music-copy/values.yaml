@@ -5,7 +5,7 @@ service:
   targetport: 8080
 
 deployment:
-  replica: 1
+  replica: 2
   contname: springmusic
   repo: yanivomc
   image: spring-music:latest

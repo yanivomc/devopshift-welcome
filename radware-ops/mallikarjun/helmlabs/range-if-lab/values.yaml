@@ -1,0 +1,9 @@
+service:
+  type: LoadBalancer
+deployment:
+  count: 2
+  replica: 1
+  contname: springmusic
+  repo: yanivomc
+  image: spring-music:latest
+  port: 8080
