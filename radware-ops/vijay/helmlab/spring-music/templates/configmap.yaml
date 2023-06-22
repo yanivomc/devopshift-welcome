@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-configmap
 data:
-  dbname: "db-mysql"
-  dbtable: "music"
+  dbname: {{ .Values.database.dbname }}
+  dbtable: {{ .Values.database.dbtable }}
+  drink: {{ .Values.food.drink | upper }}
+  eat: {{ .Values.food.eat | upper | trunc 13 | quote}}
 

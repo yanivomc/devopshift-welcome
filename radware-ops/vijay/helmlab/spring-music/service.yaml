@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-service
+spec:
+  selector:
+    app: music
+  type: {{ default "NodePort" .Values.service.type }}
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+
