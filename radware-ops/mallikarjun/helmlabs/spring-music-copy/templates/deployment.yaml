@@ -13,7 +13,7 @@ spec:
         app: music
     spec:
       containers:
-      - name: spring-music #from values
-        image: yanivomc/spring-music:latest #from values
+      - name: {{ .Values.deployment.contname }} #from values
+        image: {{ .Values.deployment.repo }}/{{ .Values.deployment.image }} #from values
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.deployment.port }}
