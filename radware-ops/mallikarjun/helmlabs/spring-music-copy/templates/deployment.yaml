@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }} #from RELEASE NAME
+spec:
+  selector: 
+    matchLabels:
+      app: music  
+  replicas: {{ .Values.deployment.replica }}  #from values
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+      - name: {{ .Values.deployment.contname }} #from values
+        image: {{ .Values.deployment.repo }}/{{ .Values.deployment.image }} #from values
+        ports:
+        - containerPort: {{ .Values.deployment.port }}

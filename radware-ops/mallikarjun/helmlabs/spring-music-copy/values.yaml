@@ -1,0 +1,12 @@
+service: 
+  svcname: mysvc
+  lbtype: LoadBalancer
+  port: 80
+  targetport: 8080
+
+deployment:
+  replica: 1
+  contname: springmusic
+  repo: yanivomc
+  image: spring-music:latest
+  port: 8080
