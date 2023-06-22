@@ -1,0 +1,17 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }} #from RELEASE NAME
+spec:
+  selector:
+    app: music    
+  {{ if eq .Values.service.type "LoadBalancer" }}
+    type: LoadBalancer
+    ports:         
+    - name: http   
+        protocol: TCP
+        port: 80
+        targetPort: 8080
+  {{ else }}
+    type: ClusterIP
+  {{ end }}
