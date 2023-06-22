@@ -1,7 +1,8 @@
-dbname: "db_mysql"
-dbtable: "music"
-database-prod:
+databaseprod: 
+  dbname: db_mysql
+  dbtable: music
+databasetest: 
   dbname: db_mysql-test
   dbtable: music
 pods: 
-  image: yanivomc/spring-music
+  image: chandra/spring-music
