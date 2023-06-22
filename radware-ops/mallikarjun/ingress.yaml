@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-canary
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
+spec:
+  rules:
+  - host: my-domain.com
+    http:
+      paths:
+      - path: /(.*)
+        backend:
+          serviceName: load-balancer-2
+          servicePort: 443
