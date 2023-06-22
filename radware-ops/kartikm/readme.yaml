@@ -1,0 +1,20 @@
+apiVersion: v1
+Kind: pod
+metadata:
+   name: myapp
+   namespace: Dev
+   labels: 
+      app: myapp
+      type: front-end
+spec: 
+  containers: 
+   - name: nginx-container
+   - image: nginx
+replica: 2
+   name: myapp
+   namespace: Dev
+   labels: 
+      app: myapp
+      type: front-end
+
+       
