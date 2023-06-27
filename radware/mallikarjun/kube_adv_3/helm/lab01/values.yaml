@@ -1,0 +1,12 @@
+repo: supergiantkir
+bear:
+  name: bear
+  replicas: 2
+  conatinername: canary-bear
+  image: animals:bear
+
+moose:
+  name: moose
+  replicas: 3
+  conatinername: canary-moose
+  image: animals:moose
