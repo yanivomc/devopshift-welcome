@@ -4,7 +4,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-animals-app # Only this rule will be configured with the below canary annotions!
+  name: ingress-bear
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "50"
@@ -14,7 +14,29 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: animals.34.241.216.52.nip.io
+    - host: animals-34-247-75-78.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: animals-bear
+                port:
+                  number: 80
+                  
+---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: ingress-moose
+
+
+      #    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  spec:
+    ingressClassName: nginx
+    rules:
+    - host: animals-34-247-75-78.nip.io
       http:
         paths:
           - path: /
@@ -22,29 +44,6 @@ spec:
 
             backend:
               service:
-                name: bear-svc
+                name: animals-moose
                 port:
                   number: 80
-                  
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ingress-canary-v1
-
-
-    #    nginx.ingress.kubernetes.io/rewrite-target: /$2
-spec:
-  ingressClassName: nginx
-  rules:
-   - host: animals.34.241.216.52.nip.io
-     http:
-       paths:
-        - path: /
-          pathType: Prefix
-
-          backend:
-            service:
-              name: moose-svc
-              port:
-                 number: 80
