@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Values.apps.bear.name }}-container
-        image: {{ .Values.apps.bear.repo }}/{{ .Values.apps.bear.image }}:{{ .Values.apps.bear.tag }}
+        image: {{ include "bear.image" . }}
         ports:
         - containerPort: {{ .Values.apps.bear.containerPort }}
 ---
@@ -30,6 +30,6 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Values.apps.moose.name }}-container
-        image: {{ .Values.apps.moose.repo }}/{{ .Values.apps.moose.image }}:{{ .Values.apps.moose.tag }}
+        image: {{ include "moose.image" . }}
         ports:
         - containerPort: {{ .Values.apps.moose.containerPort }}
