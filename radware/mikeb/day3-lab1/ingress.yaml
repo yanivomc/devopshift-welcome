@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals.52.51.119.100.nip.io
+  - host: animals-108-129-46-204.nip.io
     http:
       paths:
       - path: /
@@ -33,7 +33,7 @@ spec:
   ingressClassName: nginx
   rules:
 
-  - host: animals.52.51.119.100.nip.io
+  - host: animals-108-129-46-204.nip.io
     http:
       paths:
       - path: /
