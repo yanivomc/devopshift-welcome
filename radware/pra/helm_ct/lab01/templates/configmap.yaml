@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "{{ .Release.Name }}-{{ .Release.Namespace }}-configmap"
+  name: mychart-configmap
 data:
   dbname: "db-mysql"
   dbtable: "music"
-  type: "something"
