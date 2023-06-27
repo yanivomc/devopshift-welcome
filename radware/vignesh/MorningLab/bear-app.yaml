@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: bear-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: bear
-      type: bear
   template:
     metadata:
       labels:
         app: bear
-        type: bear
     spec:
       containers:
-      - name: bear
+      - name: bear-container
         image: supergiantkir/animals:bear
-        ports:
-        - containerPort: 80
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bear-service
+spec:
+  selector:
+    app: bear
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

@@ -4,7 +4,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-animals-app # Only this rule will be configured with the below canary annotions!
+  name: ingress-canary-v2 # Only this rule will be configured with the below canary annotions!
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "50"
@@ -14,7 +14,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: animals.34.241.216.52.nip.io
+    - host: animals.34.241.103.155.nip.io
       http:
         paths:
           - path: /
@@ -37,7 +37,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-   - host: animals.34.241.216.52.nip.io
+   - host: animals.34.241.103.155.nip.io
      http:
        paths:
         - path: /
