@@ -16,3 +16,4 @@ moose:
     type: animals
 repo: supergiantkir
 image: animals
+ingressEnabled: "no"
