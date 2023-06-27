@@ -4,7 +4,7 @@ type: {{ .Values.bear.label.type }}
 {{- end }}
 
 
-{{- define "deployment.bear" -}}
+{{- define "deployment.moose" -}}
 app: {{ .Values.moose.label.app }}
 type: {{ .Values.moose.label.type }}
 {{- end }}

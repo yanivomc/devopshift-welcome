@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name}}-{{ .Release.Namespace}}-configmap
+  labels:
+{{- include "configmap.data" . | nindent 4}}
+data:
+{{- include "configmap.data" . | nindent 2}}
