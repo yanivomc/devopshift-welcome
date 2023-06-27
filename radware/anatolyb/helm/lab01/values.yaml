@@ -1,0 +1,10 @@
+bear:
+  repo: supergiantkir
+  image: animals
+  tag: bear
+  name: bear
+  deployment:
+    replicas: "3"
+labels:
+  app: bear
+  type: animals
