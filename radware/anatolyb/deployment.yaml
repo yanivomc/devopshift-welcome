@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: bear-apps
-        type: animal-apps
+        type: animal
     spec:
       containers:
       - name: bear
@@ -25,7 +25,7 @@ kind: Deployment
 metadata:
   name: moose-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: moose-apps
@@ -33,7 +33,7 @@ spec:
     metadata:
       labels:
         app: moose-apps
-        type: animal-apps
+        type: animal
     spec:
       containers:
       - name: bear
