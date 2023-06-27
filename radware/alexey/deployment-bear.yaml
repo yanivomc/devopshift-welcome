@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: beer-deployment
+  name: bear-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: beer
+      app: bear
   template:
     metadata:
       labels:
-        app: beer
+        app: bear
     spec:
       containers:
       - name: beer-app
