@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+    {{- include "moose-data" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+      {{- include "moose-data" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-container
+        image: {{ .Values.repo }}/{{ .Values.image }}:{{ .Values.tagmoose }}
+        ports:
+        - containerPort: {{ .Values.port }}

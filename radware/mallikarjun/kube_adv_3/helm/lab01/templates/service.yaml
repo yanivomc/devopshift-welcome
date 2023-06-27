@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: moose-svc #from RELEASE NAME
 spec:
-  {{- if eq .Values.service.enabled "yes" }}
+  {{- if eq .Values.service.enabled "no" }}
   type: LoadBalancer
   {{- end }}
   selector:
