@@ -20,9 +20,9 @@ metadata:
   name: {{ .Release.Name }}-{{ .Values.apps.moose.name }}-svc 
 spec:
   selector: {{ include "moose.labels" . | nindent 4 }}
-  {{ if eq .Values.ingress "no" }}
+  {{- if eq .Values.ingress "no" }}
   type: LoadBalancer
-  {{ end }}
+  {{- end }}
   ports:          
   - name: http    
     protocol: TCP
