@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-dpl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bear
+  template:
+    metadata:
+      labels:
+        app: bear
+    spec:
+      containers:
+        - name: bear
+          image: supergiantkir/animals:bear
+          ports:
+            - containerPort: 80

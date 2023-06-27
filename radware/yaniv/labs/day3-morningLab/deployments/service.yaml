@@ -1,23 +1,24 @@
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: bear-svc #from RELEASE NAME
+  name: animals-bear #from RELEASE NAME
 spec:
   selector:
-    app: bear-apps  
+    app: bear    
   ports:         
   - name: http   
     protocol: TCP
     port: 80
     targetPort: 80
 ---
+
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: moose-svc #from RELEASE NAME
+  name: animals-moose #from RELEASE NAME
 spec:
   selector:
-    app: moose-apps    
+    app: moose    
   ports:         
   - name: http   
     protocol: TCP

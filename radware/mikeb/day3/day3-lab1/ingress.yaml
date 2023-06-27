@@ -1,34 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: animals-a
+  name: ingress-bear
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "50"
-    
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: animals-52-211-141-230.nip.io
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-             name: moose-svc
-             port:
-                number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: animals-b
+    nginx.ingress.kubernetes.io/canary-weight: "40"
 
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals-52-211-141-230.nip.io
+  - host: animals-108-129-46-204.nip.io
     http:
       paths:
       - path: /
@@ -37,4 +18,25 @@ spec:
           service:
              name: bear-svc
              port:
-                number: 80                         
+                number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-moose
+
+spec:
+  ingressClassName: nginx
+  rules:
+
+  - host: animals-108-129-46-204.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80    
