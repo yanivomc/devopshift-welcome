@@ -8,8 +8,8 @@ type: {{ .Values.Bear.type }}
 {{- end }}
 
 {{- define "moose-labels.data" -}}
-app: {{ .Values.Bear.app }}
-type: {{ .Values.Bear.type }}
+app: {{ .Values.Moose.app }}
+type: {{ .Values.Moose.type }}
 {{- end }}
 
 {{- define "moose-image" -}}

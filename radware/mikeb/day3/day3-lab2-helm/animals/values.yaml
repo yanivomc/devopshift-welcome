@@ -1,3 +1,9 @@
+dbname: "db-data"
+
+databases:
+  dbtable: "spring"
+  type: "oracle"
+
 Bear:
   replicaCount: 3
   Release:
@@ -26,3 +32,6 @@ image:
   tagbear: "bear"
   tagmoose: "moose"
 port: 80
+
+ingressEnabled: "yes"
+srvType: LoadBalancer
