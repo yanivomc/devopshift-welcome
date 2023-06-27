@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Moose.Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.Moose.replicaCount }}
+  selector:  
+    matchLabels:
+      {{- include "moose-labels.data" . | nindent 6}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 100%
+      maxUnavailable: 0%
+  template:
+    metadata:
+      labels:
+        {{- include "moose-labels.data" . | nindent 8}}
+    spec:
+      containers:
+      - name: {{ .Values.Moose.Release.Name }}-container
+        image: {{ .Values.image.repo }}/{{ .Values.Moose.Image.Name }}:{{ .Values.Moose.Image.Tag }}
+        ports:
+        - containerPort: {{ .Values.port }}
