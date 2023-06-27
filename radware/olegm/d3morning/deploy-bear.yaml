@@ -7,13 +7,16 @@ spec:
   selector:
     matchLabels:
       app: bear
+      type: bear
   template:
     metadata:
       labels:
         app: bear
+        type: bear
     spec:
       containers:
-      - name: bear-app
+      - name: bear
         image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+

@@ -6,12 +6,12 @@ metadata:
     app: bear
 spec:
   selector:
-    app: bear  
+    app: bear
   ports: 
     - port: 80
-      targetPort: 8080
+      targetPort: 80
   type: ClusterIP
-
+      
 ---
 
 apiVersion: v1
@@ -22,9 +22,9 @@ metadata:
     app: moose
 spec:
   selector:
-    app: moose  
+    app: moose
   ports: 
     - port: 80
-      targetPort: 8080
+      targetPort: 80
   type: ClusterIP
-
+      

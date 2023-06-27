@@ -7,13 +7,16 @@ spec:
   selector:
     matchLabels:
       app: moose
+      type: animals
   template:
     metadata:
       labels:
         app: moose
+        type: animals
     spec:
       containers:
-      - name: moose-app
-        image: supergiantkir/animals:moose
+      - name: moose
+        image: supergiantkir/animals:bear
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+
