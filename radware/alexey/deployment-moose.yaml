@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: moose 
+        app: moose
     spec:
       containers:
       - name: moose-app
