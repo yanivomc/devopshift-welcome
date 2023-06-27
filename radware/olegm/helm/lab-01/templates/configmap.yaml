@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name}}-{{ .Release.Namespace}}-configmap
 data:
-  dbname: "db-mysql"
-  dbtable: "music"
-  test: "foo"
+  dbname: {{ .Values.dbname}}
+  dbtable: {{ .Values.databases.dbtable | upper | trunc 2}}
+  type: {{ .Values.databases.type}}

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mychart-configmap
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-configmap
 data:
   dbname: "db-mysql"
   dbtable: "music"
-  dbpass: "blabla"
+  type: "dynamic"
 

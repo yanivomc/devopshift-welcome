@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-beer-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      {{- include "deployment.beer.labels" . | nindent 6}} 
+  template:
+    metadata:
+      labels:
+        {{- include "deployment.beer.labels" . | nindent 8}} 
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-container
+        image: {{ .Values.repo }}/{{ .Values.image }}:{{ .Values.beertag }}
+        ports:
+        - containerPort: 80
