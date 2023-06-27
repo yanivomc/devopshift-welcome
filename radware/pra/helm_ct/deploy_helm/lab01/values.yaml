@@ -1,0 +1,19 @@
+dbname: "db-data"
+
+databases:
+  dbtable: "spring"
+  type: "oracle"
+
+replicasCountBear: 3
+replicasCountMoose: 1
+image:
+  name: animals
+  repository: supergiantkir
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tagbear: "bear"
+  tagmoose: "moose"    
+
+
+ingressEnabled: "yes"
+srvType: LoadBalancer
