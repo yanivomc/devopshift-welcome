@@ -15,7 +15,8 @@ spec:
         type: animals
     spec:
       containers:
-      - name: moose-app
+      - name: moose
         image: supergiantkir/animals:moose
         ports:
-        - containerPort: 8080
+        - containerPort: 80
+
