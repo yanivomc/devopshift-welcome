@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bear-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    # nodePort: 30000 # Choose a suitable port number
+  selector:
+    app: bear
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: moose-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    # nodePort: 30000 # Choose a suitable port number
+  selector:
+    app: moose
+
+
