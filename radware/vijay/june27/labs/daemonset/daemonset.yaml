@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: prom-agent-yaniv
+  labels:
+    agent: prom
+spec:
+  selector:
+    matchLabels:
+      name: prom
+  template:
+    metadata:
+      labels:
+        name: prom
+    spec:
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - image:  nginx:latest
+          name:  nginx
+    
