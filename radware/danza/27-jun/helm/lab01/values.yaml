@@ -1,1 +1,7 @@
 replicas: 3
+labels:
+  app: "bear"
+  type: "animals"
+repo: "supergiantkir"
+image: "animals"
+beertag: "bear"

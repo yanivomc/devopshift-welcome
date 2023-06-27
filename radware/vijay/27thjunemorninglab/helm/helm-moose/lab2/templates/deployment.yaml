@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-moose-deployment
+spec:
+  replicas: {{ .Values.moose.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-moose
+      type: animals
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-moose
+        type: animals
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-moose-container
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: {{ .Values.moose.containerPort }}
+

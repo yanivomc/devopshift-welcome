@@ -1,8 +1,8 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mychart-configmap
-data:
-  dbname: "db-mysql"
-  dbtable: "music"
-  type: blabla
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: "sdfsfsf"
+# data:
+#   dbname: "Sdfsdf"
+#   dbtable: "Sfsfsfd"
+#   type: "sdfsfds"

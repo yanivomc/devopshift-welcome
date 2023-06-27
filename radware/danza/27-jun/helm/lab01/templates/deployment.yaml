@@ -1,21 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: {{ .Release.Name }}-beer-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: bear
-      type: animals
+      {{- include "deployment.beer.labels" . | nindent 6}} 
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        {{- include "deployment.beer.labels" . | nindent 8}} 
     spec:
       containers:
-      - name: bear
-        image: supergiantkir/animals:moose
+      - name: {{ .Release.Name }}-container
+        image: {{ .Values.repo }}/{{ .Values.image }}:{{ .Values.beertag }}
         ports:
         - containerPort: 80

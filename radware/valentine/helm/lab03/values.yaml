@@ -2,7 +2,8 @@ repo: supergiantkir
 image: animals
 ports:
 - containerPort: 80
-
+ingress:
+  enabled: false
 app1:
   name: bear
   type: animals
