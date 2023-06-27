@@ -11,8 +11,8 @@ image:
   repository: supergiantkir
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tagbear: "bear"
-  tagmoose: "bear"    
+  tagbear: "fghfg"
+  tagmoose: "dfgdf"    
 
 
 ingressEnabled: "yes"
