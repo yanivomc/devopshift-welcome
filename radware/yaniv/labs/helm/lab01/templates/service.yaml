@@ -1,16 +1,16 @@
-kind: Service     
-apiVersion: v1     
-metadata:
-  name: {{ .Release.Name}}-bear-svc
-spec:
-  selector:
-    app: bear  
-  {{- if eq .Values.ingressEnabled "no" }} 
-  type: LoadBalancer 
-  {{ end }} 
-  ports:         
-  - name: http   
-    protocol: TCP
-    port: 80
-    targetPort: 80
----
+# kind: Service     
+# apiVersion: v1     
+# metadata:
+#   name: {{ .Release.Name}}-bear-svc
+# spec:
+#   selector:
+#     app: bear  
+#   {{- if eq .Values.ingressEnabled "no" }} 
+#   type: LoadBalancer 
+#   {{ end }} 
+#   ports:         
+#   - name: http   
+#     protocol: TCP
+#     port: 80
+#     targetPort: 80
+# ---
