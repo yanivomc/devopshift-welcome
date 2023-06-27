@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosse-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: moose
+      type: animal
+  template:
+    metadata:
+      labels:
+        app: moose
+        type: animal
+    spec:
+      containers:
+      - name: canary-moose
+        image: supergiantkir/animals:moose
+        ports:
+        - containerPort: 80
+
+---
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: moose-svc #from RELEASE NAME
+spec:
+  selector:
+    app: moose
+    type: animal   
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bear
+      type: animal
+  template:
+    metadata:
+      labels:
+        app: bear
+        type: animal
+    spec:
+      containers:
+      - name: canary-bear
+        image: supergiantkir/animals:bear
+        ports:
+        - containerPort: 80
+
+---
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: bear-svc #from RELEASE NAME
+spec:
+  selector:
+    app: bear
+    type: animal  
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-canary-moose
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "50"
+spec:
+  rules:
+  - host: moose-svc
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-canary-bear
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "50"
+spec:
+  rules:
+  - host: bear-svc
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80
