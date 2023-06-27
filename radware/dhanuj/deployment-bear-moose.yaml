@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: bear
-  replicas: 2
+  replicas: 3
   template: 
     metadata:
       labels:
@@ -27,7 +27,7 @@ spec:
   selector:
     matchLabels:
       app: moose
-  replicas: 1
+  replicas: 2
   template: 
     metadata:
       labels:
@@ -39,15 +39,30 @@ spec:
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: bear-moose-service
+  name: bear-service
 spec:
   selector:
-    grp: bearmoose
-  type: LoadBalancer
+    app: bear
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moose-service
+spec:
+  selector:
+    app: moose
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 80

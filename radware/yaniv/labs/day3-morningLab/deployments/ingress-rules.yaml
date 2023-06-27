@@ -1,6 +1,3 @@
-#to test it use:
-#### for i in {1..30}; do curl -s LBDNS | grep bear; done;
-#### for i in {1..30}; do curl -s LBDNS | grep moose; done;
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
