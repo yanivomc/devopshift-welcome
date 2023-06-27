@@ -1,18 +1,18 @@
+repo: supergiantkir
+image: animals
+ports:
+- containerPort: 80
+
 app1:
   name: bear
   type: animals
   replicas: 2
-  repo: supergiantkir
-  image: animals
   tag: bear
-  ports:
-  - containerPort: 80
+
 app2:
   name: moose
   type: animals
   replicas: 1
-  repo: supergiantkir
-  image: animals
   tag: moose
-  ports:
-  - containerPort: 80
+
+
