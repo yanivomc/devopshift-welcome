@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: beer-svc  
+  name: bear-svc  
   labels:
-    app: beer
+    app: bear
 spec:
   selector:
-    app: beer  
+    app: bear  
   ports: 
     - port: 80
       targetPort: 8080
