@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beer-svc  
+  labels:
+    app: beer
+spec:
+  selector:
+    app: beer  
+  ports: 
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: moose-svc  
+  labels:
+    app: moose
+spec:
+  selector:
+    app: moose  
+  ports: 
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+
