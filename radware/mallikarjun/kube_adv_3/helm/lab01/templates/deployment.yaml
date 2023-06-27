@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.bear.name }}-deployment
+spec:
+  replicas: {{ .Value.bear.replicas }}
+  selector:
+    matchLabels:
+      app: moose
+      type: animal
+  template:
+    metadata:
+      labels:
+        app: moose
+        type: animal
+    spec:
+      containers:
+      - name: {{ .Value.bear.containername }}
+        image: {{ .Value.repo }}/ {{ .Values.bear.image }}
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.moose.name }}-deployment
+spec:
+  replicas: {{ .Value.moose.replicas }}
+  selector:
+    matchLabels:
+      app: moose
+      type: animal
+  template:
+    metadata:
+      labels:
+        app: moose
+        type: animal
+    spec:
+      containers:
+      - name: {{ .Value.moose.containername }}
+        image: {{ .Value.repo }}/ {{ .Values.moose.image }}
+        ports:
+        - containerPort: 80
