@@ -1,0 +1,28 @@
+Bear:
+  replicaCount: 3
+  Release:
+    Name: bear
+  Replicas: 3
+  app: bear
+  type: animals
+  Image:
+    Name: animals
+    Tag: bear
+
+Moose:
+  replicaCount: 3
+  Release:
+    Name: moose
+  Replicas: 3
+  app: moose
+  type: animals
+  Image:
+    Name: animals
+    Tag: moose
+
+image:
+  repo: supergiantkir
+  name: animals
+  tagbear: "bear"
+  tagmoose: "moose"
+port: 80

@@ -1,11 +1,14 @@
-{{ if eq .Values.ingressEnabled "yes"}}
+{{ if eq .Values.ingressEnabled "yes" }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Release.Name}}-bear-ingress
+  name: ingress-bear
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "50"
+
+
+    #    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
@@ -19,23 +22,27 @@ spec:
                 name: animals-bear
                 port:
                   number: 80
+                  
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ .Release.Name}}-moose-ingress
-spec:
-  ingressClassName: nginx
-  rules:
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: ingress-moose
+
+
+      #    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  spec:
+    ingressClassName: nginx
+    rules:
     - host: animals-34-247-75-78.nip.io
       http:
         paths:
           - path: /
             pathType: Prefix
+
             backend:
               service:
                 name: animals-moose
                 port:
                   number: 80
-
 {{ end }}

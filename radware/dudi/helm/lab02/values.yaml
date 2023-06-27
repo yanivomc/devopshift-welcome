@@ -1,0 +1,9 @@
+replicas: 2
+repo: "supergiantkir"
+image: "animals"
+tagmoose: "moose"
+tagbear: "bear"
+port: 80
+
+ingressEnables: "no"
+srvType: "LoadBalancer"

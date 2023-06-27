@@ -1,0 +1,5 @@
+dbname: "db-prod"
+
+databases: 
+  dbtable: "spring"
+  type: "mongodb"
