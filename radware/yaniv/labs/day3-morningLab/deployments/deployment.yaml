@@ -6,12 +6,12 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: moose
+      app: moose-a
       type: animals
   template:
     metadata:
       labels:
-        app: moose
+        app: moose-a
         type: animals
     spec:
       containers:
