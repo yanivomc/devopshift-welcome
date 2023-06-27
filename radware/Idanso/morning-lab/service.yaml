@@ -2,10 +2,11 @@
 kind: Service      
 apiVersion: v1     
 metadata:
-  name: bear-svc 
+  name: bear-svc
 spec:
   selector:
-    app: bear   
+    app: bear
+    type: animals 
   ports:          
   - name: http    
     protocol: TCP
@@ -18,7 +19,8 @@ metadata:
   name: moose-svc 
 spec:
   selector:
-    app: moose   
+    app: moose
+    type: animals 
   ports:          
   - name: http    
     protocol: TCP

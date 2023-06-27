@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: beer
+      type: animals
   template:
     metadata:
       labels:
-        app: beer 
+        app: beer
+        type: animals
     spec:
       containers:
       - name: beer-app
@@ -27,10 +29,12 @@ spec:
   selector:
     matchLabels:
       app: moose
+      type: animals
   template:
     metadata:
       labels:
-        app: moose 
+        app: moose
+        type: animals
     spec:
       containers:
       - name: moose-app
