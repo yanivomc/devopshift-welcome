@@ -1,0 +1,11 @@
+Release.Namespace: "maa"
+App:
+  postfix: "dpl"
+  replicas: 3
+  port: 80
+Animal:
+  Labels:
+    app: bear
+    type: animal
+
+
