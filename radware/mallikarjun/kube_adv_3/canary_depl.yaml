@@ -80,11 +80,11 @@ metadata:
   name: ingress-canary-moose
   annotations:
     nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "50"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals-100-71-221-229.nip.io
+  - host: animals-52-51-148-184.nip.io
     http:
       paths:
       - path: /
@@ -100,13 +100,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-canary-bear
-  annotations:
-    nginx.ingress.kubernetes.io/canary: "true"
-    nginx.ingress.kubernetes.io/canary-weight: "50"
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals-100-71-221-229.nip.io
+  - host: animals-52-51-148-184.nip.io
     http:
       paths:
       - path: /
