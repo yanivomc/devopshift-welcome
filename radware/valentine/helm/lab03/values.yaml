@@ -1,0 +1,19 @@
+repo: supergiantkir
+image: animals
+ports:
+- containerPort: 80
+ingress:
+  enabled: false
+app1:
+  name: bear
+  type: animals
+  replicas: 2
+  tag: bear
+
+app2:
+  name: moose
+  type: animals
+  replicas: 1
+  tag: moose
+
+
