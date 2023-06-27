@@ -1,0 +1,27 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: animals-bear #from RELEASE NAME
+spec:
+  selector:
+    app: bear  
+  {{ if eq .Values.ingressEnabled "no" }} Type: LoadBalancer {{ end }} 
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
+---
+
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: animals-moose #from RELEASE NAME
+spec:
+  selector:
+    app: moose    
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80

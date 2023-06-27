@@ -1,0 +1,16 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: moose-svc #from RELEASE NAME
+spec:
+  {{- if eq .Values.service.enabled "yes" }}
+  type: LoadBalancer
+  {{- end }}
+  selector:
+    app: moose
+    type: animal   
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80

@@ -1,16 +1,14 @@
-# Default values for lab-02.
+# Default values for class-example.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-ingressEnabled: "no"
 
 image:
-  name: animals
-  repository: supergiantkir
+  repository: nginx
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "bear"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
