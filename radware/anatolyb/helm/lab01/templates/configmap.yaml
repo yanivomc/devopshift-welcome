@@ -5,3 +5,4 @@ metadata:
 data:
   dbname: "db-mysql"
   dbtable: "music"
+  type: "something"
