@@ -4,15 +4,15 @@ databases:
   dbtable: "spring"
   type: "oracle"
 
-replicasCountBear: 3
-replicasCountMoose: 1
+replicasCountBear: 2
+replicasCountMoose: 4
 image:
   name: animals
   repository: supergiantkir
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tagbear: "moose"
-  tagmoose: "moose"    
+  tagbear: "bear"
+  tagmoose: "bear"    
 
 
 ingressEnabled: "yes"
