@@ -6,11 +6,11 @@ spec:
   replicas: {{ .Values.apps.bear.replicas }}
   selector:
     matchLabels: 
-{{- include "bear.labels" . | nindent 8 }}
+{{- include "bear.labels" . | nindent 6 }}
   template:
     metadata:
       labels: 
-{{- include "bear.labels" . | nindent 6 }}
+{{- include "bear.labels" . | nindent 8 }}
     spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Values.apps.bear.name }}-container
@@ -26,11 +26,11 @@ spec:
   replicas: {{ .Values.apps.moose.replicas }}
   selector:
     matchLabels: 
-{{- include "moose.labels" . | nindent 8 }}
+{{- include "moose.labels" . | nindent 6 }}
   template:
     metadata:
       labels: 
-{{- include "moose.labels" . | nindent 6 }}
+{{- include "moose.labels" . | nindent 8 }}
     spec:
       containers:
       - name: {{ .Release.Name }}-{{ .Values.apps.moose.name }}-container
