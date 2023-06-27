@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.apps.bear.name }}-deployment
+spec:
+  replicas: {{ .Values.apps.bear.replicas }}
+  selector:
+    matchLabels: 
+{{- include "bear.labels" . | nindent 8 }}
+  template:
+    metadata:
+      labels: 
+{{- include "bear.labels" . | nindent 6 }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-{{ .Values.apps.bear.name }}-container
+        image: {{ .Values.apps.bear.repo }}/{{ .Values.apps.bear.image }}:{{ .Values.apps.bear.tag }}
+        ports:
+        - containerPort: {{ .Values.apps.bear.containerPort }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.apps.moose.name }}-deployment
+spec:
+  replicas: {{ .Values.apps.moose.replicas }}
+  selector:
+    matchLabels: 
+{{- include "moose.labels" . | nindent 8 }}
+  template:
+    metadata:
+      labels: 
+{{- include "moose.labels" . | nindent 6 }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-{{ .Values.apps.moose.name }}-container
+        image: {{ .Values.apps.moose.repo }}/{{ .Values.apps.moose.image }}:{{ .Values.apps.moose.tag }}
+        ports:
+        - containerPort: {{ .Values.apps.moose.containerPort }}
