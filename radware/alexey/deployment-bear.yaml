@@ -6,11 +6,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: beer-a
+      app: beer
   template:
     metadata:
       labels:
-        app: beer-a
+        app: beer
     spec:
       containers:
       - name: beer-app

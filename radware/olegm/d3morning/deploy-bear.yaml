@@ -7,12 +7,12 @@ spec:
   selector:
     matchLabels:
       app: bear
-      type: animals
+      type: bear
   template:
     metadata:
       labels:
         app: bear
-        type: animals
+        type: bear
     spec:
       containers:
       - name: bear
