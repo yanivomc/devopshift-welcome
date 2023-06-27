@@ -1,0 +1,25 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: bear-svc #from RELEASE NAME
+spec:
+  selector:
+    app: bear-apps  
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: moose-svc #from RELEASE NAME
+spec:
+  selector:
+    app: moose-apps    
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80
