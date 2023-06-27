@@ -1,32 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: beer-deployment
 spec:
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 100
-      maxUnavailable: 0
   replicas: 3
   selector:
     matchLabels:
-      type: animals
+      app: beer-a
   template:
     metadata:
       labels:
-        app: bear
-        type: animals
+        app: beer 
     spec:
       containers:
-      - name: bear-app
+      - name: beer-app
         image: supergiantkir/animals:bear
-        resources:
-          limits:
-            cpu: "1000"
-            memory: "500Mi"
-          requests:
-            cpu: "500"
-            memory: "250Mi"        
         ports:
         - containerPort: 8080

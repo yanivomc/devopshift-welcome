@@ -7,12 +7,10 @@ spec:
   selector:
     matchLabels:
       app: moose
-      type: animals
   template:
     metadata:
       labels:
-        app: moose
-        type: animals
+        app: moose 
     spec:
       containers:
       - name: moose-app
