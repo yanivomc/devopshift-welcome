@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Bear.Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.Bear.replicaCount }}
+  selector:  
+    matchLabels:
+      {{- include "bear-labels.data" . | nindent 6}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "bear-labels.data" . | nindent 8}}
+    spec:
+      containers:
+      - name: {{ .Values.Bear.Release.Name }}-container
+        image: {{ .Values.image.repo }}/{{ .Values.Bear.Image.Name }}:{{ .Values.Bear.Image.Tag }}
+        ports:
+        - containerPort: {{ .Values.port }}
