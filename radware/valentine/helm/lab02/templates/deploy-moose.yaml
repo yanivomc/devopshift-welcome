@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Values.app2.name}}-deploy
+  name: {{ .Release.Name}}-moose-deploy
 spec:
   replicas: {{ .Values.app2.replicas }}
   selector:
@@ -13,7 +13,7 @@ spec:
         {{- include "labels.data" .Values.app2 | nindent 8}}  
     spec:
       containers:
-      - image: {{ .Values.app2.repo }}/{{ .Values.app2.image }}:{{ .Values.app2.tag }}
-        name: {{ .Values.app2.name }}-container
+      - image: {{ .Values.repo }}/{{ .Values.image }}:{{ .Values.app2.tag }}
+        name: {{ .Release.Name}}-moose-container
         ports:
-          {{- .Values.app2.ports | toYaml | nindent 8 }}
+          {{- .Values.ports | toYaml | nindent 8 }}
