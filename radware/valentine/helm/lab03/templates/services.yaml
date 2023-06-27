@@ -1,0 +1,25 @@
+{{- if not .Values.ingress.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.repo }}-moose-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: bear-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.repo }}-bear-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: moose-app
+{{- end -}}

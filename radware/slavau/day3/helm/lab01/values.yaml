@@ -1,0 +1,11 @@
+bearRepo : supergiantkir
+bearImage : animals
+bearImageTag : bear
+
+mooseRepo : supergiantkir
+mooseImage : animals
+mooseImageTag : moose
+
+containerPort: 80
+
+replicas: 2

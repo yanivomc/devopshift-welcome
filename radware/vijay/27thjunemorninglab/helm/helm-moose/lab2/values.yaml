@@ -1,0 +1,3 @@
+moose:
+  replicaCount: 2
+  containerPort: 80

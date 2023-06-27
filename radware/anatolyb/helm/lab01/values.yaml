@@ -1,0 +1,18 @@
+bear:
+  tag: bear
+  name: bear
+  deployment:
+    replicas: "3"
+  labels:
+    app: bear
+    type: animals
+moose:
+  tag: moose
+  name: moose
+  deployment:
+    replicas: "3"
+  labels:
+    app: moose
+    type: animals
+repo: supergiantkir
+image: animals

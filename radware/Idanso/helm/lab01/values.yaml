@@ -1,0 +1,18 @@
+apps:
+    bear:
+      name: bear
+      replicas: 3
+      containerPort: 80
+      repo: supergiantkir
+      image: animals
+      tag: bear
+    moose:
+      name: moose
+      replicas: 2
+      containerPort: 80
+      repo: supergiantkir
+      image: animals
+      tag: moose
+
+ingress: "yes"
+    
