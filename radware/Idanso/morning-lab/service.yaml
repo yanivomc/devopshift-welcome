@@ -6,7 +6,6 @@ metadata:
 spec:
   selector:
     app: bear
-    type: animals 
   ports:          
   - name: http    
     protocol: TCP
