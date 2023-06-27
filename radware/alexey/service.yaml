@@ -22,7 +22,7 @@ metadata:
     app: moose
 spec:
   selector:
-    app: moose-app  
+    app: moose  
   ports: 
     - port: 80
       targetPort: 8080
