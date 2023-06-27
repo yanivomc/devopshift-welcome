@@ -1,0 +1,41 @@
+ {{ if eq .Values.service.enabled "yes" }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-canary-moose
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "30"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: animals-52-51-148-184.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-canary-bear
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: animals-52-51-148-184.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80
+{{ end }}
