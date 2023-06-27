@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose-deployment
+  name: mosse-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: moose-a
-      type: animals
+      app: moose
+      type: animal
   template:
     metadata:
       labels:
-        app: moose-a
-        type: animals
+        app: moose
+        type: animal
     spec:
       containers:
-      - name: moose-app
+      - name: canary-moose
         image: supergiantkir/animals:moose
         ports:
         - containerPort: 80
@@ -24,21 +24,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bear-deployment
+  name: bear-app
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: bear
-      type: animals
+      type: animal
   template:
     metadata:
       labels:
         app: bear
-        type: animals
+        type: animal
     spec:
       containers:
-      - name: bear-app
+      - name: canary-bear
         image: supergiantkir/animals:bear
         ports:
         - containerPort: 80
