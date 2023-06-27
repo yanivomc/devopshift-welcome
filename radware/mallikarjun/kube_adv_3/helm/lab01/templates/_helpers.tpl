@@ -1,3 +1,10 @@
-{{- define "deployment.bear.name" -}}
-{{- .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "deployment.bear" -}}
+app: {{ .Values.bear.label.app }}
+type: {{ .Values.bear.label.type }}
+{{- end }}
+
+
+{{- define "deployment.bear" -}}
+app: {{ .Values.moose.label.app }}
+type: {{ .Values.moose.label.type }}
 {{- end }}
