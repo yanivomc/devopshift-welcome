@@ -1,0 +1,15 @@
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ .Release.Name }}-bear-svc #from RELEASE NAME
+spec:
+  selector:
+    app: {{ .Values.bear.labels.app }} 
+  {{- if eq .Values.ingressEnabled "no" }} 
+  type: LoadBalancer 
+  {{ end }} 
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: 80
+    targetPort: 80

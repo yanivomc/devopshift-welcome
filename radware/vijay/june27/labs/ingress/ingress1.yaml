@@ -1,0 +1,85 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hostbased
+
+spec:
+  ingressClassName: nginx
+  rules:
+  # change the IP below based on the DNS resolution of your LB (under kubectl get svc -n ingress-nginx)
+  - host: bear.52.30.63.97.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80
+  - host: moose.52.30.63.97.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80              
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: animals
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 # We strip the prefix before it passes to our backend or our app wont load as it will get route /bears instead /
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: animals-52.30.63.97.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80         
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-animals
+  annotations:
+   nginx.ingress.kubernetes.io/rewrite-target: /$2 
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-animals.52.30.63.97.nip.io
+    http:
+      paths:
+      - path: /moose(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: moose-svc
+             port:
+                number: 80
+      - path: /bear(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+             name: bear-svc
+             port:
+                number: 80                                                    

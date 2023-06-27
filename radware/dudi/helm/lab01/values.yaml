@@ -1,0 +1,4 @@
+dbname: "db-data"
+databases: 
+  dbtable: "spring"
+  type: "mysql"
