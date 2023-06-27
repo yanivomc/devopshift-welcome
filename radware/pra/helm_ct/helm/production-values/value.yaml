@@ -1,0 +1,4 @@
+dbname: "db-prod"
+
+databases: 
+ type: "mongodb"

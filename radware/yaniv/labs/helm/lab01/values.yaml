@@ -13,3 +13,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tagbear: "bear"
   tagmoose: "moose"    
+
+
+ingressEnabled: "yes"
+srvType: LoadBalancer
