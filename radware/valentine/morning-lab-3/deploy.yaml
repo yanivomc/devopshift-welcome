@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bear-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bear-app
+  template:
+    metadata:
+      labels:
+        app: bear-app
+    spec:
+      containers:
+      - image: supergiantkir/animals:bear
+        imagePullPolicy: Always
+        name: bear
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: moose-app
+  template:
+    metadata:
+      labels:
+        app: moose-app
+    spec:
+      containers:
+      - image: supergiantkir/animals:moose
+        imagePullPolicy: Always
+        name: moose
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      restartPolicy: Always
