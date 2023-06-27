@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moose-{{.Values.App.postfix}}
+spec:
+  replicas: {{.Values.App.replicas}}
+  selector:
+    matchLabels:
+    {{- include "animal.data" . | nindent 6}}
+  template:
+    metadata:
+      labels:
+      {{- include "animal.data" . | nindent 8}}
+    spec:
+      containers:
+        - name: moose
+          image: supergiantkir/animals:moose
+          ports:
+            - containerPort: {{.Values.App.port}}
