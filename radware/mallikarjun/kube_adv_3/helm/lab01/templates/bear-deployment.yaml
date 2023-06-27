@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.bear.name }}-deployment
+spec:
+  replicas: {{ .Values.bear.replicas }}
+  selector:
+    matchLabels:
+      {{- include "deployment.bear" . | nindent 6}}
+  template:
+    metadata:
+      labels:
+        {{- include "deployment.bear" . | nindent 8}}
+    spec:
+      containers:
+      - name: {{ .Values.bear.containername }}
+        image: {{ .Values.repo }}/{{ .Values.bear.image }}
+        ports:
+        - containerPort: 80
+

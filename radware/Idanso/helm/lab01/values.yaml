@@ -13,4 +13,6 @@ apps:
       repo: supergiantkir
       image: animals
       tag: moose
+
+ingress: "yes"
     
