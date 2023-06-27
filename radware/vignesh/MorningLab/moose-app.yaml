@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moose-deployment
+  name: moose-app
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: moose
@@ -13,7 +13,17 @@ spec:
         app: moose
     spec:
       containers:
-      - name: moose-app
+      - name: moose-container
         image: supergiantkir/animals:moose
-        ports:
-        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moose-service
+spec:
+  selector:
+    app: moose
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
