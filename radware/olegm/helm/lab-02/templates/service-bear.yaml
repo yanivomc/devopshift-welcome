@@ -8,12 +8,13 @@ metadata:
 spec:
   selector:
     type: bear
+  {{ if eq .Values.ingressEnabled "yes" }}
+  type: ClusterIP
+  {{ else }}
+  type: LoadBalancer
+  {{ end }}    
   ports: 
     - port: 80
       targetPort: 80
-      {{ if eq .Values.ingressEnabled "yes" }}
-      type: ClusterIP
-      {{ else }}
-      type: LoadBalancer
-      {{ end }}    
+      
   
