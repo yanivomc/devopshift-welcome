@@ -9,14 +9,14 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals-34.247.13.115.nip.io
+  - host: animals-63-34-120-246.nip.io
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-             name: moose-svc
+             name: moose
              port:
                 number: 80
 ---
@@ -28,7 +28,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: animals-34.247.13.115.nip.io
+  - host: animals-63-34-120-246.nip.io
     http:
       paths:
       - path: /
