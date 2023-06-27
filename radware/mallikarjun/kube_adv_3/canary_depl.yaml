@@ -82,8 +82,9 @@ metadata:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "50"
 spec:
+  ingressClassName: nginx
   rules:
-  - host: moose-svc
+  - host: animals-100-71-221-229.nip.io
     http:
       paths:
       - path: /
@@ -103,8 +104,9 @@ metadata:
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-weight: "50"
 spec:
+  ingressClassName: nginx
   rules:
-  - host: bear-svc
+  - host: animals-100-71-221-229.nip.io
     http:
       paths:
       - path: /
