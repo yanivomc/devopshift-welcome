@@ -1,0 +1,14 @@
+pods: 
+  base: supergiantkir/animals
+  base-green: supergiantkir/animals
+  tag1: bear
+  tag2: moose
+  replicas: 2
+
+Counter: 2
+
+service:
+  type: LoadBalancer
+  ingress: disabled
+
+
