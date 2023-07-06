@@ -1,0 +1,24 @@
+{{- $root := . -}}
+{{- range $i, $e := until ( int .Values.Counter ) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "%s-service-%d" $root.Release.Name $i }}
+spec:
+  selector: 
+    matchLabels:
+      app: {{ printf "%s-service-%d" $root.Release.Name $i }}
+  replicas: {{ $root.Values.pods.replicas }}
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+      - name: {{ $root.Values.pods.name }}
+      # Make sure that 1 deployment use the bear tag and the second is using the moose tag
+        image: {{ $root.Values.pods.base }}:{{ $root.Values.pods.tag }}
+        ports:
+        - containerPort: 8080
+---
+{{- end }}
