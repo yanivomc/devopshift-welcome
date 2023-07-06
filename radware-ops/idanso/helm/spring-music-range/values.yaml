@@ -9,6 +9,6 @@ Counter: 2
 
 service:
   type: LoadBalancer
-  ingress: disabled
+  ingress: enable
 
 

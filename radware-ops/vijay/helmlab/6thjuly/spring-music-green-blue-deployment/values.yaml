@@ -1,13 +1,11 @@
-counter: 2
-
-pods:
+pods: 
+  base: supergiantkir/animals
+  tag: moose
+  taggreen: bear
   replicas: 2
-  name: music
-  base: your-container-registry/your-image
-  tag: latest
+
+Counter: 2
 
 service:
   type: LoadBalancer
-  port: 80
-  targetPort: 8080
-
+  ingress: enabled
