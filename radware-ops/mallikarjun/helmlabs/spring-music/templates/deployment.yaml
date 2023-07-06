@@ -1,5 +1,5 @@
 {{- $root := . -}}
-{{- range $i, $e := until .Values.deployment.count }}
+{{- range $i, $e := until (int .Values.deployment.count) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: {{ printf "%s-deployment-%d" $root.Release.Name $i }} #from values
-      {{ if eq $root.Values.deployment.tag "bear" }}
+      {{ if eq $root.Values.deployment.tag.bear "bear" }}
         image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.bear }} #from values
       {{ else }}
         image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.moose }}

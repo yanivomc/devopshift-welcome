@@ -6,3 +6,5 @@ deployment:
     bear: bear
     moose: moose
   port: 80
+service:
+  type: LoadBalancer
