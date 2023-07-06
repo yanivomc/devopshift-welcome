@@ -1,3 +1,14 @@
+TOKENNAME=`kubectl get serviceaccount/ingress-user -o jsonpath='{.secrets[0].name}'`
+TOKEN=`kubectl get secret $TOKENNAME -o jsonpath='{.data.token}' | base64 --decode`
+kubectl config set-credentials ingress-user --token=$TOKEN
+CONTEXT=`kubectl config current-context`
+kubectl config set-context $CONTEXT --user=ingress-user
+
+kubectl auth can-i get ingresses.networking.k8s.io --as=ingress-user -n development
+kubectl auth can-i list ingresses.networking.k8s.io --as=ingress-user -n development
+kubectl auth can-i watch ingresses.networking.k8s.io --as=ingress-user -n development
+
+
 # kind: PersistentVolumeClaim
 # apiVersion: v1
 # metadata:
