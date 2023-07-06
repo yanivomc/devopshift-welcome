@@ -2,7 +2,7 @@ pods:
   base: supergiantkir/animals
   tag: moose
   taggreen: bear
-  replicas: 2
+  replicas: 3
 
 Counter: 2
 
