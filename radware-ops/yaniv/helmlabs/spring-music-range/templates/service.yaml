@@ -6,9 +6,13 @@ metadata:
   name: {{ printf "%s-service-%d" $root.Release.Name $i }}
 spec:
   selector:
-    app: {{ printf "%s-label-%d" $root.Release.Name $i }}  
+    app: {{ printf "%s-service-%d" $root.Release.Name $i }}  
     # If Ingress is disabled use LOADBALANCER, if ingress enabled use ClusterIP
-  type: {{ default "NODEPORT" $root.Values.service.type }}  
+  {{- if eq $root.Values.service.ingress "enabled"}}
+  type: ClusterIP
+  {{- else }}  
+  type: {{ default "NODEPORT" $root.Values.service.type }}
+  {{- end }}
   ports:         
   - name: http   
     protocol: TCP
