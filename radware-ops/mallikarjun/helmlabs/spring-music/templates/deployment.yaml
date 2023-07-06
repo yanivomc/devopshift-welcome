@@ -3,30 +3,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf $root.Release.Name-"%d" $i }} #from RELEASE NAME
+  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
 spec:
   selector: 
     matchLabels:
-      app: {{ printf $root.Release.Name-"%d" $i }}
+      app: {{ printf $root.Release.Name "%d" $i }}
   replicas: {{ $root.Values.deployment.replica }}  #from values
   template:
     metadata:
       labels:
-        app: {{ printf $root.Release.Name-"%d" $i }}
+        app: {{ printf $root.Release.Name "%d" $i }}
     spec:
       containers:
-      - name: {{ printf $root.Release.Name-"%d" $i }} #from values
-        image: {{ $root.Values.deployment.repo }}/{{ .Values.deployment.image }} #from values
+      - name: {{ printf $root.Release.Name "%d" $i }} #from values
+      {{ if eq $root.Values.deployment.tag "bear" }}
+        image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.bear }} #from values
+      {{ else }}
+        image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.moose }}
         ports:
         - containerPort: {{ $root.Values.deployment.port }}
 ---
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: {{ printf $root.Release.Name-"%d" $i }} #from RELEASE NAME
+  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
 spec:
   selector:
-    app: {{ printf $root.Release.Name-"%d" $i }}    
+    app: {{ printf $root.Release.Name "%d" $i }}    
   {{ if eq $root.Values.service.type "LoadBalancer" }}
     type: LoadBalancer
     ports:         
