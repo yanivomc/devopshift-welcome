@@ -1,0 +1,24 @@
+{{- $root := . -}}
+{{- range $i, $e := until ( int .Values.counter ) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "%s-service-%d" $root.Release.Name $i }}
+spec:
+  selector: 
+    matchLabels:
+      app: music
+  replicas: {{ $root.Values.pods.replicas }}
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+      - name: {{ $root.Values.pods.name }}
+        image: {{ $root.Values.pods.base }}:{{ $root.Values.pods.tag }}
+        ports:
+        - containerPort: 8080
+---
+{{- end }}
+

@@ -1,0 +1,13 @@
+counter: 2
+
+pods:
+  replicas: 2
+  name: music
+  base: your-container-registry/your-image
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+

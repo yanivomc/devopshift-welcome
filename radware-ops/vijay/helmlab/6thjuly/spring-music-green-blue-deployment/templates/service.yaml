@@ -1,0 +1,18 @@
+{{- $root := . -}}
+{{- range $i, $e := until ( int .Values.counter ) }}
+kind: Service     
+apiVersion: v1     
+metadata:
+  name: {{ printf "%s-service-%d" $root.Release.Name $i }}
+spec:
+  selector:
+    app: {{ printf "%s-label-%d" $root.Release.Name $i }}  
+  type: {{ $root.Values.service.type }}  
+  ports:         
+  - name: http   
+    protocol: TCP
+    port: {{ $root.Values.service.port }}
+    targetPort: {{ $root.Values.service.targetPort }}
+---
+{{- end }}
+
