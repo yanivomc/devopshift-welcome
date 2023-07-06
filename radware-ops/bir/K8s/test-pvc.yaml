@@ -3,12 +3,12 @@ apiVersion: v1
 metadata:
  name: jb-claim
  annotations:
-   volume.beta.kubernetes.io/storage-class: "fast-io"
+   volume.beta.kubernetes.io/storage-class: "slow-io"
 spec:
  accessModes:
    - ReadWriteOnce
  resources:
    requests:
-     storage: 1Gi
+     storage: 4Gi
    limits:
-     storage: 2Gi
+     storage: 5Gi
