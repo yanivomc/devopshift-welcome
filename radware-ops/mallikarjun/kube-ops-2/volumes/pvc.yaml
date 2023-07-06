@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: spring-claim
+ annotations:
+   volume.beta.kubernetes.io/storage-class: "spring"
+spec:
+ accessModes:
+   - ReadWriteOnce
+ resources:
+   requests:
+     storage: 4Gi
