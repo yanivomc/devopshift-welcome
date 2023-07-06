@@ -20,7 +20,7 @@ spec:
         {{- if eq $i 1}}
           {{ $root.Values.pods.base }}:{{ $root.Values.pods.tag }}
         {{- else }}
-          {{ $root.Values.pods.imagegreen }}:{{ $root.Values.pods.taggreen }}
+          {{ $root.Values.pods.base }}:{{ $root.Values.pods.taggreen }}
         {{- end }}
         ports:
         - containerPort: 8080
