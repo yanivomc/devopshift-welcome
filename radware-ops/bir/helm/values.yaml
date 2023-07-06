@@ -1,0 +1,18 @@
+database: 
+  dbname: db_mysql
+  dbtable: music
+food:
+  drink: beer
+  eat: Peanut Butter and Jelly sandwich
+
+pods: 
+  name: spring-music-range
+  image:
+    base: yanivomc/spring-music
+    tag: latest
+  replicas: 2
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
