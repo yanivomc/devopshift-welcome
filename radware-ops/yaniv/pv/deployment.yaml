@@ -1,0 +1,41 @@
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: jb-claim
+#   annotations:
+#     volume.beta.kubernetes.io/storage-class: "slow-io"
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 4Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: music-app-deployment
+  labels:
+    app: music-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: music-app
+  template:
+    metadata:
+      labels:
+        app: music-app
+    spec:
+      containers:
+      - name: music-app
+        image: yanivomc/spring-music:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: pod-volume-data
+      volumes:
+      - name: pod-volume-data
+        persistentVolumeClaim:
+          claimName: mypv
