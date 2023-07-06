@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow-io"
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  awsElasticBlockStore:
+    volumeID: "pvc-6f4d34ed-6455-4729-9c2f-3dfb3b34cde6"
+    fsType: ext4
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "slow-io"
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  volumeName: mypv
+
