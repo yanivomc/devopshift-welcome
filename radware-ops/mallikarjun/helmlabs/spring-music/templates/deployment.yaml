@@ -1,38 +1,44 @@
+{{- $root := . -}}
 {{- range $i, $e := until .Values.deployment.count }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf .Release.Name-"%d" $i }} #from RELEASE NAME
+  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
 spec:
   selector: 
     matchLabels:
-      app: {{ printf .Release.Name-"%d" $i }}
-  replicas: {{ .Values.deployment.replica }}  #from values
+      app: {{ printf $root.Release.Name "%d" $i }}
+  replicas: {{ $root.Values.deployment.replica }}  #from values
   template:
     metadata:
       labels:
-        app: {{ printf .Release.Name-"%d" $i }}
+        app: {{ printf $root.Release.Name "%d" $i }}
     spec:
       containers:
-      - name: {{ printf .Release.Name-"%d" $i }} #from values
-        image: {{ .Values.deployment.repo }}/{{ .Values.deployment.image }} #from values
+      - name: {{ printf $root.Release.Name "%d" $i }} #from values
+      {{ if eq $root.Values.deployment.tag "bear" }}
+        image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.bear }} #from values
+      {{ else }}
+        image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.moose }}
         ports:
-        - containerPort: {{ .Values.deployment.port }}
+        - containerPort: {{ $root.Values.deployment.port }}
 ---
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: {{ printf .Release.Name-"%d" $i }} #from RELEASE NAME
+  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
 spec:
   selector:
-    app: {{ printf .Release.Name-"%d" $i }}    
-  {{ if eq .Values.service.type "LoadBalancer" }}
+    app: {{ printf $root.Release.Name "%d" $i }}    
+  {{ if eq $root.Values.service.type "LoadBalancer" }}
     type: LoadBalancer
     ports:         
     - name: http   
         protocol: TCP
-        port: {{ .Values.service.port }} 
-        targetPort: {{ .Values.service.targetport }}
+        port: {{ $root.Values.service.port }} 
+        targetPort: {{ $root.Values.service.targetport }}
    {{ else }}
     type: ClusterIP
+
+---
 {{- end }}

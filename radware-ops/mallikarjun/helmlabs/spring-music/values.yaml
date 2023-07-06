@@ -1,9 +1,8 @@
-database: 
-  dbname: db_mysql
-  dbtable: music
-pods: 
-  image: yanivomc/spring-music
-  tag: latest
-food:
-  drink: beer
-  eat: Peanut Butter and Jelly sandwich
+deployment:
+  count: 2
+  replica: 1
+  repo: supergiantkir/animals
+  tag: 
+    bear: bear
+    moose: moose
+  port: 80
