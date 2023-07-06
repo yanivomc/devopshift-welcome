@@ -1,5 +1,5 @@
 {{- $root := . -}}
-{{- range $i, $e := until ( int .Values.Counter ) }}
+{{- range $i, $e := until (int $root.Values.Counter) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,12 +12,16 @@ spec:
   template:
     metadata:
       labels:
-        app: music
+        app: {{ printf "%s-service-%d" $root.Release.Name $i }}
     spec:
       containers:
-      - name: {{ $root.Values.pods.name }}
-      # Make sure that 1 deployment use the bear tag and the second is using the moose tag
-        image: {{ $root.Values.pods.base }}:{{ $root.Values.pods.tag }}
+      - name: {{ printf "%s-pod-%d" $root.Release.Name $i }}
+        image: 
+        {{- if eq $i 1}}
+          {{ $root.Values.pods.base }}:{{ $root.Values.pods.tag }}
+        {{- else }}
+          {{ $root.Values.pods.base }}:{{ $root.Values.pods.taggreen }}
+        {{- end }}
         ports:
         - containerPort: 8080
 ---
