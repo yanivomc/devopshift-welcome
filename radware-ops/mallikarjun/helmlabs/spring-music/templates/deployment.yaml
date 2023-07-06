@@ -3,33 +3,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
+  name: {{ printf "%s-deployment-%d" $root.Release.Name  $i }} #from RELEASE NAME
 spec:
   selector: 
     matchLabels:
-      app: {{ printf $root.Release.Name "%d" $i }}
+      app: {{ printf "%s-deployment-%d" $root.Release.Name $i }}
   replicas: {{ $root.Values.deployment.replica }}  #from values
   template:
     metadata:
       labels:
-        app: {{ printf $root.Release.Name "%d" $i }}
+        app: {{ printf "%s-deployment-%d" $root.Release.Name $i }}
     spec:
       containers:
-      - name: {{ printf $root.Release.Name "%d" $i }} #from values
+      - name: {{ printf "%s-deployment-%d" $root.Release.Name $i }} #from values
       {{ if eq $root.Values.deployment.tag "bear" }}
         image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.bear }} #from values
       {{ else }}
         image: {{ $root.Values.deployment.repo }}/{{ $root.Values.deployment.tag.moose }}
+      {{- end }}
         ports:
         - containerPort: {{ $root.Values.deployment.port }}
 ---
 kind: Service     
 apiVersion: v1     
 metadata:
-  name: {{ printf $root.Release.Name "%d" $i }} #from RELEASE NAME
+  name: {{ printf "%s-service-%d" $root.Release.Name $i }} #from RELEASE NAME
 spec:
   selector:
-    app: {{ printf $root.Release.Name "%d" $i }}    
+    app: {{ printf "%s-service-%d" $root.Release.Name $i }}    
   {{ if eq $root.Values.service.type "LoadBalancer" }}
     type: LoadBalancer
     ports:         
@@ -37,8 +38,9 @@ spec:
         protocol: TCP
         port: {{ $root.Values.service.port }} 
         targetPort: {{ $root.Values.service.targetport }}
-   {{ else }}
+  {{ else }}
     type: ClusterIP
+  {{- end}}
 
 ---
 {{- end }}
