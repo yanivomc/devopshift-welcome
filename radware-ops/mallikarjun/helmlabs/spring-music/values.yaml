@@ -1,3 +1,10 @@
+deployment:
+  count: 2
+  replica: 1
+  repo: yanivomc
+  image: 
+    bear: spring-music:latest
+    moose: 
 database: 
   dbname: db_mysql
   dbtable: music
