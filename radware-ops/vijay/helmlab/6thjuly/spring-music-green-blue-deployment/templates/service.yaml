@@ -1,18 +1,22 @@
 {{- $root := . -}}
-{{- range $i, $e := until ( int .Values.counter ) }}
+{{- range $i, $e := until ( int .Values.Counter ) }}
 kind: Service     
 apiVersion: v1     
 metadata:
   name: {{ printf "%s-service-%d" $root.Release.Name $i }}
 spec:
   selector:
-    app: {{ printf "%s-label-%d" $root.Release.Name $i }}  
-  type: {{ $root.Values.service.type }}  
+    app: {{ printf "%s-service-%d" $root.Release.Name $i }}  
+    # If Ingress is disabled use LOADBALANCER, if ingress enabled use ClusterIP
+  {{- if eq $root.Values.service.ingress "enabled"}}
+  type: ClusterIP
+  {{- else }}  
+  type: {{ default "NODEPORT" $root.Values.service.type }}
+  {{- end }}
   ports:         
   - name: http   
     protocol: TCP
-    port: {{ $root.Values.service.port }}
-    targetPort: {{ $root.Values.service.targetPort }}
+    port: {{ default 80 $root.Values.service.port }}
+    targetPort: {{ default 8080 $root.Values.service.targetPort }}
 ---
 {{- end }}
-
