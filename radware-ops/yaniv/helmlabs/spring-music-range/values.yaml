@@ -1,7 +1,8 @@
 pods: 
   base: supergiantkir/animals
   tag: moose
-  taggreen: bear
+  taggreen: latest
+  imagegreen: yanivomc/spring-music
   replicas: 3
 
 Counter: 2

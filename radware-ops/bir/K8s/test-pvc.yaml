@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: jb-claim
+ annotations:
+   volume.beta.kubernetes.io/storage-class: "fast-io"
+spec:
+ accessModes:
+   - ReadWriteOnce
+ resources:
+   requests:
+     storage: 1Gi
+   limits:
+     storage: 2Gi
