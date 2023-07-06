@@ -8,12 +8,11 @@ spec:
   selector:
     app: {{ printf "%s-label-%d" $root.Release.Name $i }}  
     # If Ingress is disabled use LOADBALANCER, if ingress enabled use ClusterIP
-    {{- if eq $root.Values.service.ingress "enabled" -}}
+    {{- if eq $root.Values.service.ingress "enabled"}}
     type: ClusterIP
-    {{ else }}
-    type: {{ default "NODEPORT" $root.Values.service.type }}  
+    {{- else }}
+    type: {{ default "NODEPORT" $root.Values.service.type -}}  
     {{- end }}
-  
   ports:         
   - name: http   
     protocol: TCP
