@@ -11,15 +11,28 @@ helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dash
 
 
 echo "##############################"
+echo "### Configure USER roles"
+curl -fsSL -o generate-user-token.yaml https://raw.githubusercontent.com/yanivomc/devopshift-welcome/master/welcome/k8s/dashboard/generate-user-token.yaml
+kubectl apply -f generate-user-token.yaml
+echo "##############################"
 echo "### Configure USER account"
-NAMESPACE="default"      # Replace with the namespace of your Kubernetes Dashboard installation
-SERVICE_ACCOUNT_NAME="admin-user"       # Replace with your desired service account name
-CLUSTER_ROLE_NAME="cluster-admin"  # Replace with your desired custom ClusterRole name
+NAMESPACE="kubernetes-dashboard"      # Replace with the namespace of your Kubernetes Dashboard installation
+SERVICE_ACCOUNT_NAME="admin-user"      # Replace with your desired service account name
 
+# Delete existing service account
+kubectl delete serviceaccount $SERVICE_ACCOUNT_NAME -n $NAMESPACE --ignore-not-found=true
+
+# Create namespace
+kubectl create namespace $NAMESPACE
 
 # Create service account
 kubectl create serviceaccount $SERVICE_ACCOUNT_NAME -n $NAMESPACE
 
+# Bind the cluster-admin ClusterRole to the service account
+kubectl create clusterrolebinding $SERVICE_ACCOUNT_NAME-cluster-admin-binding --clusterrole=cluster-admin --serviceaccount=$NAMESPACE:$SERVICE_ACCOUNT_NAME
+
+# Get the token associated with the service account
+SECRET_NAME=$(kubectl get serviceaccount $SERVICE_ACCOUNT_NAME -n $NAMESPACE -o jsonpath='{.secrets[0].name}')
 
 
 TOKEN=$(kubectl create token $SERVICE_ACCOUNT_NAME -n $NAMESPACE -o jsonpath='{.status.token}')
