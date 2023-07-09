@@ -8,7 +8,9 @@ echo "### installing K8S Dashboard"
 curl -fsSL -o Values.yaml https://raw.githubusercontent.com/yanivomc/devopshift-welcome/master/welcome/k8s/dashboard/Values.yaml
 helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
 helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dmespace --namespace kubernetes-dashboard -f Values.yaml
-
+echo "############### WAITING FOR METRICSERVER TO BE INSTALLED - SLEEP 15SEC"
+sleep 15
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dmespace --namespace kubernetes-dashboard -f Values.yaml --debug
 
 echo "##############################"
 echo "### Configure USER roles"
