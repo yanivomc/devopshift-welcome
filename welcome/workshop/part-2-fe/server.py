@@ -10,7 +10,7 @@ app = Flask(__name__)
 # Debug flag
 app.config['DEBUG'] = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-
+SIDECARPORT = os.environ.get('SIDECARPORT', 8082)
 DEBUG_RMQ = os.environ.get('DEBUG_RMQ', False)
 DEBUG_MONGO = os.environ.get('DEBUG_MONGO', False)
 
@@ -98,7 +98,8 @@ def buy():
         body_dict = {"trx_status":"pending", "trx_id": trx_id,"clientname": clientname, "nftid": nftid, "nftprice": float(nftprice), "nftimage_url": nftimage_url}
         # body = json.dumps(body_dict)
         try:
-            response = requests.post('http://localhost:8082/messages', json=body_dict)
+            print(f'http://localhost:{SIDECARPORT}/messages')
+            response = requests.post(f'http://localhost:{SIDECARPORT}/messages', json=body_dict)
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
             return jsonify({'status': 'error'})

@@ -2,9 +2,11 @@ version: '3.4'
 services:
   fe-nft: 
     image: yanivomc/fe-nft:latest
+    container_name: fe-nft
     build: ./part-2-fe
     networks:
       - cloudframework
+      - servicesnetwork
     depends_on:
       # - product-consumer
       # - rmq
@@ -12,45 +14,19 @@ services:
     ports:
       - "80:8081"
     restart: always
-  
-  # product-consumer:
-  #   image: yanivomc/product-consumer-nft:latest
-  #   build: ./part-3-product-consumer
-  #   networks:
-  #     - cloudframework
-  #   restart: always
-  #   depends_on:
-  #     - rmq
-  #     - mongo
-  #     # - myqsl
-  
-  # consumer-mv:
-  #   image: yanivomc/consumer-mv-nft:latest
-  #   build: ./part-4-mv-consumer
-  #   networks:
-  #     - cloudframework
-  #   restart: always
-  #   depends_on:
-  #     - rmq
-  #     - mongo
+#### fe sidecar (this is the prodoucer api)
+  fe-sidecar-api: 
+    image: yanivomc/fe-sidecar-api:latest
+    build: ./part-2-sidecar/sidecar-producer
+    network_mode: "container:fe-nft"
+    networks:
+     - cloudframework
+     - servicesnetwork
 
-############################
-  # RMQ - queue layer
-############################
-  # rmq:
-  #   image: yanivomc/nft-rmq:latest
-  #   restart: always
-  #   container_name: 'rmq'
-  #   ports:
-  #       - 5672:5672
-  #       - 15672:15672
-    
-  #   networks:
-  #       - cloudframework
-############################
-  # MYQSL state store 
-############################
-
+    depends_on: 
+      - fe-nft
+    restart: always
+  
 
 
 ############################
@@ -91,11 +67,19 @@ services:
     restart: always
 
 
-networks:
-  cloudframework:
-    driver: bridge
+
+
 
 volumes:
   cf_data:
   mongodb:
   mongodb-express:
+
+
+
+  networks:
+  cloudframework:
+    driver: bridge
+  servicesnetwork:
+    name: servicesNetwork
+    external: true

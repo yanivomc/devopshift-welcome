@@ -11,21 +11,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 ADD . /app
 
 # Make port 5000 available to the world outside this container
-EXPOSE 8082
+EXPOSE 5000
 
 # Define environment variables
-ENV MONGO_HOST="mongodb://root:pass12345@mongo:27017/"
-ENV MONGO_DB=nft_db
-ENV MONGO_COLLECTION=nft_collection
-# ENV RMQ_HOST=rmq
-ENV SIDECARPORT=5000
-ENV DEBUG=True
-### DISABLE RMQ AND MONGO for im mem 
-ENV DEBUG_RMQ = False 
-ENV DEBUG_MONGO = False
+ENV CONSULHOST='consul'
+ENV FLASK_APP=main.py
 ENV FLASK_DEBUG=1
-ENV FLASK_APP=server.py
-
+ENV KAFKABROKER=kafka1
+ENV KAFKAREGISTRY=kafka-schema-registry
+WORKDIR /app/src
 
 # Run server.py when the container launches
-CMD ["flask", "run", "--port=8081", "--host=0.0.0.0"]
+CMD ["flask" ,"run"]

@@ -2,3 +2,4 @@ confluent_kafka
 flask_restful
 flask
 fastavro
+python-consul

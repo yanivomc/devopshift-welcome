@@ -4,14 +4,19 @@ import json
 import fastavro
 import io
 import threading
-import time
+# import time
+import os
 from src.schemaManager import avroManager
 from src.logger import JsonLogger
-
+CONSULHOST= os.getenv('CONSULHOST', 'localhost')
+KAFKABROKER= os.getenv('KAFKABROKER', 'localhost')
+KAFKAREGISTRY= os.getenv('KAFKAREGISTRY', 'localhost')
+print(KAFKABROKER)
+print(KAFKAREGISTRY)
 logger = JsonLogger(debug=True)
 
 class KafkaProducer:
-    def __init__(self, consul_host='localhost', consul_port=8500, consul_key='producer/kafka/configuration'):
+    def __init__(self, consul_host=CONSULHOST, consul_port=8500, consul_key='producer/kafka/configuration'):
         self.consul = consul.Consul(host=consul_host, port=consul_port)
         self.consul_key = consul_key
         self.config = None
@@ -35,9 +40,9 @@ class KafkaProducer:
                 # The key doesn't exist, so we create it with a default value
                 default_config = {
                     'topic': 'sold_nft_ex',
-                    "registry.servers": "http://localhost:8081",
+                    "registry.servers": f"http://{KAFKAREGISTRY}:8081",
                     "kafkaConfig": {
-                        "bootstrap.servers": "localhost:19092",
+                        "bootstrap.servers": f"{KAFKABROKER}:19092",
                         "client.id": "my_client_id",
                         "default.topic.config": {
                             "acks": "all"

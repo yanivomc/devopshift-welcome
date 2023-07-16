@@ -28,7 +28,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "${workspaceFolder}/welcome/workshop/part-2-fe/sidecar-producer/src/main.py",
+                "FLASK_APP": "${workspaceFolder}/welcome/workshop/part-2-sidecar/sidecar-producer/src/main.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [
