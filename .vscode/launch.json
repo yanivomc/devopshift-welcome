@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Flask",
             "type": "python",
@@ -10,6 +11,24 @@
             "env": {
                 "FLASK_APP": "${workspaceFolder}/welcome/workshop/part-2-fe/server.py",
                 // "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+
+                "--no-reload",
+                "--host=0.0.0.0",
+                "--port=8081"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "Python: kafka",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "${workspaceFolder}/welcome/workshop/part-2-fe/sidecar-producer/src/main.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [
