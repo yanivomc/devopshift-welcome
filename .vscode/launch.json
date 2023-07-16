@@ -3,7 +3,7 @@
     "configurations": [
 
         {
-            "name": "Python: Flask",
+            "name": "Python: Main FE",
             "type": "python",
             "request": "launch",
             "module": "flask",
@@ -16,9 +16,9 @@
             "args": [
                 "run",
 
-                "--no-reload",
+                // "--no-reload",
                 "--host=0.0.0.0",
-                "--port=8081"
+                "--port=9998"
             ],
             "jinja": true
         },
@@ -34,9 +34,9 @@
             "args": [
                 "run",
 
-                "--no-reload",
+                // "--no-reload",
                 "--host=0.0.0.0",
-                "--port=8081"
+                "--port=8082"
             ],
             "jinja": true
         }

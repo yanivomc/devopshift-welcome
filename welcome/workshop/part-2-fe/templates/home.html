@@ -109,15 +109,16 @@
         var trx_id = $('#trx_id').text().substring(8);  // Remove 'trx_id: ' from the string
 
         $.post('/buy', {trx_id: trx_id ,clientname: clientname, nftid: nftid, nftprice: nftprice, nftimage_url: nftimage_url}, function(data){
-            if(data.status === 'success'){
-                alert('Purchase successful!');
-                $('#nftModal').modal('hide');
-                window.location.href="/nft-sold"
+        if(data.status === 'success'){
+            alert('Purchase successful!');
+            $('#nftModal').modal('hide');
+            window.location.href="/nft-sold"
+        } else if (data.status === 'error') {
+            // Use data.message as the error message
+            alert('Purchase failed. Please try again. Error: ' + data.message);
+        }
+    });
 
-            } else {
-                alert('Purchase failed. Please try again.');
-            }
-        });
     });
 });
     </script>

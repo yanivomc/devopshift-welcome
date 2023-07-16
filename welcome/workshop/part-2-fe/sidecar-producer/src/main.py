@@ -12,10 +12,13 @@ class MessageResource(Resource):
         message = request.get_json()
         if not message:
             return {"error": "No message provided"}, 400
-        producer.produce_message(message)
+        try:
+            producer.produce_message(message)
+        except Exception as e:
+            return {"status": "error", "message": str(e)}, 500
         return {"status": "success"}, 200
 
 api.add_resource(MessageResource, '/messages')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0', port=8082)

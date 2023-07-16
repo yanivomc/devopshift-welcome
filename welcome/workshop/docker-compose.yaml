@@ -6,47 +6,47 @@ services:
     networks:
       - cloudframework
     depends_on:
-      - product-consumer
-      - rmq
+      # - product-consumer
+      # - rmq
       - mongo
     ports:
-      - "8080:8081"
+      - "80:8081"
     restart: always
   
-  product-consumer:
-    image: yanivomc/product-consumer-nft:latest
-    build: ./part-3-product-consumer
-    networks:
-      - cloudframework
-    restart: always
-    depends_on:
-      - rmq
-      - mongo
-      # - myqsl
+  # product-consumer:
+  #   image: yanivomc/product-consumer-nft:latest
+  #   build: ./part-3-product-consumer
+  #   networks:
+  #     - cloudframework
+  #   restart: always
+  #   depends_on:
+  #     - rmq
+  #     - mongo
+  #     # - myqsl
   
-  consumer-mv:
-    image: yanivomc/consumer-mv-nft:latest
-    build: ./part-4-mv-consumer
-    networks:
-      - cloudframework
-    restart: always
-    depends_on:
-      - rmq
-      - mongo
+  # consumer-mv:
+  #   image: yanivomc/consumer-mv-nft:latest
+  #   build: ./part-4-mv-consumer
+  #   networks:
+  #     - cloudframework
+  #   restart: always
+  #   depends_on:
+  #     - rmq
+  #     - mongo
 
 ############################
   # RMQ - queue layer
 ############################
-  rmq:
-    image: yanivomc/nft-rmq:latest
-    restart: always
-    container_name: 'rmq'
-    ports:
-        - 5672:5672
-        - 15672:15672
+  # rmq:
+  #   image: yanivomc/nft-rmq:latest
+  #   restart: always
+  #   container_name: 'rmq'
+  #   ports:
+  #       - 5672:5672
+  #       - 15672:15672
     
-    networks:
-        - cloudframework
+  #   networks:
+  #       - cloudframework
 ############################
   # MYQSL state store 
 ############################

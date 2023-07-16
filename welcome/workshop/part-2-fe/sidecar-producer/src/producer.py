@@ -2,6 +2,9 @@ from confluent_kafka import Producer
 import consul
 import json
 import fastavro
+import io
+import threading
+import time
 from src.schemaManager import avroManager
 from src.logger import JsonLogger
 
@@ -16,8 +19,13 @@ class KafkaProducer:
         self.producer = None
         self.schema = None
         self.registryServers = None
-        self.read_config_from_consul()
+        self.start_config_watcher()
+    def start_config_watcher(self):
+        '''Run a seprated thread to monitor our Consul changes'''
+        config_thread = threading.Thread(target=self.read_config_from_consul, daemon=True ,name='readConfigThread')
+        config_thread.start()
 
+        
     def read_config_from_consul(self):
         # Here you would connect to Consul and read the configuration
         index = None
@@ -60,6 +68,7 @@ class KafkaProducer:
                     self.schema = fastavro.parse_schema(self.config['avro_schema'])
                     registryUpadte = avroManager(registryUrl=self.registryServers,topicName=self.topic,avroSchema=self.schema)
                     registryUpadte.manageRegistry()
+
                     
                     # Log a message about the successful configuration update
 
@@ -67,9 +76,23 @@ class KafkaProducer:
         # Here you would use the Avro schema to validate the message
         return fastavro.validate(message, self.schema)
 
+    def delivery_report(self, err, msg):
+        if err is not None:
+            logger.log({"message": "Failed to deliver message", "Error": str(err), "module":"KafkaProducer", "type":'ERROR'},level='error')
+            raise Exception(f'Message delivery failed: {err}')
+        else:
+            logger.log({"message": "Message delivered to Kafka", "module":"KafkaProducer", "type":'DEBUG'},level='debug')
+
     def produce_message(self, message):
         if not self.validate_message(message):
-            # Log a message about the validation failure
-            return
-        self.producer.produce(self.topic, value=message)
-        self.producer.flush()
+            raise ValueError("Invalid message format")
+        try:
+            message_bytes_io = io.BytesIO()
+            fastavro.schemaless_writer(message_bytes_io, self.schema, message)
+            message_bytes = message_bytes_io.getvalue()
+            self.producer.produce(self.topic, value=message_bytes, callback=self.delivery_report)
+            self.producer.flush()
+
+        except Exception as e:
+            logger.log({"message": "Failed to produce message", "Error": str(e), "module":"KafkaProducer", "type":'ERROR'},level='error')
+            raise

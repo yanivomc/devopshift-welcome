@@ -4,7 +4,7 @@ import json
 from pymongo import MongoClient # to connect to MongoDB
 import os
 import src.generators.nftGenerator as nftGenerator
-
+import requests
 app = Flask(__name__)
 
 # Debug flag
@@ -14,13 +14,15 @@ app.config['DEBUG'] = os.environ.get('DEBUG', 'True').lower() == 'true'
 DEBUG_RMQ = os.environ.get('DEBUG_RMQ', False)
 DEBUG_MONGO = os.environ.get('DEBUG_MONGO', False)
 
-# RabbitMQ Configuration
-RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
-RMQ_QUEUE = os.getenv("RMQ_QUEUE", "sold-nft")
-RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
-RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
-RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
-RMQ_PASSWORD = os.getenv("RMQ_PASSWORD", "123456")
+# # RabbitMQ Configuration - refactored out 
+# RMQ_HOST = os.getenv("RMQ_HOST", "localhost")
+# RMQ_QUEUE = os.getenv("RMQ_QUEUE", "sold-nft")
+# RMQ_QUEUE_DLX = os.getenv("RMQ_QUEUE_DLX", "dead-letter-sold-nfts")
+# RMQ_QUEUE_MV = os.getenv("RMQ_QUEUE_MV", "sold-nfts-mv")
+# RMQ_USERNAME = os.getenv("RMQ_USERNAME", "guest")
+# RMQ_PASSWORD = os.getenv("RMQ_PASSWORD", "123456")
+
+
 # Mongo Configuration
 MONGO_HOST = os.getenv("MONGO_HOST", 'mongodb://root:pass12345@localhost:27017/')
 # Mock data
@@ -48,12 +50,11 @@ if not DEBUG_RMQ == True:
     from pymongo import MongoClient # to connect to MongoDB
 
 
-    # setup RabbitMQ connection
-    credentials = pika.PlainCredentials(RMQ_USERNAME, RMQ_PASSWORD)
-    parameters = pika.ConnectionParameters(host=RMQ_HOST, credentials=credentials)
-    rmq_connection = pika.BlockingConnection(parameters)
-    # rmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=RMQ_HOST))
-    channel = rmq_connection.channel()
+    # setup RabbitMQ connection - refactor out
+    # credentials = pika.PlainCredentials(RMQ_USERNAME, RMQ_PASSWORD)
+    # parameters = pika.ConnectionParameters(host=RMQ_HOST, credentials=credentials)
+    # rmq_connection = pika.BlockingConnection(parameters)
+    # channel = rmq_connection.channel()
 
     # setup MongoDB connection
     if not DEBUG_MONGO == True:
@@ -94,10 +95,19 @@ def buy():
         print(message)
     else:
         # send data to RabbitMQ!
-        body_dict = {"trx_status":"pending", "trx_id": trx_id,"clientname": clientname, "nftid": nftid, "nftprice": nftprice, "nftimage_url": nftimage_url}
-        body = json.dumps(body_dict)
-        channel.basic_publish(exchange='sold_nft_ex', routing_key='', body=body)
-        # channel.basic_publish(exchange='sold_nft_ex', body=body)
+        body_dict = {"trx_status":"pending", "trx_id": trx_id,"clientname": clientname, "nftid": nftid, "nftprice": float(nftprice), "nftimage_url": nftimage_url}
+        # body = json.dumps(body_dict)
+        try:
+            response = requests.post('http://localhost:8082/messages', json=body_dict)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            return jsonify({'status': 'error'})
+        return jsonify({'status': 'success'})
+
+
+        #Disabling RMQ - Refactoring into KAFKA Producer sidecar
+        # channel.basic_publish(exchange='sold_nft_ex', routing_key='', body=body)
+        
 
 
     return jsonify({'status': 'success'})
