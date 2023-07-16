@@ -1,6 +1,6 @@
 
 
-**Task 1: Building the Application Diagram**
+**Task 1: Building the Application Diagram** (send solution to YANIV@YNOT.WORK)
 
 Your task is to design an architecture diagram for a Python-based application. This application is built around several interconnected services. Here are the requirements for each component:
 
