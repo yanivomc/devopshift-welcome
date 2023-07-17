@@ -1,12 +1,195 @@
-version: '3.4'
+version: '3'
 services:
+  consul:
+    image: consul
+    restart: unless-stopped
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    ports:
+      - 0.0.0.0:8500:8500
+      - 0.0.0.0:8600:8600/udp
+    networks:
+      - kafka
+    volumes:
+      - consul:/consul/data
+
+##### KAFKA SETUP
+  kafka1:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka1
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: EXTERNAL://kafka1:19092,PLAINTEXT://kafka1:9092,CONTROLLER://kafka1:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,EXTERNAL://kafka1:19092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    ports:
+      - 19092:19092
+    volumes:
+      - ./part-2-sidecar/sidecar-producer/services/compose/run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+    networks:
+      - kafka
+
+  kafka2:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka2
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_LISTENERS: EXTERNAL://kafka2:19092, PLAINTEXT://kafka2:9092,CONTROLLER://kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,EXTERNAL://kafka2:19092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    volumes:
+      - ./part-2-sidecar/sidecar-producer/services/compose/run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+    networks:
+      - kafka
+  
+  kafka3:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: kafka3
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT 
+      KAFKA_LISTENERS: EXTERNAL://kafka3:19092,PLAINTEXT://kafka3:9092,CONTROLLER://kafka3:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,EXTERNAL://kafka3:19092
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    volumes:
+      - ./part-2-sidecar/sidecar-producer/services/compose/run_workaround.sh:/tmp/run_workaround.sh
+    command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
+    networks:
+      - kafka     
+
+  conduktor:
+    image: conduktor/conduktor-platform:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - conduktor_volume:/var/conduktor
+      - type: bind
+        source: "./part-2-sidecar/sidecar-producer/services/compose/platform-config.yaml"
+        target: /opt/conduktor/platform-config.yaml
+        read_only: true
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+      - kafka-connect
+    environment:
+      CDK_IN_CONF_FILE: /opt/conduktor/platform-config.yaml
+      KAFKA_BOOTSTRAP_SERVER: PLAINTEXT://kafka1:19092
+      SR_SERVER: "http://kafka-schema-registry:8081"
+      ORGANISATION_NAME: "default"
+      ADMIN_EMAIL: "admin@admin.io"
+      ADMIN_PSW: "admin"
+      CDK_ADMIN_EMAIL: "admin@admin.io"
+      CDK_ADMIN_PASSWORD: "admin"
+    networks:
+      - kafka      
+
+  kafka-schema-registry:
+    image: confluentinc/cp-schema-registry:7.3.2
+    hostname: kafka-schema-registry
+    container_name: kafka-schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    networks:
+      - kafka
+    restart: always
+    
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.3.2
+    hostname: kafka-connect
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_PLUGIN_PATH: '/usr/share/java,/etc/kafka-connect/jars,/usr/share/confluent-hub-components'
+    volumes:
+      - ./part-2-sidecar/sidecar-producer/services/compose/connectors:/etc/kafka-connect/jars/
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+      - kafka-rest-proxy
+    command:
+      - bash
+      - -c
+      - |
+        confluent-hub install --no-prompt debezium/debezium-connector-mysql:latest
+        confluent-hub install --no-prompt confluentinc/kafka-connect-datagen:0.4.0
+        /etc/confluent/docker/run
+    networks:
+      - kafka
+ 
+  kafka-rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.3.2
+    hostname: kafka-rest-proxy
+    container_name: kafka-rest-proxy
+    ports:
+      - "8084:8082"
+    environment:
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+    depends_on:
+      - kafka1
+      - kafka-schema-registry
+    networks:
+      - kafka
+
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:7.3.2
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      KSQL_LISTENERS: http://0.0.0.0:8088/
+      KSQL_KSQL_SERVICE_ID: ksqldb-server_
+    depends_on:
+      - kafka1
+    networks:
+      - kafka
+
   fe-nft: 
     image: yanivomc/fe-nft:latest
     container_name: fe-nft
     build: ./part-2-fe
     networks:
-      - cloudframework
-      - servicesnetwork
+      - kafka
     depends_on:
       # - product-consumer
       # - rmq
@@ -20,11 +203,11 @@ services:
     build: ./part-2-sidecar/sidecar-producer
     network_mode: "container:fe-nft"
     networks:
-     - cloudframework
-     - servicesnetwork
-
+     - kafka
     depends_on: 
       - fe-nft
+      - kafka1
+      - kafka-schema-registry
     restart: always
   
 
@@ -41,7 +224,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - cloudframework
+      - kafka
     volumes:
       - mongodb:/data/db
     restart: always
@@ -61,7 +244,7 @@ services:
     depends_on:
     - mongo
     networks:
-    - cloudframework
+    - kafka
     ports:
     - 9091:8081
     restart: always
@@ -69,17 +252,17 @@ services:
 
 
 
+networks:
+  kafka:
+    name: servicesNetwork
+
 
 volumes:
+  consul:
   cf_data:
   mongodb:
   mongodb-express:
+  conduktor_volume:
 
 
 
-  networks:
-  cloudframework:
-    driver: bridge
-  servicesnetwork:
-    name: servicesNetwork
-    external: true
