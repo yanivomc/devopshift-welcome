@@ -188,14 +188,14 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: pma
     links:
-      - mysqldb
+      - mysql-db
     environment:
       PMA_HOST: mysqldb
       PMA_PORT: 3306
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8081:80
+      - 8085:80
 
   
   connect-datagen:
