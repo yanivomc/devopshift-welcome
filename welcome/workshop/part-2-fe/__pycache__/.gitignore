@@ -1,0 +1,7 @@
+installDashboard.sh
+**/**/__pycache__
+welcome/workshop/part-2-fe/__pycache__/server.cpython-39.pyc
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc

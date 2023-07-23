@@ -176,6 +176,7 @@ services:
       STREAMS_SCHEMA_REGISTRY_PORT: 8081
 
   mysql-db:
+        container_name: mysqldb
         image: mysql
         hostname: mysql-db
         ports: 
@@ -183,6 +184,19 @@ services:
         environment:
             MYSQL_DATABASE: accounts
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysqldb
+    environment:
+      PMA_HOST: mysqldb
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
   
   connect-datagen:
     build: ../code/connect/data-gen-accounts/
