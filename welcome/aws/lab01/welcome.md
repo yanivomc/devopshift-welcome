@@ -1,4 +1,4 @@
-## **Lab01 IAM overview**
+## **Lab01 IAM overview JB INTRO**
 
 In this lab, you will explore users, groups, and policies in the AWS Identity and Access Management (IAM) service.
 
