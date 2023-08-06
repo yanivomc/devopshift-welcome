@@ -1,4 +1,4 @@
-## **IAM overview**
+## **IAM overview!**
 
 In this lab, you will explore users, groups, and policies in the AWS Identity and Access Management (IAM) service.
 
