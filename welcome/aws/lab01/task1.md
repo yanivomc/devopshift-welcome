@@ -18,14 +18,13 @@ After completing this lab, you will know how to:
 
 This lab requires approximately **40 minutes** to complete.
 
-.
 
 **Accessing the AWS Management Console**
 
 1. At the top of these instructions, select Start Lab to launch your lab.
 
-A Click on CONSOLE URL.
-B User the accountID , user and password to login.
+- Right Click on CONSOLE URL to open it in incognito mode.
+- Copy the accountID , user and password to login.
 
 **Task 1: Explore the users and groups**
 
@@ -43,14 +42,26 @@ The following IAM users have been created for you:
 1. user-3
 
 
+**User:**
+user-1
+***In Group***
+S3-Support
+***Permissions***
+Read-only access to Amazon S3
 
-|**User**|**In Group**|**Permissions**|
-| :-: | :-: | :-: |
-|user-1|S3-Support|Read-only access to Amazon S3|
-|user-2|EC2-Support|Read-only access to Amazon EC2|
-|user-3|EC2-Admin|View, Start, and Stop Amazon EC2 instances|
+**User:**
+user-2
+***In Group***
+EC2-Support
+***Permissions***
+Read-only access to Amazon EC2
 
-
+**User:**
+user-3
+***In Group***
+EC2-Admin
+***Permissions***
+View, Start, and Stop Amazon EC2 instances
 
 
 4. Choose the name of **user-1**.
