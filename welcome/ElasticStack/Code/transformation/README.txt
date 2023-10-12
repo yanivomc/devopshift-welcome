@@ -44,7 +44,7 @@ wget -P /tmp/mleans/ https://jb-workshop.s3.eu-west-1.amazonaws.com/ml-25m.zip
 Install unzip if not already installed:
 **ubuntu:**
 ~~~
-apt install -y unzip
+sudo apt install -y unzip
 ~~~
 **unzip the file**
 ~~~
@@ -57,7 +57,10 @@ unzip ml-25m.zip
 python3 [script_location]/csv_to_bulk.py
 ~~~ 
 When asked for file location provide:
-source file: /tmp/mleans/movies.csv
-target file: /tmp/mleans/movies.json
+source file: /tmp/mleans/ml-25m/movies.csv
+target file: /tmp/mleans/ml-25m/movies.json
 
+When asked for titles provide:
+movieId,title,genres
+~~~
 **DO NOT SAVE THE FILE OR FILES IN YOUR GIT WORKDIR - ONLY IN /TMP**
