@@ -49,7 +49,7 @@ services:
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
 
   conduktor:
-    image: conduktor/conduktor-platform:latest
+    image: conduktor/conduktor-platform:1.17.3
     ports:
       - 8080:8080
     volumes:
