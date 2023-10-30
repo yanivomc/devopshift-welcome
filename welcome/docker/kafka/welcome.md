@@ -20,7 +20,7 @@ Container docker-compose-conduktor-1  Started
 
     cd /home/ubuntu/workarea/devopshift/kafka/docker-compose
     docker compose ps --services --status running | awk '{ print "Service:", $1, "is running" }'
-    docker compose ps --services --status failed  | awk '{ print "Service:", $1, "has failed" }'
+    docker compose ps --services --status exited  | awk '{ print "Service:", $1, "exit" }'
 
 Validate that all containers are up and no exited services.
 
