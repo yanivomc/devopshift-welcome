@@ -50,7 +50,7 @@ you may access **KAFKA brokers directly** or using **conduktor**
 **Option 1:** Accessing Kafka brokers (kafka1 - kafka3):
 
     docker exec -ti kafka1 bash
-**Option 2:** Run the following command for accessing conduktor:
+**Option 2:** Run the following command in your Terminal to get conduktor URL:
 
     echo "Your conduktor URL is: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):8080"
 
