@@ -37,7 +37,7 @@ Service: jenkins is running
 Once all services are up,
 you may access **JENKINS UI** by running the following:
 
-**Option 1:** Run the following command Jenkins URL:
+**Option 1:** Run the following command in your Terminal:
 
     echo "Your JENKINS URL is: http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4):8080"
 
