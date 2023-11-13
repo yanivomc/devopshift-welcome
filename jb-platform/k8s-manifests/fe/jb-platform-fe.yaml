@@ -19,12 +19,23 @@ spec:
     spec:
       containers:
       - name: jb-platform-fe
-        image: yanivomc/jb-elearning-fe:v1.0.1.0
+        image: yanivomc/jb-elearning-fe:1.0.1.1 
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
+        env:
+          - name:  AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  key
+          - name:  AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  secret
       - name: jb-platform-fe-sidecar
-        image: yanivomc/jb-elearning-dapr:v1.0.1.0
+        image: yanivomc/jb-elearning-dapr:1.0.1.1 
         imagePullPolicy: Always
         command: ["./daprd"]
         args: ["-app-id" ,"jb-platform-fe", "-placement-host-address", "jb-platform-placement:50006", "-components-path", "/components", "-log-level", "debug"]

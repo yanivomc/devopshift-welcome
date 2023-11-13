@@ -23,6 +23,6 @@ spec:
     app: jb-platform-fe
   ports:
   - protocol: TCP
-    port: 9003
+    port: 80
     targetPort: 9003
   type: LoadBalancer
