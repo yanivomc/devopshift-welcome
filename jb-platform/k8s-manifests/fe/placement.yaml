@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jb-platform-placement
+  # namespace: jb-platform
+  labels:
+    app: jb-platform-placement
+spec:
+  selector:
+    matchLabels:
+      app: jb-platform-placement
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: jb-platform-placement
+    spec:
+      containers:
+      - name: jb-platform-placement
+        image: "daprio/dapr"
+        imagePullPolicy: Always
+        command: ["./placement"]
+        args: [ "-port", "50006"]
+        ports:
+        - containerPort: 50006
+
+

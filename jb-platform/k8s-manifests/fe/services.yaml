@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jb-platform-placement
+  # namespace: jb-platform
+spec:
+  selector:
+    app: jb-platform-placement
+  ports:
+  - protocol: TCP
+    port: 50006
+    targetPort: 50006
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jb-platform-fe
+  # namespace: jb-platform
+spec:
+  selector:
+    app: jb-platform-fe
+  ports:
+  - protocol: TCP
+    port: 9003
+    targetPort: 9003
+  type: LoadBalancer

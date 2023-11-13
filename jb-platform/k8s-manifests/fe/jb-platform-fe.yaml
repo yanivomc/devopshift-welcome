@@ -1,0 +1,34 @@
+# K8S Deployment filr for FE
+# This file is used to deploy the FE application in K8S cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jb-platform-fe
+  # namespace: jb-platform
+  labels:
+    app: jb-platform-fe
+spec:
+  selector:
+    matchLabels:
+      app: jb-platform-fe
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: jb-platform-fe
+    spec:
+      containers:
+      - name: jb-platform-fe
+        image: yanivomc/jb-elearning-fe:v1.0.1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9003
+      - name: jb-platform-fe-sidecar
+        image: yanivomc/jb-elearning-dapr:v1.0.1.0
+        imagePullPolicy: Always
+        command: ["./daprd"]
+        args: ["-app-id" ,"jb-platform-fe", "-placement-host-address", "jb-platform-placement:50006", "-components-path", "/components", "-log-level", "debug"]
+
+
+
+
