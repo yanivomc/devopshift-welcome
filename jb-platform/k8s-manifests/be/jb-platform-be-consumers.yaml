@@ -3,23 +3,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jb-platform-fe
+  name: jb-platform-envconsumers
   # namespace: jb-platform
   labels:
-    app: jb-platform-fe
+    app: jb-platform-envconsumers
 spec:
   selector:
     matchLabels:
-      app: jb-platform-fe
+      app: jb-platform-envconsumers
   replicas: 1
   template:
     metadata:
       labels:
-        app: jb-platform-fe
+        app: jb-platform-envconsumers
     spec:
       containers:
-      - name: jb-platform-fe
-        image: yanivomc/jb-elearning-fe:v1.0.1.5
+      - name: jb-platform-envconsumers
+        image: yanivomc/jb-elearning-envconsumers:v1.0.1.5
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
@@ -37,11 +37,17 @@ spec:
         # command:
         #   - "sleep"
         #   - "60000"
-      - name: jb-platform-fe-sidecar
+      - name: jb-platform-envconsumers-sidecar
         image: yanivomc/jb-elearning-dapr:v1.0.1.5
         imagePullPolicy: Always
         command: ["./daprd"]
-        args: ["-app-id" ,"jb-platform-fe-prod", "-placement-host-address", "jb-platform-placement:50006", "-components-path", "/components", "-log-level", "debug"]
+        args: ["-app-id", "jb-platform-envconsumers",
+               "-placement-host-address", "jb-platform-placement:50006",
+               "-components-path", "/components",
+                "-log-level", "debug",
+                "--app-port", "9000", 
+                "--app-protocol", "grpc"
+                ]
 
 
 
