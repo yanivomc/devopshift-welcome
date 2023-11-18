@@ -3,7 +3,10 @@
 
 **Lab overview**
 
-In this lab, you have access to Docker terminal playground
+In this lab, you have access to Docker terminal and to VisualCode in a browser (IDE)
+
+VSCODE IDE PASSWORD:
+devopshift
 
 **Duration**
 
