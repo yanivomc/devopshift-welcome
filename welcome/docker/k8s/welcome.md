@@ -12,11 +12,12 @@ Allow a few moments for your k8s environments to bootstrap.
 
     kubectl get all --n all-namespaces
 
+## Please note reagarding your LB IP
+You may create a service Type LOADBALANCER and user your external IP (shown on top of this page) and the exposed port for ex. IP:80
+
 
 ### Creating a simple test
 Once all services are up,
-
-
 **Option 1:** Run the following command in your Terminal:
 
     kubectl run nginx --image nginx
