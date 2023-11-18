@@ -1,6 +1,11 @@
 
 ### KAFKA PLAYGROUND
 Welcome to Kafka playground.
+In this lab, you have access to KUBECTL and to VisualCode in a browser (IDE)
+
+VSCODE IDE PASSWORD: devopshift
+
+
 
 Once your terminal is available,
 Allow a few moments for your Kafka environments to bootstrap.
