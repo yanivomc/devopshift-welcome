@@ -1,6 +1,9 @@
 
 ### K8S PLAYGROUND
 Welcome to K8S playground.
+In this lab, you have access to KUBECTL and to VisualCode in a browser (IDE)
+VSCODE IDE PASSWORD: devopshift
+
 
 Once your terminal is available,
 Allow a few moments for your k8s environments to bootstrap.
