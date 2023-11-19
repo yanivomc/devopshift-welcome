@@ -5,7 +5,7 @@ metadata:
   name: example-mongodb
   namespace: mongodb
 spec:
-  members: 1
+  members: 3
   type: ReplicaSet
   version: "6.0.5"
   security:

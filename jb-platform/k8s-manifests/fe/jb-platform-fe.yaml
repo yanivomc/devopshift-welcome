@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: jb-platform-fe
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: jb-platform-fe
-        image: yanivomc/jb-elearning-fe:v1.0.1.5
+        image: yanivomc/jb-elearning-fe:v1.0.1.10-cors
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
