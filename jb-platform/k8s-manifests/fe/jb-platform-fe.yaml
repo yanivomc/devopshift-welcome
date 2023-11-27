@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: jb-platform-fe
-        image: yanivomc/jb-elearning-fe:v1.0.2.0
+        image: yanivomc/jb-elearning-fe:v1.0.2.3
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
