@@ -1,0 +1,252 @@
+Name:             example-mongodb-0
+Namespace:        mongodb
+Priority:         0
+Service Account:  mongodb-database
+Node:             i-0112b8de3d40895f2/172.31.40.44
+Start Time:       Tue, 28 Nov 2023 12:16:38 +0000
+Labels:           app=example-mongodb-svc
+                  controller-revision-hash=example-mongodb-85d858b997
+                  statefulset.kubernetes.io/pod-name=example-mongodb-0
+Annotations:      agent.mongodb.com/version: 64
+                  cni.projectcalico.org/containerID: f1e369c56b22418908233f5d671439c61962ae86f07581e9d2e93f0c8f57c6f0
+                  cni.projectcalico.org/podIP: 100.121.237.117/32
+                  cni.projectcalico.org/podIPs: 100.121.237.117/32
+Status:           Running
+IP:               100.121.237.117
+IPs:
+  IP:           100.121.237.117
+Controlled By:  StatefulSet/example-mongodb
+Init Containers:
+  mongod-posthook:
+    Container ID:  containerd://ac5930f84956ea77aa833d9fc0bcdb6b8f53c2e44d6bd0657e4afdc62a273022
+    Image:         quay.io/mongodb/mongodb-kubernetes-operator-version-upgrade-post-start-hook:1.0.8
+    Image ID:      quay.io/mongodb/mongodb-kubernetes-operator-version-upgrade-post-start-hook@sha256:c58c29ffbf13b2edc75a1afab3dec806206d900e38eb4592f59a1a5dc55f85f8
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      cp
+      version-upgrade-hook
+      /hooks/version-upgrade
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 28 Nov 2023 12:16:44 +0000
+      Finished:     Tue, 28 Nov 2023 12:16:44 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /hooks from hooks (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s5djl (ro)
+  mongodb-agent-readinessprobe:
+    Container ID:  containerd://9400ebdc15654eeebb47a958eecc525fbc67e78e2816c9ccfbd26d0ba6cda1be
+    Image:         quay.io/mongodb/mongodb-kubernetes-readinessprobe:1.0.17
+    Image ID:      quay.io/mongodb/mongodb-kubernetes-readinessprobe@sha256:a32cfb86d1a57ddb2c39093c0f1162cdb57f90a2fb3b4283c82faf72356291b2
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      cp
+      /probes/readinessprobe
+      /opt/scripts/readinessprobe
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 28 Nov 2023 12:16:45 +0000
+      Finished:     Tue, 28 Nov 2023 12:16:45 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /opt/scripts from agent-scripts (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s5djl (ro)
+  change-data-dir-permissions:
+    Container ID:  containerd://1bed71bc35c765692f74587109b21339a6f8d6fc1a7ae98b9a619dd1ff91e789
+    Image:         busybox
+    Image ID:      docker.io/library/busybox@sha256:3fbc632167424a6d997e74f52b878d7cc478225cffac6bc977eedfe51c7f4e79
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      chown
+      -R
+      2000
+      /data
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Tue, 28 Nov 2023 12:16:46 +0000
+      Finished:     Tue, 28 Nov 2023 12:16:46 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /data from data-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s5djl (ro)
+Containers:
+  mongod:
+    Container ID:  containerd://f610f615775ac43e5ef2acf373d49dd18d1e48deb97ecc67a80b0809a7d1d0ca
+    Image:         quay.io/mongodb/mongodb-community-server:6.0.5-ubi8
+    Image ID:      quay.io/mongodb/mongodb-community-server@sha256:181c462bf8d9426f686c3eb2e807b3f12afebbcfc3ac440c9db3995116edab84
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /bin/sh
+      -c
+      
+      #run post-start hook to handle version changes
+      /hooks/version-upgrade
+      
+      # wait for config and keyfile to be created by the agent
+       while ! [ -f /data/automation-mongod.conf -a -f /var/lib/mongodb-mms-automation/authentication/keyfile ]; do sleep 3 ; done ; sleep 2 ;
+      
+      # start mongod with this configuration
+      exec mongod -f /data/automation-mongod.conf;
+      
+      
+    Args:
+      
+    State:          Running
+      Started:      Tue, 28 Nov 2023 12:16:47 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  500M
+    Requests:
+      cpu:     500m
+      memory:  400M
+    Environment:
+      AGENT_STATUS_FILEPATH:  /healthstatus/agent-health-status.json
+    Mounts:
+      /data from data-volume (rw)
+      /healthstatus from healthstatus (rw)
+      /hooks from hooks (rw)
+      /tmp from tmp (rw)
+      /var/lib/mongodb-mms-automation/authentication from example-mongodb-keyfile (rw)
+      /var/log/mongodb-mms-automation from logs-volume (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s5djl (ro)
+  mongodb-agent:
+    Container ID:  containerd://629806bc6ec7f6cfed7d10c5dd76b23462a71e632db05ee85447301e28fb6da0
+    Image:         quay.io/mongodb/mongodb-agent:107.0.0.8465-1
+    Image ID:      quay.io/mongodb/mongodb-agent@sha256:a208e80f79bb7fe954d9a9a1444bb482dee2e86e5e5ae89dbf240395c4a158b3
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /bin/bash
+      -c
+      current_uid=$(id -u)
+      AGENT_API_KEY="$(cat /mongodb-automation/agent-api-key/agentApiKey)"
+      declare -r current_uid
+      if ! grep -q "${current_uid}" /etc/passwd ; then
+      sed -e "s/^mongodb:/builder:/" /etc/passwd > /tmp/passwd
+      echo "mongodb:x:$(id -u):$(id -g):,,,:/:/bin/bash" >> /tmp/passwd
+      export NSS_WRAPPER_PASSWD=/tmp/passwd
+      export LD_PRELOAD=libnss_wrapper.so
+      export NSS_WRAPPER_GROUP=/etc/group
+      fi
+      agent/mongodb-agent -healthCheckFilePath=/var/log/mongodb-mms-automation/healthstatus/agent-health-status.json -serveStatusPort=5000 -cluster=/var/lib/automation/config/cluster-config.json -skipMongoStart -noDaemonize -useLocalMongoDbTools -logFile ${AGENT_LOG_FILE} -maxLogFileDurationHrs ${AGENT_MAX_LOG_FILE_DURATION_HOURS} -logLevel ${AGENT_LOG_LEVEL}
+    State:          Running
+      Started:      Tue, 28 Nov 2023 12:16:47 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  500M
+    Requests:
+      cpu:      500m
+      memory:   400M
+    Readiness:  exec [/opt/scripts/readinessprobe] delay=5s timeout=1s period=10s #success=1 #failure=40
+    Environment:
+      AGENT_LOG_FILE:                     /var/log/mongodb-mms-automation/automation-agent.log
+      AGENT_LOG_LEVEL:                    INFO
+      AGENT_MAX_LOG_FILE_DURATION_HOURS:  24
+      AGENT_STATUS_FILEPATH:              /var/log/mongodb-mms-automation/healthstatus/agent-health-status.json
+      AUTOMATION_CONFIG_MAP:              example-mongodb-config
+      HEADLESS_AGENT:                     true
+      POD_NAMESPACE:                      mongodb (v1:metadata.namespace)
+    Mounts:
+      /data from data-volume (rw)
+      /opt/scripts from agent-scripts (rw)
+      /tmp from tmp (rw)
+      /var/lib/automation/config from automation-config (ro)
+      /var/lib/mongodb-mms-automation/authentication from example-mongodb-keyfile (rw)
+      /var/log/mongodb-mms-automation from logs-volume (rw)
+      /var/log/mongodb-mms-automation/healthstatus from healthstatus (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s5djl (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  data-volume:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  data-volume-example-mongodb-0
+    ReadOnly:   false
+  logs-volume:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  logs-volume-example-mongodb-0
+    ReadOnly:   false
+  agent-scripts:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  automation-config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  example-mongodb-config
+    Optional:    false
+  example-mongodb-keyfile:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  healthstatus:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  hooks:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-s5djl:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age    From               Message
+  ----     ------     ----   ----               -------
+  Normal   Scheduled  7m23s  default-scheduler  Successfully assigned mongodb/example-mongodb-0 to i-0112b8de3d40895f2
+  Normal   Pulling    7m18s  kubelet            Pulling image "quay.io/mongodb/mongodb-kubernetes-operator-version-upgrade-post-start-hook:1.0.8"
+  Normal   Pulled     7m17s  kubelet            Successfully pulled image "quay.io/mongodb/mongodb-kubernetes-operator-version-upgrade-post-start-hook:1.0.8" in 428.956709ms (428.964709ms including waiting)
+  Normal   Created    7m17s  kubelet            Created container mongod-posthook
+  Normal   Started    7m17s  kubelet            Started container mongod-posthook
+  Normal   Pulling    7m16s  kubelet            Pulling image "quay.io/mongodb/mongodb-kubernetes-readinessprobe:1.0.17"
+  Normal   Pulled     7m16s  kubelet            Successfully pulled image "quay.io/mongodb/mongodb-kubernetes-readinessprobe:1.0.17" in 380.05488ms (380.08665ms including waiting)
+  Normal   Created    7m16s  kubelet            Created container mongodb-agent-readinessprobe
+  Normal   Started    7m16s  kubelet            Started container mongodb-agent-readinessprobe
+  Normal   Pulling    7m15s  kubelet            Pulling image "busybox"
+  Normal   Pulled     7m15s  kubelet            Successfully pulled image "busybox" in 601.031795ms (601.058345ms including waiting)
+  Normal   Created    7m15s  kubelet            Created container change-data-dir-permissions
+  Normal   Started    7m15s  kubelet            Started container change-data-dir-permissions
+  Normal   Pulled     7m14s  kubelet            Container image "quay.io/mongodb/mongodb-community-server:6.0.5-ubi8" already present on machine
+  Normal   Created    7m14s  kubelet            Created container mongod
+  Normal   Started    7m14s  kubelet            Started container mongod
+  Normal   Pulling    7m14s  kubelet            Pulling image "quay.io/mongodb/mongodb-agent:107.0.0.8465-1"
+  Normal   Pulled     7m14s  kubelet            Successfully pulled image "quay.io/mongodb/mongodb-agent:107.0.0.8465-1" in 359.174095ms (359.180135ms including waiting)
+  Normal   Created    7m14s  kubelet            Created container mongodb-agent
+  Normal   Started    7m14s  kubelet            Started container mongodb-agent
+  Warning  Unhealthy  7m8s   kubelet            Readiness probe failed: panic: open /var/log/mongodb-mms-automation/healthstatus/agent-health-status.json: no such file or directory
+
+goroutine 1 [running]:
+main.main()
+           /workspace/cmd/readiness/main.go:226 +0x191
+  Warning  Unhealthy  2m8s (x27 over 6m58s)  kubelet  Readiness probe failed:
