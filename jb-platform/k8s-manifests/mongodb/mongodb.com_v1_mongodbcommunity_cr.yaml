@@ -3,7 +3,6 @@ apiVersion: mongodbcommunity.mongodb.com/v1
 kind: MongoDBCommunity
 metadata:
   name: example-mongodb
-  namespace: mongodb
 spec:
   members: 3
   type: ReplicaSet
@@ -40,7 +39,6 @@ spec:
         - name: readWrite
           db: admin
       scramCredentialsSecretName: my-scram
-
   additionalMongodConfig:
     storage.wiredTiger.engineConfig.journalCompressor: zlib
 
@@ -50,7 +48,7 @@ spec:
 # apiVersion: v1
 # kind: Secret
 # metadata:
-#   name: yanivomc-password
+#   name: my-user-password
 # type: Opaque
 # stringData:
-#   password: xxxxxxx
+#   password: <your-password-here>
