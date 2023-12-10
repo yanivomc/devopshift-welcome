@@ -1,0 +1,2 @@
+docker build -t stefcelmare1984/stefan:1.0 .
+docker push stefcelmare1984/stefan:1.0
