@@ -1,0 +1,35 @@
+version: '3' 
+services: 
+  web: 
+   build: ./roles/web/
+   image: yanivomc/jb-elbit:1
+   depends_on:
+     - db_mysql 
+   restart: always    
+   ports: 
+     - 8080:8080
+   networks: 
+     - app_layer
+     - db_layer
+
+  db_mysql:
+    image: wangxian/alpine-mysql
+    environment: # env variables 
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=music
+    ports:
+      - 3302:3306
+    networks: 
+     - app_layer
+     - db_layer
+    volumes: 
+      - logicalVoloume01:/app
+
+networks: 
+ db_layer:
+  driver: bridge
+ app_layer:
+  driver: bridge
+
+volumes:
+ logicalVoloume01:

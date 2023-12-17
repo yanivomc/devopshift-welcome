@@ -23,4 +23,19 @@ docker volume create [volume-name]                                              
 docker volume ls                                                                        // shows managed volumes
 docker run --rm -tdi --name [imagename] -v [volumename]:[container-data] alpine sh      // run & mount example: `docker run --rm -tdi --name alpine2 -v fs_shared:/app alpine sh`
 
-docker exec -it [container-id] ash                                                      // run docker shell
+## Networks
+
+docker network create [network-name]													//
+docker network ls                                                                       // shows docker active networks
+
+## Docker Compose
+docker compose ps                                                                       // shows all docker compose containers 
+docker compose build
+
+## General
+docker kill $( docker ps -q )
+
+## Git Config
+git config --global user.email "yaniv@example.com"
+git config --global user.name "yaniv cohen"
+git config pull.rebase true
