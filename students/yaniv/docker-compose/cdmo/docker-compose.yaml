@@ -1,0 +1,31 @@
+version: '3.8' # docker compose yml version for docker compose builder
+services: # Here we define our architecture services / roles
+  spring-app: # or web_role  , api_role , db_mysql , db_redis ....
+    build: .
+    restart: always 
+    image: yanivomc/spring-music:4
+    ports: # Ports we wish to expose source:target
+      - 8080:8080
+    volumes: # Which Bind mounts or Volumes to mount source:target
+      - type: bind        # Shortsyntax -> ./source:/code
+        source: ./source
+        target: /codesource
+      - type: volume       # Shortsyntax -> logicalVolume01:/var/log
+        source: logicalVoloume01
+        target: /var/log
+    networks: # Define netwroks per service / role
+      - db_layer
+      - app_layer
+  mysql:
+    image: yanivomc/spring-mysql:latest
+    networks:
+      - db_layer
+  
+
+networks: # custom configuration per network defined
+ db_layer:
+ app_layer:
+
+volumes:
+ logicalVoloume01:
+
