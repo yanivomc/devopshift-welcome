@@ -1,0 +1,21 @@
+mkdir jb
+wget https://github.com/yanivomc/seminars/raw/master/docker/artifacts/spring-music.jar
+docker rm db_mysql
+docker rm fe-app
+
+docker network create dblan
+docker run -d --name db_mysql --network dblan -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=music yanivomc/spring-mysql:latest
+
+docker run -d --name fe-app -p 80:8080 --network dblan -v "$(pwd)":/app yanivomc/alpine-oraclejdk8:slim java -jar -Dspring.profiles.active=mysql /app/spring-music.jar
+
+Open you browser http://REMOTEIP
+
+
+docker exec -ti db_mysql mysql
+
+
+
+>>> 
+show databases;
+use music;
+select * from album;
