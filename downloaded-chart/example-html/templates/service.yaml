@@ -1,0 +1,20 @@
+{{- $appName := include "startx.appName" . -}}
+{{- $namespace := .Values.html.namespace | default $appName -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $appName }}
+  namespace: {{ $namespace | quote }}
+  labels:
+    app.kubernetes.io/name: "{{- $appName -}}-{{- include "startx.appVersion" . -}}-service"
+    {{- include "example-html.labels" . | nindent 4 }}
+    app: {{ $appName }}
+  annotations:
+    {{- include "example-html.annotations" . | nindent 4 }}
+    idling.alpha.openshift.io/unidle-targets: '[{"kind":"Deployment","name":"{{- $appName -}}","group":"apps","replicas": {{ .Values.html.replicas | default 1 }} }]'
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: {{ $appName }}
