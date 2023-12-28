@@ -1,0 +1,6 @@
+echo "ssh ip user@password"
+echo "Test 1"
+echo "Install packages"
+echo "npm install latest-node"
+echo "running test"
+
