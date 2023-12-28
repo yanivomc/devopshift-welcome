@@ -13,6 +13,6 @@ job('NodeJS example') { // Job NAME
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps { // what steps to take 
-        shell("./lab01.sh")
+        shell("./students/Orel/28-12/lab01.sh")
     }
 }
