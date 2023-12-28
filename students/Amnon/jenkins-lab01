@@ -1,0 +1,4 @@
+echo "Test 1"
+echo “ install packages”
+echo “Running unit tests
+git config pull.rebase true
