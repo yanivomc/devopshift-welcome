@@ -13,7 +13,11 @@ job('MyJobOri') { // Job NAME
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps { // what steps to take
-        shell('echo "Hello!"')
-        shell("npm install")
+        shell('echo "Test 1"')
+        shell('''
+            "install packages"
+            npm install
+        ''')
+        shell('echo "Running unit tests"')
     }
 }
