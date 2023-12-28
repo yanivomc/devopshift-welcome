@@ -1,6 +1,7 @@
 job('NodeJS example') { // Job NAME
     scm { // Configure Source control management 
         git('https://github.com/yanivomc/devopshift-welcome.git') {  node -> // is hudson.plugins.git.GitSCM
+        branch('elbit/jenkinsdec26')    
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
