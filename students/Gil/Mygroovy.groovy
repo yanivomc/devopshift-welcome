@@ -1,4 +1,4 @@
-job('Gil example') { // Job NAME
+job('Gil-Job example') { // Job NAME
     scm { // Configure Source control management 
         git('git://github.com/yanivomc/docker-demo.git','elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
