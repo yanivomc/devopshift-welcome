@@ -12,7 +12,8 @@ job('MyJobOri') { // Job NAME
         nodejs('nodejs') // this is the name of the NodeJS installation in 
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
-    steps { // what steps to take 
+    steps { // what steps to take
+        shell('echo "Hello!"')
         shell("npm install")
     }
 }
