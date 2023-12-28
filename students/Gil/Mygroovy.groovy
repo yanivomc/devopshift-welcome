@@ -14,6 +14,5 @@ job('Gil example') { // Job NAME
     }
     steps { // what steps to take 
         shell("npm install")
-        shell("echo Test1")
     }
 }
