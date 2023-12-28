@@ -1,6 +1,7 @@
 job('NodeJS example') { // Job NAME
     scm { // Configure Source control management 
         git('git://github.com/yanivomc/docker-demo.git') {  node -> // is hudson.plugins.git.GitSCM
+            node / branches << '*/feature' // Specify the branch here
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
