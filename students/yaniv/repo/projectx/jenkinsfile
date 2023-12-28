@@ -1,4 +1,4 @@
-node(yaniv-win) {
+node{
 //My first test pipeline
     stage('Initial stage')
         {
