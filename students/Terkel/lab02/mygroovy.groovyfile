@@ -13,7 +13,7 @@ job('NodeJS example') { // Job NAME
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps { // what steps to take 
-        shell("echo "install packages"")
+        shell('echo "install packages"')
         shell("npm --version")
     }
 }
