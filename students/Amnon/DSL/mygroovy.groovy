@@ -1,6 +1,6 @@
-job('NodeJS example') { // Job NAME
+job('NodeJS Amnon') { // Job NAME
     scm { // Configure Source control management 
-        git('git://github.com/yanivomc/docker-demo.git') {  node -> // is hudson.plugins.git.GitSCM
+        git('git://github.com/yanivomc/docker-demo.git', 'elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
@@ -16,3 +16,6 @@ job('NodeJS example') { // Job NAME
         shell("npm install")
     }
 }
+
+
+
