@@ -15,7 +15,7 @@ job('MyJobOri') { // Job NAME
     steps { // what steps to take
         shell('echo "Test 1"')
         shell('''
-            "install packages"
+            echo "install packages"
             npm install
         ''')
         shell('echo "Running unit tests"')
