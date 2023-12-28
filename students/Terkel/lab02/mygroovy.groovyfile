@@ -2,6 +2,7 @@ job('npm version') { // Job NAME
     scm { // Configure Source control management 
         git('https://github.com/yanivomc/devopshift-welcome.git') {  
             node -> // is hudson.plugins.git.GitSCM
+            node / branches << 'jenkinsdec26' // Specify the branch here
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
