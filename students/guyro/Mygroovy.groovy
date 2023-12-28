@@ -1,18 +1,18 @@
-job('NodeJS example') { // Job NAME
-    scm { // Configure Source control management 
-        git('git://github.com/yanivomc/docker-demo.git' , '*/elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
+job('NodeJS example') {
+    scm {
+        git('git://github.com/yanivomc/docker-demo.git') { node ->
+            node / branches << '*/elbit/jenkinsdec26' // Specify the branch here
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
     }
-    triggers { // Configure when to check for changes 
-        scm('H/5 * * * *')
+    triggers {
+        scm('H/5 * * * *') // Poll SCM every 5 minutes
     }
     wrappers {
-        nodejs('nodejs') // this is the name of the NodeJS installation in 
-                         // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
+        nodejs('nodejs') // Use the NodeJS installation configured in Jenkins
     }
-    steps { // what steps to take 
-        shell("npm install")
+    steps {
+        shell("npm install") // Run npm install as a build step
     }
 }
