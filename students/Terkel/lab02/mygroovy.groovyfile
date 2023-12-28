@@ -1,4 +1,4 @@
-job('npm version') { // Job NAME
+job('myJob') { // Job NAME
     scm { // Configure Source control management 
         git('https://github.com/yanivomc/devopshift-welcome.git', '*/elbit/jenkinsdec26') {  
             node -> // is hudson.plugins.git.GitSCM
