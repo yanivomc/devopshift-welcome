@@ -13,4 +13,5 @@ node {
    stage('Third stage')
        {
            println 'Thanks for your patience'
-    
+       }
+}
