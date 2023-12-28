@@ -6,7 +6,7 @@ node{
         }
     stage('Second stage')
         {
-            def text = 'Moshe'
+            def text = 'yaniv'
             def text2 = 'Bryce'
             echo "${text} ${text2} has reached the second stage"
         }
