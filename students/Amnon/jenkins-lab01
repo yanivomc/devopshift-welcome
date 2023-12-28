@@ -1,4 +1,5 @@
 echo "Test 1"
 echo “ install packages”
+install npm
 echo “Running unit tests
 git config pull.rebase true
