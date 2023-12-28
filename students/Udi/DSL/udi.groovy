@@ -14,9 +14,7 @@ job('NodeJS example') { // Job NAME
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps { // what steps to take 
-        shell("echo “Test 1
-               echo install packages
-               npm install
-               echo Running unit tests")
+        shell("echo “Test 1")
+          
     }
 }
