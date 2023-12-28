@@ -1,0 +1,4 @@
+echo "Test 1"
+echo "Installing Packages"
+npm install
+echo "Running Unit Tests
