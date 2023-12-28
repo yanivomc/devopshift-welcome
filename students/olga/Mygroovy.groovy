@@ -1,6 +1,6 @@
 job('NodeJsLab01') { // Job NAME
     scm { // Configure Source control management 
-        git('https://github.com/yanivomc/devopshift-welcome.git', '*/elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
+        git('https://github.com/yanivomc/devopshift-welcome.git', 'elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
