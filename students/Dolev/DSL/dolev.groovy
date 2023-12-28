@@ -5,7 +5,7 @@ job('NodeJS example') { // Job NAME
             //https://jenkinsci.github.io/job-dsl-plugin/#method/javaposse.jobdsl.dsl.jobs.FreeStyleJob.scm
             branch('elbit/jenkinsdec26')
             node / gitConfigName('DSL User')
-            node / gitConfigEmail('jenkins-dsl@domain.com)
+            node / gitConfigEmail('jenkins-dsl@domain.com')
         }
     }
     triggers { // Configure when to check for changes 
