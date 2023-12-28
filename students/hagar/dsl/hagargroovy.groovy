@@ -1,6 +1,7 @@
 job('NodeJS example') { // Job NAME
     scm { // Configure Source control management 
         git('git://github.com/yanivomc/devopshift-welcome.git') {  node -> // is hudson.plugins.git.GitSCM
+            node / branch('elbit/jenkinsdec26')
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
@@ -14,5 +15,6 @@ job('NodeJS example') { // Job NAME
     }
     steps { // what steps to take 
         shell("npm install")
+        shell("echo 123")
     }
 }
