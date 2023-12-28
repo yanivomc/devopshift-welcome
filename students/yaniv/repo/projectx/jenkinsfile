@@ -14,4 +14,9 @@ node{
         {
             println 'Thanks for your patience'
         }
+
+    stage('Deploy stage')
+        {
+            println 'Im deploying to SSH://19283JF8J'
+        }
 }
