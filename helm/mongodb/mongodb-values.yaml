@@ -1,0 +1,8 @@
+architecture: replicaset
+replicaCount: 2
+persistence:
+    storageClass: "gp2"
+auth:
+    rootPassword: FreazingC00ld
+global:
+    namespaceOverride: mongo

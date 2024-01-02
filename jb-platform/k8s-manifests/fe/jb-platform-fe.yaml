@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: jb-platform-fe
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: jb-platform-fe
-        image: yanivomc/jb-elearning-fe:v1.0.2.8-sec-fixed
+        image: yanivomc/jb-elearning-fe:v2.0.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
@@ -38,7 +38,18 @@ spec:
         #   - "sleep"
         #   - "60000"
       - name: jb-platform-fe-sidecar
-        image: yanivomc/jb-elearning-dapr:v1.0.1.5
+        image: yanivomc/jb-elearning-dapr:v2.0.0.0
+        env:
+          - name:  AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  key
+          - name:  AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  secret
         imagePullPolicy: Always
         command: ["./daprd"]
         args: ["-app-id" ,"jb-platform-fe-prod", "-placement-host-address", "jb-platform-placement:50006", "-components-path", "/components", "-log-level", "debug"]

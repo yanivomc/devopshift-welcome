@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: jb-platform-envconsumers
-  replicas: 2
+  replicas:  1
   template:
     metadata:
       labels:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: jb-platform-envconsumers
-        image: yanivomc/jb-elearning-envconsumers:v1.0.2.3
+        image: yanivomc/jb-elearning-envconsumers:v2.0.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 9003
@@ -38,7 +38,18 @@ spec:
         #   - "sleep"
         #   - "60000"
       - name: jb-platform-envconsumers-sidecar
-        image: yanivomc/jb-elearning-dapr:v1.0.1.5
+        image: yanivomc/jb-elearning-dapr:v2.0.0.0
+        env:
+          - name:  AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  key
+          - name:  AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name:  jb-platform-entrypoint-secret
+                key:  secret
         imagePullPolicy: Always
         command: ["./daprd"]
         args: ["-app-id", "jb-platform-envconsumers",
