@@ -14,7 +14,7 @@ pipelineJob('my-pipeline2') { // broken branch config
        git {
          remote { url(repo) }
          branches('elbit/jenkinsdec26') // this is fine
-         scriptPath('students/Asaf/Repo/jenkinsfile')
+         scriptPath('students/Asaf/DSL/dslpipeline.groovy')
          extensions { }  // required as otherwise it may try to tag the repo, which you may not want
        }
      }
