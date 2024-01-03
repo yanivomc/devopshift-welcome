@@ -26,6 +26,7 @@ pipelineJob('my-pipeline') {
             }
     }
       }
+      scriptPath('students/Terkel/jenkinsFile101/jenkinsfile') 
     }
   }
 }
