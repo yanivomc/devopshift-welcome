@@ -21,21 +21,21 @@ pipelineJob('projectx') { // Job NAME
     definition {
         cpsScm {
             scm {
-                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
-                    branches('*/main') // Branch to build, replace with your branch if needed
+                git('git://github.com/yanivomc/devopshift-welcome.git') { // Your repository
+                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
                     // extensions {
-                    //     relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
-                    //     cleanBeforeCheckout() // Optional: Clean the workspace before checkout
+                    //     // relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
+                    //     // cleanBeforeCheckout() // Optional: Clean the workspace before checkout
                     // }
                     userRemoteConfigs {
                         userRemoteConfig {
-                            name('Hagar')
-                            email('jenkins-dsl@domain.com')
+                            name('Yaniv')
+                            email('yaniv@domain.com')
                         }
                     }
                 }
             }
-            scriptPath('Jenkinsfile') // Path to the Jenkinsfile in the repository
+            scriptPath('./students/yaniv/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
         }
     }
     triggers { // Configure when to check for changes 
