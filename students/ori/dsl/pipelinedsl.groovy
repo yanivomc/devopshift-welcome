@@ -1,4 +1,4 @@
-pipelineJob('projectx') { // Job NAME
+pipelineJob('My Generated Job') { // Job NAME
    definition {
        cpsScm {
            scm {
