@@ -1,5 +1,5 @@
 pipelineJob('my-pipeline') {
-  def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
+  def myrepo = 'https://github.com/yanivomc/devopshift-welcome.git'
   def myname = 'Terkel'
   def mymail = 'terkmail@gmail.com'
   triggers {
@@ -16,7 +16,7 @@ pipelineJob('my-pipeline') {
         //   scriptPath('students/Terkel/jenkinsFile101/jenkinsfile')
         //   extensions { }  // required as otherwise it may try to tag the repo, which you may not want
         // }
-        git(url(repo)) { // Your repository
+        git(myrepo) { // Your repository
             branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
             userRemoteConfigs {
                 userRemoteConfig {
