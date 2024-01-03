@@ -10,7 +10,6 @@ pipelineJob('my-pipeline') { // broken branch config
   definition {
     cpsScm {
       scm {
-
         git(myrepo) { // Your repository
             branches('elbit/jenkinsdec26') // this is not fine
             userRemoteConfigs {
