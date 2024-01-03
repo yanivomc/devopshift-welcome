@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-        stage('Parallel Tasks') {
+        stage('Parallell Tasks') {
             parallel {
                 stage('Unit Test') {
                     steps {
