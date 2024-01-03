@@ -26,7 +26,7 @@ pipelineJob('my-pipeline') { // broken branch config
   }
 }
 
-pipelineJob('my-pipeline2') { // broken branch config
+pipelineJob('my-pipeline2') { // ok
   def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
   triggers {
