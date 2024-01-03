@@ -29,8 +29,8 @@ pipelineJob('projectx') { // Job NAME
                    }
                    userRemoteConfigs {
                        userRemoteConfig {
-                           name('Asaf')
-                           email('asaf-dsl@domain.com')
+                           name('anastasia')
+                           email('anastasia-dsl@domain.com')
                        }
                    }
                }
