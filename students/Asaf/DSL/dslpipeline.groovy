@@ -22,7 +22,7 @@ pipelineJob('projectx') { // Job NAME
        cpsScm {
            scm {
                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
-                   branches('*/main') // Branch to build, replace with your branch if needed
+                   branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
                    extensions {
                        relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
                        cleanBeforeCheckout() // Optional: Clean the workspace before checkout
