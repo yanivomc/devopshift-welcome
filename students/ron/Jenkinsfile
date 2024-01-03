@@ -32,7 +32,6 @@ pipeline {
 
     post {
         failure {
-            echo 'echo "send mail"
             emailext(
                 subject: "Failed pipeline: ${currentBuild.fullDisplayName}",
                 body: """<p>There was a failure in the pipeline:</p>
