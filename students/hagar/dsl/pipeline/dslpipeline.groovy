@@ -29,7 +29,7 @@ pipelineJob('projectx') { // Job NAME
                     // }
                     userRemoteConfigs {
                         userRemoteConfig {
-                            name('DSL User')
+                            name('Hagar')
                             email('jenkins-dsl@domain.com')
                         }
                     }
