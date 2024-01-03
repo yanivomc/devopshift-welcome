@@ -1,8 +1,8 @@
 pipeline {
-    agent any // Run on any available agent
+    agent any
 
     stages {
-        stage('Clone repository') {
+        stage('Git Clone') {
             steps {
                 git url: 'http://github.com/yanivomc/devopshift-welcome.git', branch: '/elbit/jenkinsdec26'
             }
@@ -18,12 +18,12 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        sh 'echo "Unit Test"' // Replace with actual test command
+                        echo "Unit Test"
                     }
                 }
                 stage('Integration Test') {
                     steps {
-                        sh 'echo "Unit Test"' // Replace with actual test command
+                        echo "Integration Test"
                     }
                 }                
             }
