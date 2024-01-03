@@ -23,14 +23,14 @@ pipelineJob('projectx') { // Job NAME
            scm {
                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-                   extensions {
-                       relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
-                       cleanBeforeCheckout() // Optional: Clean the workspace before checkout
+                   //extensions {
+                       //relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
+                       //cleanBeforeCheckout() // Optional: Clean the workspace before checkout
                    }
                    userRemoteConfigs {
                        userRemoteConfig {
-                           name('DSL User')
-                           email('jenkins-dsl@domain.com')
+                           name('Asaf')
+                           email('asaf-dsl@domain.com')
                        }
                    }
                }
