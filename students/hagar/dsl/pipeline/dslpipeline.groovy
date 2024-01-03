@@ -21,7 +21,7 @@ pipelineJob('projectx') { // Job NAME
     definition {
         cpsScm {
             scm {
-                git('git://github.com/yanivomc/docker-demo.git') { // Your repository
+                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
                     branches('*/main') // Branch to build, replace with your branch if needed
                     extensions {
                         relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
