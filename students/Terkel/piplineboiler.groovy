@@ -1,6 +1,7 @@
 pipelineJob('my-pipeline') {
   def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
-
+  def myname = 'Terkel'
+  def mymail = 'terkmail@gmail.com'
   triggers {
     scm('H/5 * * * *')
   }
@@ -17,14 +18,10 @@ pipelineJob('my-pipeline') {
         // }
         git(url(repo)) { // Your repository
             branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-            extensions {
-                relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
-                cleanBeforeCheckout() // Optional: Clean the workspace before checkout
-            }
             userRemoteConfigs {
                 userRemoteConfig {
-                    name('DSL User')
-                    email('jenkins-dsl@domain.com')
+                    name(myname)
+                    email(mymail)
                 }
             }
     }
