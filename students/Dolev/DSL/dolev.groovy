@@ -28,7 +28,7 @@ pipelineJob('projectx') { // Job NAME
                     remote{
                         url('https://github.com/yanivomc/devopshift-welcome.git')
                     }
-                    branch('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
+                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
                     userRemoteConfigs {
                         userRemoteConfig {
                             name('Dolev')
