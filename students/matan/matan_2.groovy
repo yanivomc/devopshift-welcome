@@ -16,7 +16,7 @@ pipelineJob('projectx') { // Job NAME
                    }
                }
            }
-           scriptPath('Jenkinsfile') // Path to the Jenkinsfile in the repository
+           scriptPath('/sudent/matan/jenkinsfile') // Path to the Jenkinsfile in the repository
        }
    }
    triggers { // Configure when to check for changes
