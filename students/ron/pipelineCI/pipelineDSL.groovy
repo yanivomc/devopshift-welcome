@@ -10,15 +10,10 @@ pipelineJob('pipeline-ci') {
                 git {
                     remote { url(repo) }
                     branches('elbit/jenkinsdec26')
-                    userRemoteConfigs {
-                        userRemoteConfig {
-                            name('DSL User')
-                            email('jenkins-dsl@domain.com')
-                        }
-                    }
+                    scriptPath('students/ron/Jenkinsfile')
+                    extensions {}
                 }
             }
         }
-        scriptPath('students/ron/Jenkinsfile')
     }
 }
