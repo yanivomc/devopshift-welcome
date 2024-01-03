@@ -16,27 +16,26 @@ job('NodeJS example') { // Job NAME
         shell("npm install")
     }
 }
+pipelineJob('projectx') { // broken branch config
+ def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
-pipelineJob('projectx') { // Job NAME
-    definition {
-        cpsScm {
-            scm {
-                git{
-                    remote(url('https://github.com/yanivomc/devopshift-welcome.git')) { // Your repository
-                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-                    userRemoteConfigs {
-                        userRemoteConfig {
-                            name('Yaniv')
-                            email('yaniv@domain.com')
-                        }
-                    }
-                }
-            }
-            }
-            scriptPath('./students/yaniv/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
-        }
-    }
-    triggers { // Configure when to check for changes 
-        scm('H/5 * * * *')
-    }
+
+ triggers {
+   scm('H/5 * * * *')
+ }
+ description("My Pipeline 2")
+
+
+ definition {
+   cpsScm {
+     scm {
+       git {
+         remote { url(repo) }
+         branches('elbit/jenkinsdec26') // this is fine
+         scriptPath('students/yaniv/repo/projectx/jenkinsfile')
+         extensions { }  // required as otherwise it may try to tag the repo, which you may not want
+       }
+     }
+   }
+ }
 }
