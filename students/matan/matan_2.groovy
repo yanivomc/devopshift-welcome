@@ -1,4 +1,4 @@
-pipelineJob('projectx') { // Job NAME
+pipelineJob('קובץ dsa') { // Job NAME
    definition {
        cpsScm {
            scm {
