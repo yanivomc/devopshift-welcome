@@ -1,0 +1,47 @@
+pipeline {
+    agent any // Run on any available agent
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git branch: 'elbit/jenkinsdec26', url: 'https://github.com/yanivomc/devopshift-welcome.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo "javac"'
+            }
+        }
+
+        stage('Testing') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh 'echo "Unit Test"'
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        sh 'echo "Integration"'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'This will always run regardless of the result.'
+            //mail bcc: '', body: 'Job Executed', cc: '', from: '', replyTo: '', subject: 'Jenkins Lab 101', to: 'ori.arad@elbitsystems.com'
+        }
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+            echo 'sending mail'
+            mail bcc: '', body: 'Job Failed', cc: '', from: '', replyTo: '', subject: 'Jenkins Lab 101', to: 'ori.arad@elbitsystems.com'
+        }
+    }
+}
