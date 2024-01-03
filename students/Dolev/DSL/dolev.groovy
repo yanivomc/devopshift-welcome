@@ -37,3 +37,4 @@ pipelineJob('Pipeline') { // Job NAME
             }
         }
 }
+}
