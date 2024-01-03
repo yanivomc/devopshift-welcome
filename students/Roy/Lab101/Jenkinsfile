@@ -19,36 +19,19 @@ pipeline {
             parallel {
                 stage('unitest') {
                     steps {
-                        script {
-                            try {
-                                sh 'echo unitest' // This test fails
-                            } catch (Exception e) {
-                                echo "unitest failed, but pipeline continues."
-                            }
-                    }
+
+                        sh 'echo unitest' // This test fails
                 }
                 stage('Integration test') {
-                    steps {
-                        script {
-                            try {
+
                                 sh 'echo Integration test' // This test fails
-                            } catch (Exception e) {
-                                echo "Integration Test failed, but pipeline continues."
-                            }
-                    }
-                    }
+
                 }
             }
         }
     }
 
     post {
-        always {
-            echo 'This will always run regardless of the result.'
-        }
-        success {
-            echo 'Pipeline completed successfully.'
-        }
         failure {
             script {
                 // Send email notification only on failure
