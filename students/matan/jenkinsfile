@@ -1,0 +1,63 @@
+pipeline {
+    agent any // Run on any available agent
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git 'https://your.repository.url/repo.git' // Replace with your repository URL
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'pip install -r requirements.txt' // Install dependencies
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                sh 'python -m unittest discover' // Run unit tests
+            }
+        }
+
+        stage('Parallel Mock Tests') {
+            parallel {
+                stage('Mock Test 1') {
+                    steps {
+                        sh 'echo "Running Mock Test 1"' // Replace with actual test command
+                        // Add commands to execute Mock Test 1
+                    }
+                }
+                stage('Mock Test 2') {
+                    steps {
+                        sh 'echo "Running Mock Test 2"' // Replace with actual test command
+                        // Add commands to execute Mock Test 2
+                    }
+                }
+                stage('Allowed to Fail Test') {
+                    steps {
+                        script {
+                            try {
+                                sh 'echo "Running test that is allowed to fail"; exit 1' // This test fails
+                            } catch (Exception e) {
+                                echo "Test failed, but pipeline continues."
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'This will always run regardless of the result.'
+        }
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
