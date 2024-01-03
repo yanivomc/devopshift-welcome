@@ -1,0 +1,46 @@
+pipeline {
+   agent any // Run on any available agent
+   stages {
+       stage('Clone repository') {
+           steps {
+               sh "git clone -b elbit/jenkinsdec26 https://github.com/yanivomc/devopshift-welcome.git"
+               // git branch: "elbit/jenkinsdec26" can be used in a different context
+           }
+       }
+       stage('Build') {
+           steps {
+               echo "Java build"
+               // Add additional build commands here if necessary
+           }
+       }
+       stage('Parallel Mock Tests') {
+           parallel {
+               stage('unit test') {
+                   steps {
+                       sh 'echo "unit test stage"' // Replace with actual test command
+                       // Add commands to execute Mock Test 1
+                   }
+               }
+               stage('integration test') {
+                   steps {
+                       sh 'echo "integration test"' // Replace with actual test command
+                       // Add commands to execute Mock Test 2
+                   }
+               }
+           }
+       }
+   }
+   post {
+       always {
+           echo 'This will always run regardless of the result.'
+       }
+       success {
+           echo 'Pipeline completed successfully.'
+       }
+       failure {
+           mail to: 'udi.orgad@elbitystems.com',
+                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: "Bad news, the Jenkins job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' failed."
+       }
+   }
+}
