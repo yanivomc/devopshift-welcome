@@ -17,7 +17,7 @@ job('NodeJS example') { // Job NAME
     }
 }
 
-pipelineJob('my-pipeline2') { // broken branch config
+pipelineJob('projectx') { // broken branch config
   def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
   triggers {
