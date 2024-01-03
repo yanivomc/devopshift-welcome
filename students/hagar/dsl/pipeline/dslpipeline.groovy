@@ -17,28 +17,24 @@ job('NodeJS example') { // Job NAME
     }
 }
 
-pipelineJob('projectx') { // Job NAME
-    definition {
-        cpsScm {
-            scm {
-                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
-                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-                    // extensions {
-                    //     // relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
-                    //     // cleanBeforeCheckout() // Optional: Clean the workspace before checkout
-                    // }
-                    userRemoteConfigs {
-                        userRemoteConfig {
-                            name('Yaniv')
-                            email('yaniv@domain.com')
-                        }
-                    }
-                }
-            }
-            scriptPath('./students/hagar/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
+pipelineJob('my-pipeline2') { // broken branch config
+  def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
+
+  triggers {
+    scm('H/5 * * * *')
+  }
+  description("My Pipeline 2")
+
+  definition {
+    cpsScm {
+      scm {
+        git {
+          remote { url(repo) }
+          branches('elbit/jenkinsdec26') // this is fine
+          scriptPath('students/hagar/repo/projectx/jenkinsfile')
+        //   extensions { }  // required as otherwise it may try to tag the repo, which you may not want
         }
+      }
     }
-    triggers { // Configure when to check for changes 
-        scm('H/5 * * * *')
-    }
+  }
 }
