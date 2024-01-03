@@ -1,4 +1,4 @@
-job('NodeJS example') { // Job NAME
+job('קובץ dsa') { // Job NAME
     scm { // Configure Source control management 
         git('https://github.com/yanivomc/docker-demo.git') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
@@ -17,7 +17,7 @@ job('NodeJS example') { // Job NAME
     }
 }
 
-pipelineJob('קובץ dsa') { // broken branch config
+pipelineJob('project X') { // broken branch config
  def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
 
