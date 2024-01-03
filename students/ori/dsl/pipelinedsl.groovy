@@ -3,11 +3,7 @@ pipelineJob('projectx') { // Job NAME
        cpsScm {
            scm {
                git('https://github.com/yanivomc/devopshift-welcome.git') { 
-                   branches('elbit/jenkinsdec26') 
-                   extensions {
-                       relativeTargetDirectory('students/ori') 
-                       cleanBeforeCheckout() 
-                   }
+                   branches('elbit/jenkinsdec26')
                    userRemoteConfigs {
                        userRemoteConfig {
                            name('DSL User')
