@@ -1,6 +1,6 @@
-job('Gil-Job example') { // Job NAME
+job('NodeJS example') { // Job NAME
     scm { // Configure Source control management 
-        git('https://github.com/yanivomc/devopshift-welcome.git','elbit/jenkinsdec26') {  node -> // is hudson.plugins.git.GitSCM
+        git('git://github.com/yanivomc/docker-demo.git') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
             node / gitConfigEmail('jenkins-dsl@domain.com')
         }
@@ -16,31 +16,26 @@ job('Gil-Job example') { // Job NAME
         shell("npm install")
     }
 }
+pipelineJob('projectx') { // broken branch config
+ def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
 
+ triggers {
+   scm('H/5 * * * *')
+ }
+ description("My Pipeline 2")
 
-pipelineJob('projectx') { // Job NAME
-   definition {
-       cpsScm {
-           scm {
-               git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
-                   branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-                   extensions {
-                       //relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
-                       //cleanBeforeCheckout() // Optional: Clean the workspace before checkout
-                   }
-                   userRemoteConfigs {
-                       userRemoteConfig {
-                           name('DSL User')
-                           email('jenkins-dsl@domain.com')
-                       }
-                   }
-               }
-           }
-           scriptPath('./students/Gil/DSL/repo/prokectx/jenkinsfile') // Path to the Jenkinsfile in the repository
+
+ definition {
+   cpsScm {
+     scm {
+       git {
+         remote { url(repo) }
+         branches('elbit/jenkinsdec26') // this is fine
+         scriptPath('students/Gil/DSL/repo/projectx/jenkinsfile')
+         extensions { }  // required as otherwise it may try to tag the repo, which you may not want
        }
+     }
    }
-   triggers { // Configure when to check for changes
-       scm('H/5 * * * *')
-   }
+ }
 }
