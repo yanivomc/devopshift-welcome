@@ -39,7 +39,7 @@ pipeline {
                          <p><b>Job:</b> ${env.JOB_NAME}</p>
                          <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
                          <p>Check console output at <a href="${env.BUILD_URL}console">here</a> to view the details.</p>""",
-                recipientProviders: [culprits(), requestor(), recipientList('your.email@example.com')]
+                recipientProviders: [culprits(), requestor(), recipientList('shani@gmail.com')]
             )
         }
     }
