@@ -1,4 +1,4 @@
-job('קובץ dsa') { // Job NAME
+job('קובץ dsl') { // Job NAME
     scm { // Configure Source control management 
         git('https://github.com/yanivomc/docker-demo.git') {  node -> // is hudson.plugins.git.GitSCM
             node / gitConfigName('DSL User')
