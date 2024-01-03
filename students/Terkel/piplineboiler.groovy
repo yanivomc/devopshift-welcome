@@ -1,4 +1,4 @@
-pipelineJob('my-pipeline') { // broken branch config
+pipelineJob('my-pipeline-broken') { // broken branch config
   def myrepo = 'https://github.com/yanivomc/devopshift-welcome.git'
   def myname = 'Terkel'
   def mymail = 'terkmail@gmail.com'
@@ -25,7 +25,7 @@ pipelineJob('my-pipeline') { // broken branch config
   }
 }
 
-pipelineJob('my-pipeline2') { // ok
+pipelineJob('my-pipeline') { // ok
   def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
   triggers {
