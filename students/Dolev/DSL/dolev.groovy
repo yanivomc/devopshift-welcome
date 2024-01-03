@@ -19,3 +19,21 @@ job('NodeJS example') { // Job NAME
         shell("npm install")
     }
 }
+
+pipelineJob('Pipeline') { // Job NAME
+    definition {
+            cpsScm { {
+                scm { // Configure Source control management 
+                        git('https://github.com/yanivomc/devopshift-welcome.git') {  node -> // is hudson.plugins.git.GitSCM
+                            // Specify the branches to examine for changes and to build.
+                            //https://jenkinsci.github.io/job-dsl-plugin/#method/javaposse.jobdsl.dsl.jobs.FreeStyleJob.scm
+                            branch('elbit/jenkinsdec26')
+                            node / gitConfigName('DSL User')
+                            node / gitConfigEmail('jenkins-dsl@domain.com')
+                        }
+                    }//scm
+                script(readFileFromWorkspace('students/Dolev/repo/projectx/pipeline'))
+                sandbox()
+            }
+        }
+}
