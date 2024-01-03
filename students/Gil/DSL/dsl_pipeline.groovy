@@ -37,7 +37,7 @@ pipelineJob('projectx') { // Job NAME
                    }
                }
            }
-           scriptPath('Jenkinsfile') // Path to the Jenkinsfile in the repository
+           scriptPath('./students/Gil/DSL/repo/prokectx/jenkinsfile') // Path to the Jenkinsfile in the repository
        }
    }
    triggers { // Configure when to check for changes
