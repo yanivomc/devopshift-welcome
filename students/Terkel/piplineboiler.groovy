@@ -1,8 +1,8 @@
 pipelineJob('my-pipeline') { // Job NAME
-    definition {
+  definition {
     cps {
-      script('logic-here')
-      sandbox()
+      script(readFileFromWorkspace('tudents/Terkel/jenkinsFile101/jenkinsfile'))
+      sandbox()     
     }
   }
 }
