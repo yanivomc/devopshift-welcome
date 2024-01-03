@@ -1,6 +1,5 @@
 pipeline {
     agent any // Run on any available agent
-
     stages {
         stage('Clone') {
             steps {
