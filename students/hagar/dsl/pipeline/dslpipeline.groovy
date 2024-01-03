@@ -35,7 +35,7 @@ pipelineJob('projectx') { // Job NAME
                     }
                 }
             }
-            scriptPath('./students/yaniv/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
+            scriptPath('./students/hagar/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
         }
     }
     triggers { // Configure when to check for changes 
