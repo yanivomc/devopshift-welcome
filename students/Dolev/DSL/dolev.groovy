@@ -25,16 +25,8 @@ pipelineJob('projectx') { // Job NAME
         cpsScm {
             scm {
                 git{ // Your repository
-                    remote{
-                        url('https://github.com/yanivomc/devopshift-welcome.git')
-                    }
+                    remote{ url('https://github.com/yanivomc/devopshift-welcome.git')}
                     branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-                    userRemoteConfigs {
-                        userRemoteConfig {
-                            name('Dolev')
-                            email('Dolev@domain.com')
-                        }
-                    }
                 }
             }
             scriptPath('students/Dolev/repo/projectx/jenkinsfile') // Path to the Jenkinsfile in the repository
