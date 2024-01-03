@@ -24,7 +24,10 @@ pipelineJob('projectx') { // Job NAME
     definition {
         cpsScm {
             scm {
-                git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
+                git{ // Your repository
+                    remote{
+                        url('https://github.com/yanivomc/devopshift-welcome.git')
+                    }
                     branch('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
                     userRemoteConfigs {
                         userRemoteConfig {
