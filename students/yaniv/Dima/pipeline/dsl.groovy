@@ -9,7 +9,7 @@ job('Pipeline example') { // Job NAME
         scm('H/5 * * * *')
     }
     wrappers {
-        nodejs('MyNodeJs') // this is the name of the NodeJS installation in 
+        nodejs('NodeJs21.5') // this is the name of the NodeJS installation in 
                          // Manage Jenkins -> Configure Tools -> NodeJS Installations -> Name
     }
     steps { // what steps to take 
@@ -17,37 +17,15 @@ job('Pipeline example') { // Job NAME
     }
 }
 
-//pipelineJob('projectx') { // Job NAME
-//   definition {
-//       cpsScm {
-//           scm {
-//              git('https://github.com/yanivomc/devopshift-welcome.git') { // Your repository
-//                   branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
-//                   
-//                   userRemoteConfigs {
-//                       userRemoteConfig {
-//                           name('DSL User')
-//                           email('jenkins-dsl@domain.com')
-//                       }
-//                   }
-//               }
-//           }
-//           scriptPath('./students/yaniv/Dima/Jenkinsfile/Jenkinsfile') // Path to the Jenkinsfile in the repository
-//       }
-//   }
-//   triggers { // Configure when to check for changes
-//       scm('H/5 * * * *')
-//   }
-//}
 
-pipelineJob('my-pipeline2') { // broken branch config
+pipelineJob('MyPipeline1') { // branch config
  def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
 
  triggers {
    scm('H/5 * * * *')
  }
- description("My Pipeline 2")
+ description("My Pipeline 1")
 
 
  definition {
