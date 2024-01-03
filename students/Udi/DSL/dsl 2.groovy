@@ -3,7 +3,7 @@ pipelineJob('projectx') { // Job NAME
        cpsScm {
            scm {
                git('git://github.com/yanivomc/docker-demo.git') { // Your repository
-                   branches('*/main') // Branch to build, replace with your branch if needed
+                   branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
                    extensions {
                        relativeTargetDirectory('docker-demo') // Optional: Check out to a sub-directory
                        cleanBeforeCheckout() // Optional: Clean the workspace before checkout
@@ -16,7 +16,7 @@ pipelineJob('projectx') { // Job NAME
                    }
                }
            }
-           scriptPath('Jenkinsfile') // Path to the Jenkinsfile in the repository
+           scriptPath('./students/Udi/projectX/Jenkinsfile') // Path to the Jenkinsfile in the repository
        }
    }
    triggers { // Configure when to check for changes
