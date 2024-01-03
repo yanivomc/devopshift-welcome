@@ -1,0 +1,62 @@
+pipeline {
+    agent any // Run on any available agent
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git branch: 'elbit/jenkinsdec26', url: 'https://github.com/yanivomc/devopshift-welcome.git' 
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo javac' 
+            }
+        }
+
+
+        stage('Parallel Mock Tests') {
+            parallel {
+                stage('unitest') {
+                    steps {
+                        script {
+                            try {
+                                sh 'echo unitest' // This test fails
+                            } catch (Exception e) {
+                                echo "unitest failed, but pipeline continues."
+                            }
+                    }
+                }
+                stage('Integration test') {
+                    steps {
+                        script {
+                            try {
+                                sh 'echo Integration test' // This test fails
+                            } catch (Exception e) {
+                                echo "Integration Test failed, but pipeline continues."
+                            }
+                    }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'This will always run regardless of the result.'
+        }
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            script {
+                // Send email notification only on failure
+                emailext subject: "Failed: ${currentBuild.fullDisplayName}",
+                          body: "The build '${currentBuild.fullDisplayName}' has failed. Please check the Jenkins logs for more information.",
+                          to: 'roysadan@gmail.com',
+                          mimeType: 'text/html'
+            }
+        }
+    }
+}
