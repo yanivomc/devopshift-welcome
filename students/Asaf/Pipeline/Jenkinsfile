@@ -34,7 +34,15 @@ pipeline {
 
     post {
         failure {
-            echo 'Pipeline failed.'
+            // Replace with your email-ext plugin configuration
+            emailext(
+                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                body: """<p>There was a failure in the pipeline:</p>
+                         <p><b>Job:</b> ${env.JOB_NAME}</p>
+                         <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                         <p>Check console output at <a href="${env.BUILD_URL}console">here</a> to view the details.</p>""",
+                recipientProviders: [culprits(), requestor(), recipientList('your.email@example.com')]
+            )
         }
     }
 }
