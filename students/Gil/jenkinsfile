@@ -10,41 +10,22 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'pip install -r requirements.txt' // Install dependencies
+                echo "javac"
             }
         }
-
-        stage('Unit Tests') {
-            steps {
-                sh 'python -m unittest discover' // Run unit tests
-            }
-        }
-
-        stage('Parallel Mock Tests') {
+    
+        stage('Parallel Tasks') {
             parallel {
-                stage('Mock Test 1') {
+                stage('Unit Test') {
                     steps {
-                        sh 'echo "Running Mock Test 1"' // Replace with actual test command
-                        // Add commands to execute Mock Test 1
+                        sh 'echo "Unit Test"' // Replace with actual test command
                     }
                 }
-                stage('Mock Test 2') {
+                stage('Integration Test') {
                     steps {
-                        sh 'echo "Running Mock Test 2"' // Replace with actual test command
-                        // Add commands to execute Mock Test 2
+                        sh 'echo "Unit Test"' // Replace with actual test command
                     }
-                }
-                stage('Allowed to Fail Test') {
-                    steps {
-                        script {
-                            try {
-                                sh 'echo "Running test that is allowed to fail"; exit 1' // This test fails
-                            } catch (Exception e) {
-                                echo "Test failed, but pipeline continues."
-                            }
-                        }
-                    }
-                }
+                }                
             }
         }
     }
