@@ -1,0 +1,40 @@
+pipeline {
+    agent any // Run on any available agent
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git 'https://github.com/yanivomc/devopshift-welcome.git' // Replace with your repository URL
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "javac" // Install dependencies
+            }
+        }
+
+        stage('Parallel Tasks') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        echo "Unit Test" // Replace with actual test command
+                        // Add commands to execute Mock Test 1
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        echo "Integration Test" // Replace with actual test command
+                        // Add commands to execute Mock Test 2
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Send Email.'
+        }
+    }
+}
