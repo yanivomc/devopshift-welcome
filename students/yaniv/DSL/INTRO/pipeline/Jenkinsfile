@@ -33,7 +33,7 @@ pipeline {
 
     post {
         failure {
-            // Replace with your email-ext plugin configuration
+            // Replace with your email-ext plugin configurationjj dsadas
             emailext(
                 subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: """<p>There was a failure in the pipeline:</p>
