@@ -20,7 +20,7 @@ pipeline {
                     ls
                     pip list
 
-                    python -m venv my_venv
+                    python3 -m venv my_venv
                     cd my_venv
                     ./bin/activate
                 """
