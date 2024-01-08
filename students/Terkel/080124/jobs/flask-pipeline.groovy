@@ -10,7 +10,9 @@ pipeline {
         stage('Requirments') {
             steps {
                 sh 'cat students/Terkel/080124/python-flask/requirements.txt' 
+                sh 'pip --version' 
                 sh 'pip install -r students/Terkel/080124/python-flask/requirements.txt' 
+                sh 'python --version' 
             }
         }
 
