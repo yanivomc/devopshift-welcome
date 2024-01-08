@@ -11,7 +11,7 @@ pipeline {
 
         stage('Deubg') {
             steps {
-                echo 'pip install'
+                echo 'Deubg'
                 sh """
                     pwd
                     ls
