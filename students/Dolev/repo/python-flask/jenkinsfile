@@ -1,0 +1,53 @@
+pipeline {
+    agent any // Run on any available agent
+
+    stages {
+        stage('Clone repository') {
+            steps {
+                git url:'https://github.com/yanivomc/devopshift-welcome.git',
+                    branch: 'elbit/jenkinsdec26'// Replace with your repository URL
+            }
+        }
+
+        stage('Build') {
+            steps {
+                //sh 'pip install -r requirements.txt' // Install dependencies
+                echo 'javac'
+            }
+        }
+
+        stage('InstallReq') {
+            steps {
+                //sh 'pip install -r requirements.txt' // Install dependencies
+                echo 'pip isnatll'
+            }
+        }
+        stage('Parallel Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo 'unittests'
+                    }
+                }
+                stage('Integration test') {
+                    steps {
+                        echo 'unittests'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'This will always run regardless of the result.'
+        }
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+            emailext body: 'mail', subject: 'pipeline', to: 'doleval013@gmail.com'
+            
+        }
+    }
+}
