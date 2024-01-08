@@ -6,12 +6,6 @@ pipeline {
                 git branch: 'elbit/jenkinsdec26', url: 'https://github.com/yanivomc/devopshift-welcome.git'
             }
         }
-
-        stage('pip') {
-            steps {
-                sh 'echo pip install' 
-            }
-        }
                 stage('Build') {
             steps {
                 sh 'echo javac' 
@@ -30,6 +24,12 @@ pipeline {
                         sh 'echo “unit test”' 
                     }
                 }
+            }
+        }
+
+        stage('Requirments') {
+            steps {
+                sh 'echo pip install' 
             }
         }
     }
