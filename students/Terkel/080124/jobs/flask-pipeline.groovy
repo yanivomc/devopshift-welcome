@@ -12,7 +12,9 @@ pipeline {
                 sh 'cat students/Terkel/080124/python-flask/requirements.txt' 
                 sh 'pip --version' 
                 sh 'pip install -r students/Terkel/080124/python-flask/requirements.txt' 
-                sh 'python --version' 
+                catchError(buildResult: 'SUCCESS', message: 'python error', stageResult: 'UNSTABLE') {
+                    sh 'python --version' // some block
+                }
             }
         }
 
