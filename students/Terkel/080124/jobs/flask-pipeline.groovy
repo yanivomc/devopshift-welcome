@@ -12,6 +12,26 @@ pipeline {
                 sh 'echo pip install' 
             }
         }
+                stage('Build') {
+            steps {
+                sh 'echo javac' 
+            }
+        }
+
+        stage('Parallel Tests') {
+            parallel {
+                stage('Unit test') {
+                    steps {
+                        sh 'echo “unit test”'
+                    }
+                }
+                stage('ntegration test') {
+                    steps {
+                        sh 'echo “unit test”' 
+                    }
+                }
+            }
+        }
     }
 
     post {
