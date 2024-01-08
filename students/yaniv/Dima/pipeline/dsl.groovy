@@ -42,4 +42,28 @@ pipelineJob('MyPipeline1') { // branch config
  }
 }
 
+pipelineJob('Flash APP') { // branch config
+ def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
+
+
+ triggers {
+   scm('H/5 * * * *')
+ }
+ description("Flash APP")
+
+
+ definition {
+   cpsScm {
+     scm {
+       git {
+         remote { url(repo) }
+         branches('elbit/jenkinsdec26') // this is fine
+         scriptPath('students/yaniv/Dima/repo/projectToCopy/python-flask/Jenkinsfile')//'./students/yaniv/Dima/Jenkinsfile/Jenkinsfile'
+         extensions { }  // required as otherwise it may try to tag the repo, which you may not want
+       }
+     }
+   }
+ }
+}
+
 
