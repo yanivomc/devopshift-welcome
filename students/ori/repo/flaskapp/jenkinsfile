@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo 'pip install'
                 sh """
-                    cd students/ori/repo/flaskapp/jenkinsfile
+                    pwd
                     ls
                 """
             }
