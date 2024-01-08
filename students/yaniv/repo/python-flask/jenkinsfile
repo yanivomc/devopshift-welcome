@@ -19,7 +19,7 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                       sh "python3 ./students/yaniv/repo/python-flask/unit_test.py"
+                       sh "python3 students/yaniv/repo/python-flask/unit_test.py"
                     }
                 }
                 stage('Integration Test') {
