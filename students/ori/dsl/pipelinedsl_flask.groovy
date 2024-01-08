@@ -1,4 +1,4 @@
-pipelineJob('My Generated Job') { // Job NAME
+pipelineJob('My Generated Flask Job') { // Job NAME
     definition {
         cpsScm {
             scm {
