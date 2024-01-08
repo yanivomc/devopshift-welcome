@@ -51,7 +51,7 @@ pipeline {
                         echo 'unit test'
                         sh """
                             cd students/ori/repo/flaskapp/src
-                            python3 server_test.py
+                            python3 unit_test.py
                         """
                     }
                 }
