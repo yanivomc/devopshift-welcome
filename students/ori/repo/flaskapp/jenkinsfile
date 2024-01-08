@@ -39,10 +39,8 @@ pipeline {
         }           
 
         stage('Build') {
-=======
->>>>>>> baf812e (updates):students/yaniv/repo/projectToCopy/python-flask/jenkinsfile
             steps {
-                pip install -r requirements.txt
+                echo 'pip build'
             }
         }
 
@@ -64,10 +62,6 @@ pipeline {
                 }
             }
         }
-<<<<<<< HEAD:students/ori/repo/flaskapp/jenkinsfile
-=======
-       
->>>>>>> baf812e (updates):students/yaniv/repo/projectToCopy/python-flask/jenkinsfile
     }
 
     post {
