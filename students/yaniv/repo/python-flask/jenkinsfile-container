@@ -11,7 +11,7 @@ pipeline {
 
         stage('build') {
             steps {
-               sh "cd students/yaniv/repo/python-flask && docker build -t elbit:3 ."
+               sh "cd students/yaniv/repo/python-flask && docker build -t elbit:4 ."
             }
         }
 
