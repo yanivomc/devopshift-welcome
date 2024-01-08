@@ -11,7 +11,7 @@ pipeline {
         stage('InstallApp') {
             steps {
                 //echo "pip install"
-                pip install -r requirements.txt 
+                sh pip install -r requirements.txt 
             }
         }
         stage('Build') {
@@ -25,6 +25,9 @@ pipeline {
                 stage('Unit Test ') {
                     steps {
                         echo "Unit Test."
+                        sh cd "students/yaniv/Dima/repo/projectToCopy/python-flask/src"
+                        sh python3 unit_test.py
+                        
                         // Add commands to execute Mock Test 1
                     }
                 }
