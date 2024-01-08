@@ -3,7 +3,7 @@ import requests
 
 class TestFlaskApiUsingRequests(unittest.TestCase):
     def setUp(self):
-        self.base_url = "http://localhost:8080"  # Ensure this matches the port and host of your Flask app
+        self.base_url = "http://localhost:8083"  # Ensure this matches the port and host of your Flask app
 
     def test_index(self):
         # Test the main page

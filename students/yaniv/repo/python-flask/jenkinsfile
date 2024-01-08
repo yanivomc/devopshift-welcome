@@ -11,7 +11,7 @@ pipeline {
 
         stage('Install_Req') {
             steps {
-                pip install -r requirements.txt
+               sh "pip install -r requirements.txt"
             }
         }
 
@@ -19,7 +19,7 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        echo 'unit test'
+                       sh "python3 unit_test.py"
                     }
                 }
                 stage('Integration Test') {
