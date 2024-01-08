@@ -20,7 +20,7 @@ pipelineJob('my-pipeline') { // ok
   }
 }
 
-pipelineJob('my-pipeline') { // ok
+pipelineJob('flask-pipeline') { // ok
   def repo = 'https://github.com/yanivomc/devopshift-welcome.git'
 
   triggers {
