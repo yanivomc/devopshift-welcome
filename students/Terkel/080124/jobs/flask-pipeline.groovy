@@ -22,7 +22,7 @@ pipeline {
             parallel {
                 stage('Unit test') {
                     steps {
-                        sh 'echo “unit test”'
+                        sh 'python3 students/Terkel/080124/python-flask/unit_test.py'
                     }
                 }
                 stage('ntegration test') {
