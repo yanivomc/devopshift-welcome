@@ -6,9 +6,11 @@ pipeline {
                 git branch: 'elbit/jenkinsdec26', url: 'https://github.com/yanivomc/devopshift-welcome.git'
             }
         }
-                stage('Build') {
+
+        stage('Requirments') {
             steps {
-                sh 'echo javac' 
+                sh 'cat students/Terkel/080124/python-flask/requirements.txt' 
+                sh 'pip install -r students/Terkel/080124/python-flask/requirements.txt' 
             }
         }
 
@@ -24,12 +26,6 @@ pipeline {
                         sh 'echo “unit test”' 
                     }
                 }
-            }
-        }
-
-        stage('Requirments') {
-            steps {
-                sh 'echo pip install' 
             }
         }
     }
