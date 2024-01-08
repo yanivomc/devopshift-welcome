@@ -11,6 +11,7 @@ pipeline {
         stage('InstallApp') {
             steps {
                 //echo "pip install"
+                sh 'cd "students/yaniv/Dima/repo/projectToCopy/python-flask/src"'
                 sh 'pip install -r requirements.txt'
             }
         }
