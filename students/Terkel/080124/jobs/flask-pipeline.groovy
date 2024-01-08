@@ -14,6 +14,8 @@ pipeline {
                 sh 'pip install -r students/Terkel/080124/python-flask/requirements.txt' 
                 catchError(buildResult: 'SUCCESS', message: 'python error', stageResult: 'UNSTABLE') {
                     sh 'python3 --version' // some block
+                    sh 'pwd' // some block
+                    sh 'ls' // some block
                 }
             }
         }
