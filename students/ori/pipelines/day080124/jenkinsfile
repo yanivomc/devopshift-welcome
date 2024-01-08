@@ -11,6 +11,7 @@ pipeline {
         stage('PIP install') {
             steps {
                 sh 'echo "pip install"'
+                
             }
         }
 
