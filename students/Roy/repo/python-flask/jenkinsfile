@@ -12,7 +12,7 @@ pipeline {
 
        stage('Install_Req') {
            steps {
-               sh "pip install -r requirements.txt"
+               sh "pip install -r students/Roy/repo/python-flask/requirements.txt"
            }
        }
 
@@ -21,7 +21,7 @@ pipeline {
            parallel {
                stage('Unit Test') {
                    steps {
-                       sh "python3 ./src/unit_test.py"
+                       sh "python3 students/Roy/repo/python-flask/src/unit_test.py"
                    }
                }
                stage('Integration Test') {
