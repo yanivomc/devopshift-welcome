@@ -18,6 +18,7 @@ pipeline {
                     cd students/ori/repo/flaskapp
                     cat jenkinsfile
                     ls
+                    python3 --version
                     pip list
 
                     #python3 -m venv my_venv
