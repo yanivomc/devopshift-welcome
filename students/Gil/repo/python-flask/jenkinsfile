@@ -19,7 +19,7 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                       sh "python3 students/Gil/repo/python-flask/unit_test.py"
+                       sh "cd students/Gil/repo/python-flask/src && python3 unit_test.py"
                     }
                 }
                 stage('Integration Test') {
