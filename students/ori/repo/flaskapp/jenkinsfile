@@ -10,7 +10,6 @@ pipeline {
         }
 
         stage('InstalReq') {
-<<<<<<< HEAD:students/ori/repo/flaskapp/jenkinsfile
             steps {
                 echo 'pip install'
                 sh """
@@ -27,7 +26,17 @@ pipeline {
                     #./bin/activate
                 """
             }
-        }        
+        }
+
+        stage('Install Req') {
+            steps {
+                echo 'pip install'
+                sh """
+                    cd students/ori/repo/flaskapp
+                    pip install -r requirements.txt
+                """
+            }
+        }           
 
         stage('Build') {
 =======
@@ -42,6 +51,10 @@ pipeline {
                 stage('Unit Test') {
                     steps {
                         echo 'unit test'
+                        sh """
+                            cd students/ori/repo/flaskapp
+                            python3 server_test.py
+                        """
                     }
                 }
                 stage('Integration Test') {
