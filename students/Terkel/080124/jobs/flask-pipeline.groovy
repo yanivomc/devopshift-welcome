@@ -24,7 +24,7 @@ pipeline {
             parallel {
                 stage('Unit test') {
                     steps {
-                        sh 'python3 students/Terkel/080124/python-flask/src/unit_test.py'
+                        sh 'cd students/Terkel/080124/python-flask/src/ && python3 unit_test.py'
                     }
                 }
                 stage('ntegration test') {
