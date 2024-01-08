@@ -11,13 +11,7 @@ pipeline {
 
         stage('pip install') {
             steps {
-                echo 'pip install'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'javac'
+                pip install -r requirements.txt
             }
         }
 
@@ -25,7 +19,7 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        echo 'unit test'
+                        python3 src/unit_test.py
                     }
                 }
                 stage('Integration Test') {
