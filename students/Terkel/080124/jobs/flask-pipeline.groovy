@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git ('https://github.com/yanivomc/devopshift-welcome.git')
+                git branch: 'elbit/jenkinsdec26', url: ''https://github.com/yanivomc/devopshift-welcome.git''
             }
         }
 
