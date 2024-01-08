@@ -40,8 +40,6 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed.'
-            echo 'sending mail'
-            mail bcc: '', body: 'Job Failed', cc: '', from: '', replyTo: '', subject: 'Jenkins Lab 101', to: 'ori.arad@elbitsystems.com'
         }
     }
 }
