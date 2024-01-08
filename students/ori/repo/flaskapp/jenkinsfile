@@ -15,6 +15,9 @@ pipeline {
                 sh """
                     pwd
                     ls
+                    cd students/ori/repo/flaskapp
+                    cat jenkinsfile
+                    ls
                 """
             }
         }        
