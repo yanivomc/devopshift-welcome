@@ -40,7 +40,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                pip install -r requirements.txt
+                echo 'pip build'
             }
         }
 
