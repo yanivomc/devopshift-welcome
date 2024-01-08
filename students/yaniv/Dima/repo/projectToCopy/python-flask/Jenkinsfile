@@ -8,9 +8,10 @@ pipeline {
             }
         }
 
-        stage('Install') {
+        stage('InstallApp') {
             steps {
-                echo "pip install"
+                //echo "pip install"
+                pip install -r requirements.txt 
             }
         }
         stage('Build') {
