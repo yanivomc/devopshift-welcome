@@ -6,31 +6,13 @@ pipeline {
                 git {
                 remote { url('https://github.com/yanivomc/devopshift-welcome.git') }
                 branches('elbit/jenkinsdec26') // this is fine
-                scriptPath('students/Terkel/080124/jobs/my-pipeline.groovy')
-                extensions { }  // required as otherwise it may try to tag the repo, which you may not want
                 }
-                git 'https://github.com/yanivomc/devopshift-welcome.git' // Replace with your repository URL
             }
         }
 
-        stage('Build') {
+        stage('pip') {
             steps {
-                sh 'echo javac' 
-            }
-        }
-
-        stage('Parallel Tests') {
-            parallel {
-                stage('Unit test') {
-                    steps {
-                        sh 'echo “unit test”'
-                    }
-                }
-                stage('ntegration test') {
-                    steps {
-                        sh 'echo “unit test”' 
-                    }
-                }
+                sh 'echo pip install' 
             }
         }
     }
