@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone repository') {
             steps {
-                git 'https://your.repository.url/repo.git' // Replace with your repository URL
+                git 'https://your.repository.url/repo.git' // Replace with yo  ur repository URL
             }
         }
 
