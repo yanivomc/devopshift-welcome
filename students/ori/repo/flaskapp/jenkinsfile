@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('InstalReq') {
+        stage('Deubg') {
             steps {
                 echo 'pip install'
                 sh """
