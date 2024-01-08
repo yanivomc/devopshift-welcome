@@ -15,6 +15,9 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', message: 'python error', stageResult: 'UNSTABLE') {
                     sh 'python --version' // some block
                 }
+                catchError(buildResult: 'SUCCESS', message: 'python error', stageResult: 'UNSTABLE') {
+                    sh '/usr/lib/python3/python --version' // some block
+                }
             }
         }
 
