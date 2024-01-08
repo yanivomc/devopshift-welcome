@@ -1,0 +1,47 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Clone') {
+            steps {
+                git branch: 'elbit/jenkinsdec26', url: 'https://github.com/yanivomc/devopshift-welcome.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'install pip'
+            }
+        }
+
+        stage('Parallel Tasks') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        echo 'unit test'
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        echo 'integration test'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            // Replace with your email-ext plugin configurationjj dsadas
+            emailext(
+                subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+                body: """<p>There was a failure in the pipeline:</p>
+                         <p><b>Job:</b> ${env.JOB_NAME}</p>
+                         <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                         <p>Check console output at <a href="${env.BUILD_URL}console">here</a> to view the details.</p>""",
+                recipientProviders: [culprits(), requestor(), recipientList('your.email@example.com')]
+            )
+        }
+    }
+}
