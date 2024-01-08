@@ -11,7 +11,7 @@ pipeline {
 
         stage('pip install') {
             steps {
-                sh "pip install -r requirements.txt"
+                sh "pip install -r students/Orel/repo/python-flask/requirements.txt"
             }
         }
 
@@ -19,7 +19,7 @@ pipeline {
             parallel {
                 stage('Unit Test') {
                     steps {
-                        python3 src/unit_test.py
+                        sh "python3 students/Orel/repo/python-flask/src/unit_test.py"
                     }
                 }
                 stage('Integration Test') {
