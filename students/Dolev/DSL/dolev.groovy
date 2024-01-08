@@ -36,3 +36,20 @@ pipelineJob('projectx') { // Job NAME
         scm('H/5 * * * *')
     }
 }
+
+pipelineJob('python-flask') { // Job NAME
+    definition {
+        cpsScm {
+            scm {
+                git{ // Your repository
+                    remote{ url('https://github.com/yanivomc/devopshift-welcome.git')}
+                    branches('elbit/jenkinsdec26') // Branch to build, replace with your branch if needed
+                }
+            }
+            scriptPath('students/Dolev/repo/python-flask/jenkinsfile') // Path to the Jenkinsfile in the repository
+        }
+    }
+    triggers { // Configure when to check for changes 
+        scm('H/5 * * * *')
+    }
+}
