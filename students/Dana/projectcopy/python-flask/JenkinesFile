@@ -12,7 +12,7 @@ pipeline {
 
        stage('Install_Req') {
            steps {
-              shell pip install -r requirements.txt
+              sh "pip install -r requirements.txt"
            }
        }
 
@@ -21,7 +21,7 @@ pipeline {
            parallel {
                stage('Unit Test') {
                    steps {
-                       python3 unit_test.py
+                     sh"python3 students/Dana/projectcopy/python-flask/src/unit_test.py"
                    }
                }
                stage('Integration Test') {
