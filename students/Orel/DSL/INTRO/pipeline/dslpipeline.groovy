@@ -39,7 +39,7 @@ pipelineJob('projectFlask') { // broken branch config
      scm {
        git {
          remote { url(repo) }
-         branches('labs') // this is fine
+         branches('elbit/jenkinsdec26') // this is fine
          scriptPath('students/Orel/repo/python-flask/jenkinsfile')
          extensions { }  // required as otherwise it may try to tag the repo, which you may not want
        }
