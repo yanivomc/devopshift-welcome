@@ -15,7 +15,7 @@ pipelineJob('projectx') { // broken branch config
        git {
          remote { url(repo) }
          branches('elbit/jenkinsdec26') // this is fine
-         scriptPath('students/yaniv/repo/projectx/jenkinsfile')
+         scriptPath('students/olga/repo/projectx/jenkinsfile')
          extensions { }  // required as otherwise it may try to tag the repo, which you may not want
        }
      }
