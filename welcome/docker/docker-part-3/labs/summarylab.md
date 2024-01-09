@@ -1,3 +1,9 @@
+### Lab Intro:
+This comprehensive lab covers a wide range of Docker and Docker Compose functionalities, providing a hands-on experience with building,
+pushing, and managing multi-container applications. 
+
+The lab is designed to reinforce concepts related to Docker Buildx, Docker Bake, and Docker Compose in a practical, real-world scenario.
+
 ### Lab Instructions:
 
 #### Part 1: Creating Flask Applications
