@@ -1,5 +1,3 @@
----
-
 ### Lab Instructions:
 
 #### Part 1: Creating Flask Applications
