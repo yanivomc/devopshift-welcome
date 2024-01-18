@@ -1,4 +1,4 @@
-# **Lab 1: Introduction to IAM**
+# **Lab 1: Introduction to IAM!**
 
 ## **Lab overview**
 
