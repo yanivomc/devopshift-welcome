@@ -12,5 +12,8 @@ echo "kafka-storage format --ignore-formatted -t NqnEdODVKkiLTfJvqd1uqQ== -c /et
 
 # The second line ignores the cub zk-ready. Without it, everything will end up with another exception: zk-ready: error: too few arguments.
 
+
+
+
 # And finally, the last line is a KRaft required step, which formats the storage directory with a new cluster identifier. Please keep in mind that the specified UUID value (NqnEdODVKkiLTfJvqd1uqQ== in my case) has to be 16 bytes of a base64-encoded UUID.
 
