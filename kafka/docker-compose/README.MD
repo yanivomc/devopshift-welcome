@@ -1,7 +1,9 @@
-1. Please run docker compose and watch the logs to allow all brokers to bootstrap and change state to RUNNING.
+1. Please run docker compose commands below and watch the logs to allow all brokers to bootstrap and change state to RUNNING.
  ~~~
  docker compose up -d
 
+ docker compose ps --services --filter "status=running"
+ 
  docker compose logs -f 
  ~~~ 
   
@@ -43,6 +45,6 @@ To manage our kafka cluster.
 
 Access Conduktor: http://REMOTEIP:8080
 
-User: admin@conduktor.io
+User: admin@admin.io
 Password: admin
 
