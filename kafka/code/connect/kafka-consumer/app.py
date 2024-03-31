@@ -1,32 +1,46 @@
-from kafka import KafkaConsumer
+from confluent_kafka import Consumer, KafkaError
 import logging
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Kafka Consumer configuration
+# Confluent Kafka Consumer configuration
 conf = {
-    'bootstrap_servers': ['kafka1:9092'],
-    'group_id': 'mygroup',
-    'auto_offset_reset': 'latest',
-    'enable_auto_commit': False
+    'bootstrap.servers': 'kafka1:9092',
+    'group.id': 'mygroup',
+    'auto.offset.reset': 'latest',
+    'enable.auto.commit': False,
 }
 
-# Create Kafka consumer instance
-consumer = KafkaConsumer('mydb-.accounts.users_accounts', **conf)
+# Create Confluent Kafka consumer instance
+consumer = Consumer(conf)
+
+# Subscribe to topic
+consumer.subscribe(['mydb-.accounts.users_accounts'])
 
 # Start consuming messages
 try:
     while True:
-        for msg in consumer:
-            # Process message
-            logging.info('Message consumed: %s' % msg.value)
+        msg = consumer.poll(1.0)  # Poll for a message with a 1-second timeout
 
-            # Commit offset
-            consumer.commit()
+        if msg is None:
+            continue
+        if msg.error():
+            if msg.error().code() == KafkaError._PARTITION_EOF:
+                # End of partition event
+                continue
+            else:
+                logging.error(msg.error())
+                break
 
-            # Log committed offset
-            logging.info('Offset committed: %s' % msg.offset)
+        # Process message
+        logging.info('Message consumed: %s' % msg.value().decode('utf-8'))
+
+        # Commit offset
+        consumer.commit(asynchronous=False)
+
+        # Log committed offset
+        logging.info('Offset committed for offset: %s' % msg.offset())
 
 except KeyboardInterrupt:
     pass

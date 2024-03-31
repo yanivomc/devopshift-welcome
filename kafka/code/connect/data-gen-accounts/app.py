@@ -52,6 +52,6 @@ while True:
     mydb.commit()
     time.sleep(0.3)
 
-# Commit changes and close connection
-mycursor.close()
-mydb.close()
+  # Commit changes and close connection
+  mycursor.close()
+  mydb.close()
