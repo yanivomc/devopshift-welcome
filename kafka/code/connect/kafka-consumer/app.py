@@ -16,7 +16,7 @@ conf = {
 consumer = Consumer(conf)
 
 # Subscribe to topic
-consumer.subscribe(['mydb-.accounts.users_accounts'])
+consumer.subscribe(['configured-topic'])
 
 # Start consuming messages
 try:
