@@ -1,60 +1,50 @@
-import mysql.connector
-from faker import Faker
-import random
-import time
+from confluent_kafka import Consumer, KafkaError
+import logging
 
-fake = Faker()
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
-# Connect to the database
-mydb = mysql.connector.connect(
-  host="mysql-db",
-  user="root",
-  database="accounts"
-)
+# Confluent Kafka Consumer configuration
+conf = {
+    'bootstrap.servers': 'kafka1:9092',
+    'group.id': 'mygroup',
+    'auto.offset.reset': 'latest',
+    'enable.auto.commit': False,
+}
 
-# Create users_accounts table if not exists
-mycursor = mydb.cursor()
-mycursor.execute("CREATE TABLE IF NOT EXISTS users_accounts (id INT AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(255), last_name VARCHAR(255), email VARCHAR(255), username VARCHAR(255), user_id VARCHAR(255) UNIQUE)")
+# Create Confluent Kafka consumer instance
+consumer = Consumer(conf)
 
-# Create orders table if not exists
-mycursor.execute("CREATE TABLE IF NOT EXISTS orders (id INT AUTO_INCREMENT PRIMARY KEY, userid VARCHAR(255), orderid VARCHAR(255), product VARCHAR(255), price FLOAT)")
+# Subscribe to topic
+consumer.subscribe(['mydb-.accounts.users_accounts'])
 
-# Corrected script snippet
-
-# Generate and insert fake data
-count = 0
-total_orders_added = 0  # To keep track of total orders added
+# Start consuming messages
 try:
     while True:
-      first_name = fake.first_name()
-      last_name = fake.last_name()
-      email = fake.email()
-      username = (first_name + last_name).lower()
-      user_id = fake.uuid4()  # Generate a random UUID for each user
+        msg = consumer.poll(1.0)  # Poll for a message with a 1-second timeout
 
-      # Insert user account data
-      sql = "INSERT IGNORE INTO users_accounts (first_name, last_name, email, username, user_id) VALUES (%s, %s, %s, %s, %s)"
-      val = (first_name, last_name, email, username, user_id)
-      mycursor.execute(sql, val)
+        if msg is None:
+            continue
+        if msg.error():
+            if msg.error().code() == KafkaError._PARTITION_EOF:
+                # End of partition event
+                continue
+            else:
+                logging.error(msg.error())
+                break
 
-      # Generate and insert random number of orders for each user
-      num_orders = random.randint(1, 5)
-      for _ in range(num_orders):
-        orderid = fake.uuid4()  # Generate a random UUID for each order
-        product = fake.word()  # Generate a random product name
-        price = round(random.uniform(100, 500), 2)  # Generate a random price between 100 and 500
+        # Process message
+        logging.info('Message consumed: %s' % msg.value().decode('utf-8'))
 
-        sql = "INSERT INTO orders (userid, orderid, product, price) VALUES (%s, %s, %s, %s)"
-        val = (user_id, orderid, product, price)
-        mycursor.execute(sql, val)
-        total_orders_added += 1
+        # Commit offset
+        consumer.commit(asynchronous=False)
 
-      count += 1
-      if count % 10 == 0:
-        print(f"{count} users created with {total_orders_added} orders added")
-        mydb.commit()  # Commit after every 10 users (and their orders) are inserted
-        time.sleep(0.3)
+        # Log committed offset
+        logging.info('Offset committed for offset: %s' % msg.offset())
+
+except KeyboardInterrupt:
+    pass
+
 finally:
-    # Ensure that the cursor and connection are closed properly
-    mycursor.close()
-    mydb.close()
+    # Close the consumer to commit any remaining offsets and release resources
+    consumer.close()
