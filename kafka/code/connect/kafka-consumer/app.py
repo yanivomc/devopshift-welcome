@@ -19,11 +19,10 @@ mycursor.execute("CREATE TABLE IF NOT EXISTS users_accounts (id INT AUTO_INCREME
 # Create orders table if not exists
 mycursor.execute("CREATE TABLE IF NOT EXISTS orders (id INT AUTO_INCREMENT PRIMARY KEY, userid VARCHAR(255), orderid VARCHAR(255), product VARCHAR(255), price FLOAT)")
 
-# Corrected script snippet
+# Subscribe to topic
+consumer.subscribe(['mydb-.accounts.users_accounts'])
 
-# Generate and insert fake data
-count = 0
-total_orders_added = 0  # To keep track of total orders added
+# Start consuming messages
 try:
     while True:
       first_name = fake.first_name()
