@@ -15,10 +15,10 @@ spec:
   components:
     ingressGateways:
       - name: istio-ingressgateway
-        enabled: true
+        enabled: true        
     egressGateways:
       - name: istio-egressgateway
-        enabled: false
+        enabled: true
   values:
     global:
       istioNamespace: istio-system

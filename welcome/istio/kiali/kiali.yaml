@@ -109,6 +109,9 @@ data:
       tracing:
         url: "http://tracing.istio-system.svc.cluster.local:80"
         grpc: "tracing.istio-system.svc.cluster.local:16685"
+      prometheus:
+        url: "http://prometheus.istio-system.svc.cluster.local:9090/prometheus"
+
     identity:
       cert_file: ""
       private_key_file: ""

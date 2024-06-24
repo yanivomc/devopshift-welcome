@@ -13,7 +13,7 @@ spec:
     metadata:
       labels:
         app: jaeger
-        sidecar.istio.io/inject: "false"
+        sidecar.istio.io/inject: "true"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "14269"
@@ -36,6 +36,10 @@ spec:
               value: "50000"
             - name: QUERY_BASE_PATH
               value: /jaeger
+            - name: METRICS_STORAGE_TYPE
+              value: prometheus
+            - name: PROMETHEUS_SERVER_URL
+              value: http://prometheus.istio-system.svc.cluster.local:9090/prometheus
           livenessProbe:
             httpGet:
               path: /
