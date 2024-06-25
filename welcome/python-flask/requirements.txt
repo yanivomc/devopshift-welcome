@@ -1,5 +1,0 @@
-requests
-Flask 
-mysql-connector-python
-python-dotenv
-flask-testing
