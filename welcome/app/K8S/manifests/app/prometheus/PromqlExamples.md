@@ -1,6 +1,6 @@
 
 
-Simple PromQL Queries:
+Simple PromQL Queries to validate our Monitoring:
 
 1. Total number of requests:
 ```
