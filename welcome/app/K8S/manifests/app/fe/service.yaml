@@ -12,5 +12,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
+  # Change the type to LoadBalancer OR NodePort if you want to expose the service outside the cluster without Istio / Ingress controller
   type: ClusterIP
-  
+
