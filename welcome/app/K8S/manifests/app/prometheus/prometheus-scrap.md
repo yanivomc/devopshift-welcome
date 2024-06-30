@@ -21,3 +21,7 @@ Into our Promtheus config map we need to append the following scraper job:
         metrics_path: /metrics
         scheme: http
 ```
+
+
+Once updated please run: 
+kubectl rollout restart deployment prometheus -n [Prometheus Namespace]

@@ -16,7 +16,7 @@ spec:
         app: fe
     spec:
       containers:
-      - name: fe
+      - name: fefaker
         image: yanivomc/fefaker:latest
         ports:
         - containerPort: 8000
