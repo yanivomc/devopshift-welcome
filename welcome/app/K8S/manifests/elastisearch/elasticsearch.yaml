@@ -1,0 +1,17 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: quickstart
+  namespace: default
+spec:
+  version: 8.2.0
+  nodeSets:
+  - name: default
+    count: 1
+    config:
+      xpack.security.enabled: false
+      node.store.allow_mmap: false
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true

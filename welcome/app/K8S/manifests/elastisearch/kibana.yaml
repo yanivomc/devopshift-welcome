@@ -1,0 +1,21 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: quickstart
+  namespace: default
+spec:
+  version: 8.2.0
+  count: 1
+  elasticsearchRef:
+    name: quickstart
+  config:
+    server.host: "0.0.0.0"
+    elasticsearch.hosts: ["http://quickstart-es-http.default.svc.cluster.local:9200"]
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+    service:
+      spec:
+        type: LoadBalancer # default is ClusterIP
+
