@@ -1,0 +1,16 @@
+# ClusterIP service for the frontend
+apiVersion: v1
+kind: Service
+metadata:
+  name: fe-service
+  labels:
+    app: fe
+spec:
+  selector:
+    app: fe
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
+  

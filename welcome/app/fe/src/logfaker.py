@@ -3,8 +3,16 @@ import random
 import time
 from datetime import datetime, timedelta
 from faker import Faker
+import socket
 
 fake = Faker()
+
+def hostname():
+    # Get real machine/container hostname from os and return it 
+    hostname = socket.gethostname()
+    return hostname
+
+
 
 def generate_log_entry():
     log_levels = ["INFO", "WARNING", "ERROR", "DEBUG"]
@@ -13,6 +21,8 @@ def generate_log_entry():
     
     timestamp = fake.date_time_between(start_date="-1h", end_date="now").isoformat()
     level = random.choice(log_levels)
+    
+
     
     log_entry = {
         "timestamp": timestamp,
@@ -29,6 +39,7 @@ def generate_log_entry():
         "status_code": fake.random_element(elements=(200, 201, 204, 400, 401, 403, 404, 500)),
         "response_time": round(random.uniform(0.1, 2.0), 3),
         "message": fake.sentence(),
+        "hostname": hostname(),
     }
     
     if level == "ERROR":
@@ -50,8 +61,8 @@ def main():
         print(json.dumps(log_entry))
         time.sleep(random.uniform(0.1, 1))
 
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\nLog generation stopped.")
+# if __name__ == "__main__":
+#     try:
+#         main()
+#     except KeyboardInterrupt:
+#         print("\nLog generation stopped.")

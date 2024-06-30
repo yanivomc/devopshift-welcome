@@ -1,7 +1,7 @@
 from prometheus_client import start_http_server, Gauge, Counter, Histogram, Summary
 import random
 import time
-import logfaker as logfaker
+import logfaker as logerfaker
 
 # Request metrics
 REQUEST_INPROGRESS = Gauge('app_requests_inprogress', 'Number of application requests in progress')
@@ -38,8 +38,7 @@ ENDPOINTS = ['/api/users', '/api/orders', '/api/products', '/api/payments']
 SERVICES = ['user_service', 'order_service', 'product_service', 'payment_service']
 
 # Create service health metrics
-for service in SERVICES:
-    Gauge(f'{service}_health', f'Health of {service} (0=unhealthy, 1=healthy)')
+SERVICE_HEALTH = {service: Gauge(f'{service}_health', f'Health of {service} (0=unhealthy, 1=healthy)') for service in SERVICES}
 
 def generate_fake_metrics():
     while True:
@@ -81,15 +80,30 @@ def generate_fake_metrics():
 
         # Service health
         for service in SERVICES:
-            Gauge(f'{service}_health', f'Health of {service}').set(random.choice([0, 1]))
+            SERVICE_HEALTH[service].set(random.choice([0, 1]))
 
         # Wait before generating next batch of metrics
         time.sleep(5)
+
+# Create a new thread that will run the logerfaker.main() function  
+# in parallel to the generate_fake_metrics() function
+import threading
+def loger():
+    
+    log_thread = threading.Thread(target=logerfaker.main)
+    log_thread.start()
+
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
     start_http_server(8000)
     print("Metrics server started on port 8000")
-    
-    # Generate metrics.
-    generate_fake_metrics()
+    print("Press Ctrl+C to stop metrics generation.")
+    try:
+        
+        loger()
+        generate_fake_metrics()
+        
+    except KeyboardInterrupt:
+        print("\nMetrics generation stopped.")
+        print("\nLog generation stopped.")
