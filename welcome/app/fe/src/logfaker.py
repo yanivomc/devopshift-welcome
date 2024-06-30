@@ -16,6 +16,7 @@ def hostname():
 
 def generate_log_entry():
     log_levels = ["INFO", "WARNING", "ERROR", "DEBUG"]
+    app_names = ["user-service", "product-service", "order-service", "auth-service", "search-service"]
     http_methods = ["GET", "POST", "PUT", "DELETE", "PATCH"]
     endpoints = ["/api/users", "/api/products", "/api/orders", "/api/auth", "/api/search"]
     
@@ -40,6 +41,7 @@ def generate_log_entry():
         "response_time": round(random.uniform(0.1, 2.0), 3),
         "message": fake.sentence(),
         "hostname": hostname(),
+        "app_name": random.choice(app_names),
     }
     
     if level == "ERROR":
