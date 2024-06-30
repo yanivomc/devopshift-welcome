@@ -5,6 +5,10 @@ metadata:
   name: fe-service
   labels:
     app: fe
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/path: "/metrics/"
 spec:
   selector:
     app: fe
