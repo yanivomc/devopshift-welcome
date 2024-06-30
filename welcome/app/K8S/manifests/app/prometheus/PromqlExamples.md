@@ -59,9 +59,14 @@ sum(increase(app_cache_hits_total[1h])) / (sum(increase(app_cache_hits_total[1h]
 avg_over_time(app_queue_processing_time_seconds_sum[30m]) / avg_over_time(app_queue_processing_time_seconds_count[30m])
 ```
 
-12. Correlation between CPU usage and active requests (over last hour):
+12. Rate of change of CPU usage compared to rate of change of active requests over the last hour:
 ```
-corr_over_time(app_cpu_usage_percent[1h], app_requests_inprogress[1h])
+(rate(app_cpu_usage_percent[1h]) / rate(app_requests_inprogress[1h]))
+```
+13. More comprehensive view 
+```
+rate(app_cpu_usage_percent[1h])
+rate(app_requests_inprogress[1h])
 ```
 
 These queries provide a range of insights:
