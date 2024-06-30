@@ -1,34 +1,30 @@
 # Create an istio gateway and route for the frontend service
-apiVersion: networking.istio.io/v1
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: fe-gateway
+  name: fefaker-gateway
 spec:
-  selector:
-    istio: ingressgateway
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
+  gatewayClassName: istio
+  listeners:
+  - name: http
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: Same
 ---
-apiVersion: networking.istio.io/v1
-kind: VirtualService
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: fe-route
+  name: fefaker
 spec:
-  hosts:
-  - "*"
-  gateways:
-  - fe-gateway
-  http:
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: fe-service
-        port:
-          number: 80
+  parentRefs:
+  - name: fefaker-gateway
+  rules:
+  - matches:
+    - path:
+        type: Exact
+        value: /metrics/
+    backendRefs:
+    - name: fe-service
+      port: 80
