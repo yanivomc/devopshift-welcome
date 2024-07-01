@@ -2,6 +2,7 @@ apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
   name: quickstart
+  namespace: default
 spec:
   type: filebeat
   version: 8.2.0
@@ -10,10 +11,18 @@ spec:
   elasticsearchRef:
     name: quickstart
   config:
+    logging.level: debug
+    setup.dashboards.enabled: false
     filebeat.inputs:
     - type: container
       paths:
-      - /var/log/containers/*.log
+      - /var/log/containers/fe-deployment*_fefaker*.log
+      json.keys_under_root: true
+      json.add_error_key: true
+    output.elasticsearch:
+      hosts: ["http://quickstart-es-http.default.svc.cluster.local:9200"]
+      indices:
+        - index: "filebeat-fe-%{[agent.version]}-%{+yyyy.MM.dd}"
   daemonSet:
     podTemplate:
       spec:

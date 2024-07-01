@@ -22,5 +22,3 @@ spec:
         - containerPort: 8000
         # Set Always pull 
         imagePullPolicy: Always
-        # Set restartPolicy: Always
-        restartPolicy: Always
