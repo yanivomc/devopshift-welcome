@@ -19,4 +19,20 @@ helm repo update
 helm install prometheus-node-exporter prometheus-community/prometheus-node-exporter
 
 
+Recommended Dashboards
+Kubernetes / Views / Global
 
+Provides an overview of the entire Kubernetes cluster, including CPU and memory usage, disk usage, and more.
+GitHub Link: Kubernetes Views Global
+Kubernetes / Nodes
+
+Focuses on node-level metrics such as CPU, memory, and disk usage.
+GitHub Link: Kubernetes Views Nodes
+Kubernetes / Pods
+
+Displays metrics at the pod level, including CPU and memory usage.
+GitHub Link: Kubernetes Views Pods
+Kubernetes / Namespaces
+
+Provides metrics organized by namespaces, useful for multi-tenant environments.
+GitHub Link: Kubernetes Views Namespaces
