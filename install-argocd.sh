@@ -117,7 +117,7 @@ function validate_installation() {
     # Get ArgoCD Password
     clear
     echo "Access the following URL for ArgoCD:"
-    echo "ArgoCD: http://$ingress_ip/"
+    echo "ArgoCD: https://$ingress_ip/"
     echo "Getting ArgoCD initial admin Password"
     PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d; echo)
     echo "USER: admin"
