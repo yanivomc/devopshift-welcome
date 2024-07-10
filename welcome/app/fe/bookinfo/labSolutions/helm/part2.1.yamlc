@@ -1,0 +1,38 @@
+# 1. Updating Helm Chart for Service-Specific Replicas
+# Objective: Learn to modify Helm chart values for service-specific replicas instead of using a global variable.
+# Step 1: Update the Helm chart to have replica counts for each service defined individually.
+# Step 2: Commit the changes to the repository.
+# Step 3: Allow ArgoCD to sync the changes automatically.
+# Step 4: Change the number of replicas for one of the applications using the ArgoCD UI Helm override, commit the change, and observe the differences.
+details:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-details-v1
+
+ratings:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-ratings-v1
+
+reviews:
+  replicas: 1
+  image: docker.io/istio/examples-bookinfo-reviews-v1
+
+productpage:
+  replicas: 3
+  image: docker.io/istio/examples-bookinfo-productpage-v1
+
+
+
+  # Modify the deployment templates to use these specific values.
+
+  apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: details-v1
+  labels:
+    app: details
+    version: v1
+spec:
+  replicas: {{ .Values.details.replicas }}
+
+# Continue for other services as well.
+
