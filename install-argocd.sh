@@ -128,15 +128,13 @@ function validate_installation() {
             clear
             PASSWORD=$(kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d; echo)
             if [ ! -z "$PASSWORD" ]; then
-                break
+                echo "Password retrived successfully"
             fi
         done
         #   if Loop ends and PASSWORD is still empty, then update the user on the process status
         if [ -z "$PASSWORD" ]; then
             echo "ArgoCD Password not found yet - please run the command again manually to get the Password."
             echo "kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 -d; echo"
-        else
-            echo "ArgoCD Password: $PASSWORD"
         fi
     fi
     echo "USER: admin"
