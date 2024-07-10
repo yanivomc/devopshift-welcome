@@ -18,4 +18,4 @@ spec:
       prune: {{ .Values.argoApplication.prune }}
       selfHeal: {{ .Values.argoApplication.selfHeal }}
 {{- end }}
-```
+
