@@ -1,0 +1,9 @@
+{{- define "bookinfo-chart.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{- define "bookinfo-chart.fullname" -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- $fullname := default (include "bookinfo-chart.name" .) .Values.fullnameOverride -}}
+{{- $fullname | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
