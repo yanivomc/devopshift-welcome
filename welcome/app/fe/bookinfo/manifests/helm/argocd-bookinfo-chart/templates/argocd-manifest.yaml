@@ -4,6 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .Values.argoApplication.name }}
+  namespace: argocd
 spec:
   project: {{ .Values.argoApplication.project }}
   source:
