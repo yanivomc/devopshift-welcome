@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: my-project
+  namespace: argocd
+spec:
+  description: Example project
+  sourceRepos:
+    - https://github.com/my-org/*
+  destinations:
+    - namespace: dev
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: PersistentVolume
+  namespaceResourceBlacklist:
+    - group: ""
+      kind: Pod
+  orphanedResources:
+    warn: true
+  syncWindows:
+    - kind: deny
+      schedule: "0 0 * * 0"
+      duration: 1h
