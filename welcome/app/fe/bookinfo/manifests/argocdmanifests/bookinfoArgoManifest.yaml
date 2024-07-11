@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/yourusername/yourrepository'
+    repoURL: 'https://github.com/ankitsingh16391/devopshift-welcome'
     path: ./welcome/app/fe/bookinfo/manifests/manual
     targetRevision: argocd-workshop
   destination:
@@ -16,8 +16,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
-      syncOptions:
-        - CreateNamespace=true
+    syncOptions:
+      - CreateNamespace=true
   # webhook:
   #   github:
   #     secret: webhook-secret
