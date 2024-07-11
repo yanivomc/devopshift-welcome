@@ -9,5 +9,5 @@ argoApplication:
   targetRevision: argocd-workshop
   server: 'https://kubernetes.default.svc'
   namespace: default
-  prune: true
+  prune: false
   selfHeal: true
