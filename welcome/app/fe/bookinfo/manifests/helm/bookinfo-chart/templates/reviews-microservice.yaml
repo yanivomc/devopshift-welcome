@@ -67,7 +67,7 @@ metadata:
     app: reviews
     version: v2
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.reviews.replicaCount }}
   selector:
     matchLabels:
       app: reviews
@@ -107,7 +107,7 @@ metadata:
     app: reviews
     version: v3
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.reviews.replicaCount }}
   selector:
     matchLabels:
       app: reviews
