@@ -27,7 +27,7 @@ metadata:
     app: details
     version: v1
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.details.replicaCount }}
   selector:
     matchLabels:
       app: details
