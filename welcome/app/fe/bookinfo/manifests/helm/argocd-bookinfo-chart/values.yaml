@@ -1,7 +1,7 @@
 
 
 argoApplication:
-  install: True
+  install: False
   name: bookinfo-application
   project: default
   repoURL: 'https://github.com/yourusername/yourrepository'
