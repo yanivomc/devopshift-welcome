@@ -5,30 +5,32 @@ environment{
     CREDENTIALS_ID='evgenil'
 }
 
-stages {
-    stage('Build') {
-        steps {
-            script {
-                //BuildtheDockerimageforthebuildstage
-                sh'dockerbuild--targetbuild--tag${IMAGE_NAME}:${VERSION}-build.'
+pipeline {
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    //BuildtheDockerimageforthebuildstage
+                    sh'dockerbuild--targetbuild--tag${IMAGE_NAME}:${VERSION}-build.'
+                }
             }
         }
-    }
-    stage('Test') {
-        steps {
-            script {
-                //BuildandtesttheDockerimage
-                sh'dockerbuild--targettest--tag${IMAGE_NAME}:${VERSION}-test.'
-                sh'dockerrun--rm${IMAGE_NAME}:${VERSION}-test'
+        stage('Test') {
+            steps {
+                script {
+                    //BuildandtesttheDockerimage
+                    sh'dockerbuild--targettest--tag${IMAGE_NAME}:${VERSION}-test.'
+                    sh'dockerrun--rm${IMAGE_NAME}:${VERSION}-test'
+                }
             }
         }
-    }
-    stage('Push') {
-        steps {
-            script {
-                docker.withRegistry('https://index.docker.io/v1/',"${CREDENTIALS_ID}") {
-                    sh'dockerpush${REPO}/${IMAGE_NAME}:${VERSION}'
-                    //Continuewithcreatingalatestversionalso-usingdockertagandpushit
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/',"${CREDENTIALS_ID}") {
+                        sh'dockerpush${REPO}/${IMAGE_NAME}:${VERSION}'
+                        //Continuewithcreatingalatestversionalso-usingdockertagandpushit
+                    }
                 }
             }
         }
