@@ -8,7 +8,6 @@ COPY ./src/ /home/gradle
 
 RUN gradle build
 
-
 # Security Stage
 FROM builder AS security
 USER root
@@ -16,10 +15,10 @@ RUN apt-get update && apt-get install -y npm && rm -rf /var/lib/apt/lists/*
 RUN curl --compressed https://static.snyk.io/cli/latest/snyk-linux?_gl=1*82pq22*_ga*MTY0ODQ2NTg4Ni4xNzIwOTUxOTcz*_ga_X9SH3KP7B4*MTcyMDk1MTk3My4xLjEuMTcyMDk1MTk3My42MC4wLjA -o ./snyk
 RUN chmod +x ./snyk
 COPY ./snyk /usr/local/bin/
-# https://app.snyk.io/account - Register with a free account to generate authkey and updated below using link: https://app.snyk.io/account
-ENV SNYK_TOKEN=CHANGETHETOKEN
+# https://app.snyk.io/account - Register with a free account to generate authkey and use it as part of the CI , docker build ARG below-   generate link: https://app.snyk.io/account
+ARG SNYK_TOKEN
+ENV SNYK_TOKEN=${SNYK_TOKEN}
 RUN ./snyk test /home/gradle/ --all-sub-projects
-
 
 # Run Stage
 FROM open-liberty:24.0.0.1-kernel-slim-java17-openj9
@@ -35,8 +34,8 @@ RUN /opt/ol/wlp/bin/featureUtility installServerFeatures --acceptLicense /opt/ol
 ARG service_version
 ARG enable_ratings
 ARG star_color
-ENV SERVICE_VERSION ${service_version:-v1}
-ENV ENABLE_RATINGS ${enable_ratings:-false}
-ENV STAR_COLOR ${star_color:-black}
+ENV SERVICE_VERSION=${service_version:-v1}
+ENV ENABLE_RATINGS=${enable_ratings:-false}
+ENV STAR_COLOR=${star_color:-black}
 
 CMD ["/opt/ol/wlp/bin/server", "run", "defaultServer"]

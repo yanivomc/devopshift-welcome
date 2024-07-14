@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'my-liberty-service'
+        VERSION = "v${env.BUILD_NUMBER}"
+        REPO = 'my-docker-repo'
+        CREDENTIALS_ID = 'docker-credentials'
+        SNYK_TOKEN = 'CHANGETHETOKEN' // Update this with your actual Snyk token
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://your-git-repo-url.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh 'docker build --target builder --tag ${IMAGE_NAME}:${VERSION}-build .'
+                }
+            }
+        }
+
+        stage('Security') {
+            steps {
+                script {
+                    sh 'docker build --target security --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-security .'
+                    sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-security'
+                }
+            }
+        }
+
+        stage('Run') {
+            steps {
+                script {
+                    sh 'docker build --target run --tag ${IMAGE_NAME}:${VERSION} .'
+                }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${CREDENTIALS_ID}") {
+                        sh 'docker push ${REPO}/${IMAGE_NAME}:${VERSION}'
+                        sh 'docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest'
+                        sh 'docker push ${REPO}/${IMAGE_NAME}:latest'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Docker image build, security check, and push successful!'
+        }
+        failure {
+            echo 'Docker image build, security check, or push failed.'
+        }
+    }
+}
