@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOMEREPO="/home/ubuntu/workarea"
+HOMEREPO="$HOME/workarea"
 
 # Function to validate repository URL
 validate_repo() {
@@ -97,11 +97,8 @@ if [ "$first_run" == "yes" ]; then
   read -p "Enter the branch to clone (default: main): " branch
   branch=${branch:-main}
   
- # mkdir -p $HOMEREPO
-  #git clone --branch $branch $repo_url $HOMEREPO/repo
-  
-  mkdir -p ~/workarea/repo
-  git clone -b $branch $repo_url ~/workarea/repo || { echo "Error: Cloning the repository failed."; exit 1; }
+  mkdir -p $HOMEREPO
+  git clone --branch $branch $repo_url $HOMEREPO/repo
   if [ $? -ne 0 ]; then
     echo "Error: Cloning the repository failed."
     exit 1
