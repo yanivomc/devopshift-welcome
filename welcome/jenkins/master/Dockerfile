@@ -3,7 +3,7 @@
 FROM jenkins/jenkins:2.452.3
  
 # Installing the plugins we need using the in-built jenkins-plugin-cli script instead of manual install plugins
-RUN /bin/jenkins-plugin-cli --plugins git matrix-auth credentials-binding workflow-aggregator docker-workflow blueocean  docker-workflow job-dsl workflow-job workflow-cps 
+RUN /bin/jenkins-plugin-cli --plugins git matrix-auth credentials-binding workflow-aggregator docker-workflow blueocean job-dsl workflow-job workflow-cps 
  
 # Setting up environment variables for Jenkins admin user
 ENV JENKINS_USER admin

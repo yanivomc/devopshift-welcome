@@ -1,20 +1,7 @@
-# Copyright Istio Authors
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+# Build Stage
+FROM node:21.6-slim AS build
 
-FROM node:21.6-slim
-
-#hadolint ignore=DL3008
+# Install curl
 RUN apt-get update \
     && apt-get install curl --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
@@ -23,11 +10,29 @@ ARG service_version
 ENV SERVICE_VERSION ${service_version:-v1}
 
 COPY package.json /opt/microservices/
-COPY ratings.js /opt/microservices/
 WORKDIR /opt/microservices
 RUN npm install
 
+# Lint/Test Stage
+FROM build AS lint-test
+
+# Create ESLint configuration file
+COPY ratings.js /opt/microservices/
+RUN npm install eslint --save-dev
+COPY eslint.config.js /opt/microservices/eslint.config.js
+RUN npx eslint /opt/microservices/ratings.js
+
+# Run Stage
+FROM node:21.6-slim AS run
+
+WORKDIR /opt/microservices
+
+# Copy the necessary files from the build stage
+COPY --from=build /opt/microservices /opt/microservices
+COPY ratings.js /opt/microservices/
+
 EXPOSE 9080
+
 CMD ["node", "/opt/microservices/ratings.js", "9080"]
 
 USER 1000

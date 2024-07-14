@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'my-docker-image'
+        VERSION = "v${env.BUILD_NUMBER}"
+        REPO = 'my-docker-repo'
+        CREDENTIALS_ID = 'docker-credentials'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://your-git-repo-url.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sh '''
+                    docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build .
+                    '''
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    sh '''
+                    docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .
+                    docker run --rm ${IMAGE_NAME}:${VERSION}-test
+                    '''
+                }
+            }
+        }
+
+        stage('Run') {
+            steps {
+                script {
+                    sh '''
+                    docker build --target run --tag ${IMAGE_NAME}:${VERSION} .
+                    '''
+                }
+            }
+        }
+
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry("https://index.docker.io/v1/", "${CREDENTIALS_ID}") {
+                        sh '''
+                        docker push ${REPO}/${IMAGE_NAME}:${VERSION}
+                        docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest
+                        docker push ${REPO}/${IMAGE_NAME}:latest
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Docker image build, test, and push successful!'
+        }
+        failure {
+            echo 'Docker image build, test, or push failed.'
+        }
+    }
+}
