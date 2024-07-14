@@ -31,6 +31,7 @@ kubectl apply -f https://download.elastic.co/downloads/eck/2.8.0/operator.yaml
 ```
 
 Verify the Installation:
+Hold a few moments - ignore crashloopback for a moment and it suppose to be resolved
 
 ```bash
 kubectl get pods -n elastic-system
@@ -68,3 +69,20 @@ echo "Your Kibana Endpoint is : http://$endpoint:5601"
 ```
 
 There is no user/password enabled
+
+## Deploy all the rest
+Once kibana is working and elasticsearch is green 
+```bash
+kubectl apply -f .
+```
+this will install and verify that everything is set along with metricbeat and filebeat
+
+
+## view logs 
+In kibana go to :
+observbility > logs
+
+## View Metricbeat dashboard K8S
+In Kibana go to:
+Dashboard > [Metricbeat Kubernetes] Overview ECS
+
