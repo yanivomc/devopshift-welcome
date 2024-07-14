@@ -5,7 +5,7 @@ ROOTFOLDER="/home/ubuntu/workarea/devopshift/welcome/istio/"
 # Function to prompt user for installation choice
 function prompt_installation_choice() {
     echo "Choose installation option:"
-    echo "1. Install all components (Istio, Kiali, Prometheus, Jaeger)"
+    echo "1. Install all components (Istio, Kiali, Prometheus, Jaeger,Grafana)"
     echo "2. Install only Istio"
     read -rp "Enter your choice (1 or 2): " choice
     return $choice
@@ -56,6 +56,13 @@ function install_prometheus() {
     run_command "kubectl get pods -n istio-system" "Verify the Prometheus deployment"
 }
 
+# Function to install Prometheus
+function install_grafana() {
+    echo "Installing Grafana..."
+    run_command "kubectl apply -f ${ROOTFOLDER}/grafana/grafana-deployments.yaml" "Apply the Prometheus deployment manifest"
+    run_command "kubectl get pods -n istio-system" "Verify the Grafana deployment"
+}
+
 # Function to install Jaeger
 function install_jaeger() {
     echo "Installing Jaeger..."
@@ -98,10 +105,11 @@ function validate_installation() {
     fi
 
 
-    echo "Access the following URLs to check the services:"
-    echo "Kiali: http://$ingress_ip/kiali"
-    echo "Jaeger: http://$ingress_ip/jaeger"
-    echo "Prometheus: http://$ingress_ip/prometheus"
+    echo "Access the following URLs to check the services after few minutes:"
+    echo "Kiali: http://$ingress_ip/kiali/"
+    echo "Jaeger: http://$ingress_ip/jaeger/"
+    echo "Prometheus: http://$ingress_ip/prometheus/"
+    echo "Grafana: http://$ingress_ip/grafana/"
 }
 
 # Main script execution
@@ -112,6 +120,7 @@ if [ "$choice" -eq 1 ]; then
     install_istio
     install_kiali
     install_prometheus
+    install_grafana
     install_jaeger
     expose_services
     validate_installation
