@@ -111,6 +111,11 @@ data:
         grpc: "tracing.istio-system.svc.cluster.local:16685"
       prometheus:
         url: "http://prometheus.istio-system.svc.cluster.local:9090/prometheus"
+      grafana:
+        url: "http://grafana.istio-system.svc.cluster.local:3000/grafana"
+        in_cluster_url: http://grafana.istio-system.svc.cluster.local:3000/grafana
+
+
 
     identity:
       cert_file: ""
