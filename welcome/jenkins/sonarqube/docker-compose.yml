@@ -1,0 +1,42 @@
+version: '3'
+services:
+  sonarqube: 
+    ports: 
+      - '9000:9000' 
+    volumes: 
+      - sonarqube:/opt/sonarqube/
+    image: sonarqube
+    networks: 
+      - jenkins
+  jenkins:
+    image: 'ravindranathbarathy/jenkins'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home  
+    ports:
+      - '80:8080'
+      - '5001:50000'
+    networks: 
+      - jenkins
+
+  jenkins-slave:  
+    container_name: jenkins-slave
+    restart: always
+    environment:
+            - 'JENKINS_URL=http://jenkins:8080'
+    image: ravindranathbarathy/jenkins-slave:node
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_slave:/home/jenkins
+    depends_on:
+      - jenkins
+    networks: 
+      - jenkins
+
+volumes: 
+  jenkins_slave:
+  jenkins_home:
+  sonarqube:
+
+networks:
+ jenkins:
