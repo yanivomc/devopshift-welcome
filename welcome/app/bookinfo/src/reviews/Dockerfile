@@ -17,7 +17,7 @@ RUN curl --compressed https://static.snyk.io/cli/latest/snyk-linux?_gl=1*82pq22*
 RUN chmod +x ./snyk
 COPY ./snyk /usr/local/bin/
 # https://app.snyk.io/account - Register with a free account to generate authkey and updated below using link: https://app.snyk.io/account
-ENV SNYK_TOKEN=5cc168d3-b731-4e8e-b7c3-bf9244c95a4a
+ENV SNYK_TOKEN=CHANGETHETOKEN
 RUN ./snyk test /home/gradle/ --all-sub-projects
 
 
