@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image for the build stage
-                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build .'
+                    sh 'docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build -f welcome/Dockerfile .'
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     // Build and test the Docker image
-                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .'
+                    sh 'docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test -f welcome/Dockerfile .'
                     sh 'docker run --rm ${IMAGE_NAME}:${VERSION}-test'
                 }
             }
