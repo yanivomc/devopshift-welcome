@@ -1,6 +1,7 @@
 #!/bin/bash
 
-HOMEREPO="/home/ubuntu/workarea"
+#HOMEREPO="/home/ubuntu/workarea"
+HOMEREPO="$HOME/workarea"
 
 # Function to validate repository URL
 validate_repo() {
