@@ -7,15 +7,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Make sure the package repository is up to date
 RUN apt-get update && \
     apt-get -qy upgrade && \
-    apt-get install -qy git && \
-    apt-get install -qy openjdk-8-jdk && \
-    apt-get -qy autoremove
-
-# Install required packages without specifying versions
-RUN apt-get install -y \
+    apt-get install -qy \
+    git \
+    openjdk-8-jdk \
     iputils-ping \
     patchelf \
-    git \
     default-jdk \
     plantuml \
     doxygen \
@@ -25,22 +21,14 @@ RUN apt-get install -y \
     curl \
     vim \
     cifs-utils \
-    nfs-common
+    nfs-common && \
+    apt-get -qy autoremove
 
 # Install Python packages
-RUN pip3 install requests==2.22.0 && \
-    pip3 install Atlassian-python-API && \
+RUN pip3 install requests==2.22.0 Atlassian-python-API && \
     git config --global http.sslVerify false
 
-RUN mkdir -p /home/ciuser/sdk && \
-    mkdir -p /home/ciuser/.jfrog && \
-    mkdir -p /home/ciuser/.ssh
-
-# Test stage
-FROM builder as test
-
-# Add your test commands here, for example:
-# RUN some-test-command
+RUN mkdir -p /home/ciuser/sdk /home/ciuser/.jfrog /home/ciuser/.ssh
 
 # Final stage
 FROM ubuntu:20.04
