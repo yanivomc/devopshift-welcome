@@ -40,6 +40,7 @@ kubectl get pods -n elastic-system
 ## deploy-cluster
 Deploy Elasticsearch Cluster
 ```bash
+cd /home/ubuntu/workarea/devopshift/welcome/app/K8S/manifests/elastisearch
 kubectl apply -f elasticsearch.yaml
 ```
 Validate: Wait a minute or until the pods are in state running
