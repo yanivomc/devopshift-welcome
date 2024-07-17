@@ -30,6 +30,12 @@ RUN pip3 install requests==2.22.0 Atlassian-python-API && \
 
 RUN mkdir -p /home/ciuser/sdk /home/ciuser/.jfrog /home/ciuser/.ssh
 
+# Test stage
+FROM builder as test
+
+# Add your test commands here, for example:
+# RUN some-test-command
+
 # Final stage
 FROM ubuntu:20.04
 
