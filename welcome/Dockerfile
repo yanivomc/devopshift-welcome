@@ -11,11 +11,23 @@ RUN apt-get update && \
     apt-get install -qy openjdk-8-jdk && \
     apt-get -qy autoremove
 
-RUN apt install -y iputils-ping patchelf=0.10-2build1 git default-jdk=2:1.11-72 \
-    plantuml=1:1.2018.13+ds-2 doxygen=1.8.17-0ubuntu2 graphviz=2.42.2-3build2 \
-    xsltproc=1.1.34-4 python3-pip=20.0.2-5ubuntu1.6 curl vim cifs-utils=2:6.9-1ubuntu0.1 \
-    nfs-common=1:1.3.4-2.5ubuntu3.4
+# Install required packages without specifying versions
+RUN apt-get install -y \
+    iputils-ping \
+    patchelf \
+    git \
+    default-jdk \
+    plantuml \
+    doxygen \
+    graphviz \
+    xsltproc \
+    python3-pip \
+    curl \
+    vim \
+    cifs-utils \
+    nfs-common
 
+# Install Python packages
 RUN pip3 install requests==2.22.0 && \
     pip3 install Atlassian-python-API && \
     git config --global http.sslVerify false
