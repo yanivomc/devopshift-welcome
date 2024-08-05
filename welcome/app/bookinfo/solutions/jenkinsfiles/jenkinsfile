@@ -6,6 +6,8 @@ pipeline {
         VERSION = "v${env.BUILD_NUMBER}"
         REPO = 'my-docker-repo'
         CREDENTIALS_ID = 'docker-credentials'
+        DOCKERFFILE = 'Dockerfile'
+        DOCKERFILE_DIR = './welcome/app/bookinfo/solutions/jenkinsfiles'
     }
 
     tools {
@@ -15,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/yanivomc/docker-cicd'
+                git branch: 'jenkins-workshop', url: 'https://github.com/yanivomc/devopshift-welcome.git'
             }
         }
 
@@ -23,9 +25,8 @@ pipeline {
             steps {
                 script {
                         sh '''
-                        cd ./basics
-                        npm install
-                        echo "docker build --target build --tag ${IMAGE_NAME}:${VERSION}-build ."
+                        cd ${DOCKERFILE_DIR}
+                        docker build --target base --tag ${IMAGE_NAME}:${VERSION}-build .
                         '''
                     }
                 }
@@ -36,18 +37,30 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    echo "docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test ."
-                    echo "docker run --rm ${IMAGE_NAME}:${VERSION}-test"
+                    cd ${DOCKERFILE_DIR}
+                    docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .
+                    docker run --rm ${IMAGE_NAME}:${VERSION}-test
+                    '''
+                }
+            }
+        }
+         stage('lint') {
+            steps {
+                script {
+                    sh '''
+                    cd ${DOCKERFILE_DIR}
+                    docker build --target lint --tag ${IMAGE_NAME}:${VERSION} .
                     '''
                 }
             }
         }
 
-        stage('Run') {
+        stage('CreateArtifact') {
             steps {
                 script {
                     sh '''
-                    echo "docker build --target run --tag ${IMAGE_NAME}:${VERSION} ."
+                    cd ${DOCKERFILE_DIR}
+                    docker build --target production --tag ${IMAGE_NAME}:${VERSION} .
                     '''
                 }
             }
