@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'my-docker-image'
+        IMAGE_NAME = 'poalimdemo'
         VERSION = "v${env.BUILD_NUMBER}"
-        REPO = 'my-docker-repo'
+        REPO = 'yanivomc'
         CREDENTIALS_ID = 'docker-credentials'
         DOCKERFFILE = 'Dockerfile'
         DOCKERFILE_DIR = './welcome/app/bookinfo/solutions/jenkinsfiles'
@@ -59,25 +59,25 @@ pipeline {
                 script {
                     sh '''
                     cd ${DOCKERFILE_DIR}
-                    docker build --target production --tag ${IMAGE_NAME}:${VERSION} .
+                    docker build --target production --tag ${REPO}/${IMAGE_NAME}:${VERSION} .
                     '''
                 }
             }
         }
 
-        // stage('Push') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry("https://index.docker.io/v1/", "${CREDENTIALS_ID}") {
-        //                 sh '''
-        //                 echo "docker push ${REPO}/${IMAGE_NAME}:${VERSION}"
-        //                 echo "docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest"
-        //                 echo "docker push ${REPO}/${IMAGE_NAME}:latest"
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push') {
+            steps {
+                script {
+                    docker.withRegistry("https://index.docker.io/v1/", "${CREDENTIALS_ID}") {
+                        sh '''
+                        docker push ${REPO}/${IMAGE_NAME}:${VERSION}
+                        docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest
+                        docker push ${REPO}/${IMAGE_NAME}:latest
+                        '''
+                    }
+                }
+            }
+        }
     }
 
     post {
