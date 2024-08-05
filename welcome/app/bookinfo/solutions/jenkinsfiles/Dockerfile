@@ -8,13 +8,13 @@ RUN pip install -r requirements.txt
 FROM base as test
 WORKDIR /app
 COPY ./src/server.py /app/server.py
-RUN echo "Running unit test"
+RUN echo "Running unit test step"
 
 
 
 # Build lint stage
 FROM alpine:latest as lint
-RUN echo "Running lint"
+RUN echo "Running lint step"
 
 
 

@@ -10,10 +10,6 @@ pipeline {
         DOCKERFILE_DIR = './welcome/app/bookinfo/solutions/jenkinsfiles'
     }
 
-    tools {
-        nodejs 'NodeJS11' // Name of the NodeJS installation in Jenkins global configuration
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -32,25 +28,28 @@ pipeline {
                 }
             }
         
-
-        stage('Test') {
-            steps {
-                script {
-                    sh '''
-                    cd ${DOCKERFILE_DIR}
-                    docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .
-                    docker run --rm ${IMAGE_NAME}:${VERSION}-test
-                    '''
+        stage('Parallel Test and lint') {
+            parallel {
+                stage('Test') {
+                    steps {
+                        script {
+                            sh '''
+                            cd ${DOCKERFILE_DIR}
+                            docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test .
+                            docker run --rm ${IMAGE_NAME}:${VERSION}-test
+                            '''
+                        }
+                    }
                 }
-            }
-        }
-         stage('lint') {
-            steps {
-                script {
-                    sh '''
-                    cd ${DOCKERFILE_DIR}
-                    docker build --target lint --tag ${IMAGE_NAME}:${VERSION} .
-                    '''
+                stage('lint') {
+                    steps {
+                        script {
+                            sh '''
+                            cd ${DOCKERFILE_DIR}
+                            docker build --target lint --tag ${IMAGE_NAME}:${VERSION} .
+                            '''
+                        }
+                    }
                 }
             }
         }
