@@ -57,4 +57,9 @@ node {
             deleteDir()  // Clean up the workspace
         }
         echo 'Sending notification...'
-        // Example: Send email noti
+        // Example: Send email notification
+        mail to: 'team@example.com',
+             subject: "Jenkins Build ${currentBuild.fullDisplayName} - ${currentBuild.result}",
+             body: "Build details: ${env.BUILD_URL}"
+    }
+}
