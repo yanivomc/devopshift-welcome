@@ -1,0 +1,26 @@
+node {
+    try {
+        stage('Build') {
+            echo 'Building...'
+            // Example of a build step
+            sh 'make build'
+        }
+
+        stage('Test') {
+            echo 'Testing...'
+            // Example of a test step
+            sh 'make test'
+        }
+
+        stage('Deploy') {
+            echo 'Deploying...'
+            // Example of a deploy step
+            sh 'make deploy'
+        }
+    } catch (Exception e) {
+        echo 'Something failed!'
+        currentBuild.result = 'FAILURE'
+    } finally {
+        echo 'This will always run'
+    }
+}

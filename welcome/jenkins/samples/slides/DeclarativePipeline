@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // Example of a build step (e.g., compile, test)
+                sh 'make build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // Example of a test step (e.g., unit tests)
+                sh 'make test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                // Example of a deploy step (e.g., push to production)
+                sh 'make deploy'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'This will always run'
+        }
+        success {
+            echo 'This will run only if the build succeeds'
+        }
+        failure {
+            echo 'This will run only if the build fails'
+        }
+    }
+}
