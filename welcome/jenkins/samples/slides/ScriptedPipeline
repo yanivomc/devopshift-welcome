@@ -1,26 +1,60 @@
 node {
+    def buildSuccess = true
+
     try {
-        stage('Build') {
-            echo 'Building...'
-            // Example of a build step
-            sh 'make build'
+        // Dynamic agent selection based on environment variable
+        def agentLabel = env.BUILD_ENV == 'production' ? 'prod-agent' : 'dev-agent'
+        echo "Running on agent: ${agentLabel}"
+        
+        // Example: Checkout code from Git
+        stage('Checkout') {
+            checkout scm
         }
 
+        // Conditional stages based on parameters
+        if (params.RUN_BUILD) {
+            stage('Build') {
+                echo 'Building application...'
+                // Example build step with error handling
+                try {
+                    sh 'make build'
+                } catch (Exception e) {
+                    echo "Build failed: ${e.message}"
+                    buildSuccess = false
+                    throw e
+                }
+            }
+        }
+
+        // Parallel execution of tests
         stage('Test') {
-            echo 'Testing...'
-            // Example of a test step
-            sh 'make test'
+            parallel(
+                'Unit Tests': {
+                    echo 'Running unit tests...'
+                    sh 'make test-unit'
+                },
+                'Integration Tests': {
+                    echo 'Running integration tests...'
+                    sh 'make test-integration'
+                }
+            )
         }
 
-        stage('Deploy') {
-            echo 'Deploying...'
-            // Example of a deploy step
-            sh 'make deploy'
+        // Deploy stage only if build and tests are successful
+        if (buildSuccess) {
+            stage('Deploy') {
+                echo 'Deploying application...'
+                sh 'make deploy'
+            }
         }
+
     } catch (Exception e) {
-        echo 'Something failed!'
+        echo "Pipeline failed: ${e.message}"
         currentBuild.result = 'FAILURE'
     } finally {
-        echo 'This will always run'
-    }
-}
+        stage('Cleanup') {
+            echo 'Cleaning up workspace...'
+            deleteDir()  // Clean up the workspace
+        }
+        echo 'Sending notification...'
+        // Example: Send email noti
