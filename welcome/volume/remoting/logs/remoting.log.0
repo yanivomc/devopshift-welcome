@@ -1,23 +1,23 @@
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Locating server among [http://jenkins:8080/]
-Aug 25, 2024 9:21:07 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+Aug 26, 2024 10:24:07 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
 INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Agent discovery successful
   Agent address: jenkins
   Agent port:    50000
   Identity:      e2:07:02:f0:18:41:50:45:21:e2:23:eb:a6:dc:f8:e9
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Handshaking
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Connecting to jenkins:50000
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Server reports protocol JNLP4-connect-proxy not supported, skipping
-Aug 25, 2024 9:21:07 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:07 AM hudson.remoting.Launcher$CuiListener status
 INFO: Trying protocol: JNLP4-connect
-Aug 25, 2024 9:21:07 AM org.jenkinsci.remoting.protocol.impl.BIONetworkLayer$Reader run
+Aug 26, 2024 10:24:07 AM org.jenkinsci.remoting.protocol.impl.BIONetworkLayer$Reader run
 INFO: Waiting for ProtocolStack to start.
-Aug 25, 2024 9:21:08 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:08 AM hudson.remoting.Launcher$CuiListener status
 INFO: Remote identity confirmed: e2:07:02:f0:18:41:50:45:21:e2:23:eb:a6:dc:f8:e9
-Aug 25, 2024 9:21:08 AM hudson.remoting.Launcher$CuiListener status
+Aug 26, 2024 10:24:08 AM hudson.remoting.Launcher$CuiListener status
 INFO: Connected

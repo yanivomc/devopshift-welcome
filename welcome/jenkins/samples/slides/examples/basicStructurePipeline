@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage('Stage Name') {
+            steps {
+                // Commands or scripts to execute
+            }
+        }
+    }
+    post {
+        always {
+            // Actions to take regardless of pipeline success or failure
+        }
+    }
+}
