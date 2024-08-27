@@ -21,3 +21,5 @@ Aug 27, 2024 12:47:18 PM hudson.remoting.Launcher$CuiListener status
 INFO: Remote identity confirmed: e2:07:02:f0:18:41:50:45:21:e2:23:eb:a6:dc:f8:e9
 Aug 27, 2024 12:47:18 PM hudson.remoting.Launcher$CuiListener status
 INFO: Connected
+Aug 27, 2024 1:01:06 PM org.eclipse.jgit.util.FS$FileStoreAttributes getFsResolution
+WARNING: Thread[JGit-FileStoreAttributeReader-1,5,main]: got smaller file timestamp on /home/jenkins (/host_mark/Users), /home/jenkins/workspace/samplepipeline/.git/objects: 2024-08-27T13:01:06Z < 2024-08-27T13:01:06.335389Z. Aborting measurement at resolution PT0.664611S.
