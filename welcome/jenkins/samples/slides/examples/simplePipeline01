@@ -6,7 +6,6 @@ pipeline {
     }
 
     stages {
-    stages {
         stage('Clone Flask Project') {
             steps {
                 // Use the Git plugin to clone the repository
