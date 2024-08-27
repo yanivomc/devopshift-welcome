@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Clone Flask Project') {
-            steps {
-                // Use the Git plugin to clone the repository
-                git branch: 'main', url: 'https://github.com/app-generator/flask-volt-dashboard.git'
-            }
-        }
         stage('Setup Python Environment') {
             steps {
                 script {
