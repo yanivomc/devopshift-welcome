@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+    environment {
+        PYENV_HOME = "${WORKSPACE}/.pyenv"
+        FLASK_APP = 'run.py'
+        FLASK_ENV = 'development'
+    }
+
+    stages {
+        stage('Setup Python Environment') {
+            steps {
+                script {
+                    // Check if virtualenv is installed
+                    if (!sh(script: 'command -v virtualenv', returnStatus: true)) {
+                        sh 'pip install virtualenv'
+                    }
+
+                    // Delete previously built virtualenv
+                    sh 'rm -rf $PYENV_HOME'
+
+                    // Create virtualenv and install necessary packages
+                    sh '''
+                    virtualenv $PYENV_HOME
+                    . $PYENV_HOME/bin/activate
+                    pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Run Flask Application') {
+            steps {
+                script {
+                    // Stop any existing Flask process
+                    def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
+                    if (tasks) {
+                        echo "Stopping existing Flask application..."
+                        sh "pkill -9 -f 'flask run'"
+                    }
+
+                    // Start the Flask application
+                    echo 'Starting Flask application on 0.0.0.0:5001...'
+                    sh 'nohup flask run --host=0.0.0.0 --port=5001 --cert=adhoc > flask_app.log 2>&1 &'
+                }
+            }
+        }
+
+        stage('Verify Application') {
+            steps {
+                script {
+                    // Sleep to allow Flask to start
+                    sleep 5
+
+                    // Verify Flask application is running
+                    def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
+                    if (!tasks) {
+                        error "Flask application is not running!"
+                    } else {
+                        echo "Flask application is running successfully."
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            sh 'rm -rf $PYENV_HOME'
+        }
+    }
+}
