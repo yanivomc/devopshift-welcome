@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+        stage('Clone Flask Project') {
+            steps {
+                // Use the Git plugin to clone the repository
+                git branch: 'jenkins-workshop', url: 'https://github.com/yanivomc/devopshift-welcome.git'
+            }
+        }
         stage('Setup Python Environment') {
             steps {
                 script {
