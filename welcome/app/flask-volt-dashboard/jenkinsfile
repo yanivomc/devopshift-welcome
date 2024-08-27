@@ -1,0 +1,91 @@
+pipeline {
+    agent any
+
+    environment {
+        PYENV_HOME = "${env.WORKSPACE}/venv"
+    }
+
+    stages {
+        stage('Clone Flask Project') {
+            steps {
+                // Use the Git plugin to clone the repository
+                git branch: 'main', url: 'https://github.com/app-generator/flask-volt-dashboard.git'
+            }
+        }
+        stage('Setup Python Environment') {
+            steps {
+                script {
+                    // Install virtualenv if not available using bash
+                    sh '''#!/bin/bash
+                    if ! command -v virtualenv &> /dev/null; then
+                        echo "Installing virtualenv..."
+                        pip install virtualenv
+                    fi
+                    '''
+
+                    // Delete previously built virtualenv
+                    sh '''#!/bin/bash
+                    rm -rf $PYENV_HOME
+                    '''
+
+                    // Create virtualenv and install necessary packages
+                    sh '''#!/bin/bash
+                    virtualenv $PYENV_HOME
+                    source $PYENV_HOME/bin/activate
+                    pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Run Flask Application') {
+            steps {
+                script {
+                    // Stop any existing Flask process using bash
+                    sh '''#!/bin/bash
+                    tasks=$(pgrep -f "flask run")
+                    if [ -n "$tasks" ]; then
+                        echo "Stopping existing Flask application..."
+                        for pid in $tasks; do
+                            kill -9 $pid
+                            echo "Killed process $pid"
+                        done
+                    else
+                        echo "No Flask application running."
+                    fi
+                    '''
+
+                    // Start the Flask application using bash
+                    sh '''#!/bin/bash
+                    echo 'Starting Flask application on 0.0.0.0:5001...'
+                    nohup flask run --host=0.0.0.0 --port=5001 > flask_app.log 2>&1 &
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Application') {
+            steps {
+                script {
+                    // Sleep to allow Flask to start
+                    sleep 5
+
+                    // Verify Flask application is running
+                    def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
+                    if (!tasks) {
+                        error "Flask application is not running!"
+                    } else {
+                        echo "Flask application is running successfully."
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            sh 'rm -rf $PYENV_HOME'
+        }
+    }
+}
