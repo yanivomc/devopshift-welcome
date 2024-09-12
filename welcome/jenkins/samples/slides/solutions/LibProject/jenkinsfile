@@ -1,0 +1,43 @@
+@Library('my-shared-library') _
+
+pipeline {
+    agent any
+
+    environment {
+        APP_ENV = 'production'
+        // IF APP_DEBUG is set to 'true' the DEBUG_BRANCH will be used as we might run it using pipeline script without full git repo
+        APP_DEBUG = 'true'
+        DEBUG_BRANCH = 'develop'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Call the mock buildApp function
+                    myLibrary.buildApp()
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // If APP_DEBUG is set to 'true' set env.BRANCH_NAME to DEBUG_BRANCH
+                    env.BRANCH_NAME = env.APP_DEBUG == 'true' ? env.DEBUG_BRANCH : env.BRANCH_NAME
+                    // Call the mock deployApp function with the current branch name
+                    myLibrary.deployApp(env.BRANCH_NAME)
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Call the mock cleanup function
+                myLibrary.cleanup()
+            }
+        }
+    }
+}

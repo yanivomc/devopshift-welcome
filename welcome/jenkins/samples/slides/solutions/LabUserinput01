@@ -56,8 +56,8 @@ pipeline {
                             done
                         fi
 
-                        echo "Starting Flask application on 0.0.0.0:5001..."
-                        nohup flask run --host=0.0.0.0 --port=5001 > flask_app.log 2>&1 &
+                        echo "Starting Flask application on 0.0.0.0:5005..."
+                        nohup flask run --host=0.0.0.0 --port=5005 > flask_app.log 2>&1 &
                         '''
                     }
                 }
@@ -90,7 +90,7 @@ pipeline {
                 script {
                     // Wait for user interaction and store the result
                     def userInput = input message: 'Is the application running successfully? ',
-                                         parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'use the URL: http://REMOTEIP:5001 and Choose an option')]
+                                         parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'use the URL: http://REMOTEIP:5005 and Choose an option')]
                     // Set a variable based on user input
                     env.USER_CHOICE = userInput
                 }

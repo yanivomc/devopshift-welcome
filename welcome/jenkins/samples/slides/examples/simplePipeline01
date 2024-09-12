@@ -56,8 +56,8 @@ pipeline {
                             done
                         fi
 
-                        echo "Starting Flask application on 0.0.0.0:5001..."
-                        nohup flask run --host=0.0.0.0 --port=5001 > flask_app.log 2>&1 &
+                        echo "Starting Flask application on 0.0.0.0:5005..."
+                        nohup flask run --host=0.0.0.0 --port=5005 > flask_app.log 2>&1 &
                         '''
                     }
                 }
