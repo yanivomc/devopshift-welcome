@@ -1,5 +1,0 @@
-flask
-pymongo
-pika
-faker
-requests
