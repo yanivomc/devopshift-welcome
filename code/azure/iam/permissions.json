@@ -1,0 +1,25 @@
+{
+    "properties": {
+        "roleName": "jbterraformRole",
+        "description": "Custom role for Terraform with admin rights in a specific region, except user management",
+        "assignableScopes": [
+            "/subscriptions/672a3421-0dc3-4e2c-8225-c09d1b7c94a4"
+        ],
+        "permissions": [
+            {
+                "actions": [
+                    "Microsoft.Compute/*",
+                    "Microsoft.Network/*",
+                    "Microsoft.Storage/*",
+                    "Microsoft.Resources/subscriptions/resourceGroups/read",
+                    "Microsoft.Resources/subscriptions/resourceGroups/write"
+                ],
+                "notActions": [
+                    "Microsoft.Authorization/*"
+                ],
+                "dataActions": [],
+                "notDataActions": []
+            }
+        ]
+    }
+}
