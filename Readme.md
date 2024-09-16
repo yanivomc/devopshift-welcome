@@ -1,1 +1,1 @@
-Please switch to the required workshop branch
+Terraform workshop
