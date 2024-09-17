@@ -103,7 +103,7 @@ resource "time_sleep" "wait_for_ip" {
   create_duration = "30s"  # Wait for 30 seconds to allow Azure to allocate the IP
 }
 
-resource "null_resource" "validate_ip " {
+resource "null_resource" "validate_ip" {
   provisioner "local-exec" {
         command = <<EOT
       if [ -z "${azurerm_public_ip.pip.ip_address}" ]; then
