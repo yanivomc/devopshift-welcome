@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    time = {
+      source = "hashicorp/time"
+      version = "0.7.2"  # Ensure you're using the latest version
+    }
+  }
+}
+
 provider "azurerm" {
   features {}
 }
@@ -90,8 +99,14 @@ resource "azurerm_linux_virtual_machine" "vm" {
   computer_name = "[YOURNAME]-vm"
 }
 
+resource "time_sleep" "wait_for_ip" {
+  create_duration = "30s"  # Wait for 30 seconds to allow Azure to allocate the IP
+}
+
 
 output "vm_public_ip" {
-  value = azurerm_public_ip.pip.ip_address
+  value       = azurerm_public_ip.pip.ip_address
+  depends_on  = [time_sleep.wait_for_ip]  # Wait for the time_sleep resource to complete
   description = "Public IP address of the VM"
 }
+
