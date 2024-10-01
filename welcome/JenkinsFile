@@ -49,8 +49,15 @@ pipeline {
         
         stage('Clone Flask Project') {
             steps {
+                  script {
+                    // Wait for user interaction and store the result
+                    def userInput = input message: 'please enter your git repo to clone',
+                                         parameters: [string(defaultValue: 'None', description: 'my repo url from Git')]
+                    // Set a variable based on user input
+                    env.GIT_REPO_URL = userInput
+                }
                 // Use the Git plugin to clone the repository
-                git branch: 'jenkins-workshop', url: 'https://github.com/VitalyD190/devopshift-welcome.git'
+                git branch: 'jenkins-workshop', url: env.GIT_REPO_URL
             }
         }
 
