@@ -52,7 +52,7 @@ pipeline {
                   script {
                     // Wait for user interaction and store the result
                     def userInput = input message: 'please enter your git repo to clone',
-                                         parameters: [string(defaultValue: 'None', description: 'my repo url from Git')]
+                                         parameters: [string(defaultValue: 'None', description: 'my repo url from Git',name: 'Vitaly')]
                     // Set a variable based on user input
                     env.GIT_REPO_URL = userInput
                 }
