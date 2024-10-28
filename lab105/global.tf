@@ -1,8 +1,9 @@
-# Define the provider and global variables
+// File 1: provider.tf
 provider "azurerm" {
   features {}
 }
 
+// File 2: variables.tf
 variable "yourname" {
   default     = "yanivc"
   description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
@@ -33,8 +34,6 @@ variable "vm_size" {
   description = "Size of the virtual machine"
 }
 
-
-# Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.yourname}"
   location = var.location
