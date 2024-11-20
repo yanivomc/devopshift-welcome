@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.7.0
+  node: circleci/node@4.7.0  # JavaScript linting orb
+  java: circleci/openjdk@1.0.0  # Java orb for Maven build and tests
 
 jobs:
   build:
@@ -9,12 +10,63 @@ jobs:
       - image: cimg/openjdk:11.0  # Java build environment
     steps:
       - checkout
+      - java/maven:  # Using the Java orb for building
+          command: "mvn clean package spring-boot:repackage"
+          working_directory: "code/nexus-lab/circleci-101"
+
+  lint:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
       - run:
-          name: Build the Project
-          command: cd code/nexus-lab/circleci-101 && mvn clean package spring-boot:repackage
+          name: Lint the Code
+          command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
+
+  unit_test:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - java/maven:  # Using Java orb for running unit tests
+          command: "mvn test"
+          working_directory: "code/nexus-lab/circleci-101"
+
+  deploy_mock:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - run:
+          name: Mock Deployment
+          command: echo "Deployment complete."
+
+  node_lint:
+    docker:
+      - image: cimg/node:14.17
+    steps:
+      - checkout
+      - run:
+          name: Lint JavaScript Code
+          command: |
+            cd code/nexus-lab/circleci-101
+            npm install
+            npm run lint
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build
+      - node_lint:
+          requires:
+            - build
+      - lint:
+          requires:
+            - build
+      - unit_test:
+          requires:
+            - build
+      - deploy_mock:
+          requires:
+            - lint
+            - unit_test
