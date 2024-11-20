@@ -1,17 +1,18 @@
 version: 2.1
 
 orbs:
-  maven: circleci/maven@2.0.0  # Java orb for Maven build and tests
+  maven: circleci/maven@2.0.0  # Maven orb for Java build and tests
+  node: circleci/node@4.7.0    # JavaScript linting orb
 
 jobs:
   build:
-    docker:
-      - image: cimg/openjdk:11.0  # Java build environment
+    executor:
+      name: maven/default
     steps:
       - checkout
-      - maven/test:  # Using the Java orb for building
-          command: "mvn clean package spring-boot:repackage"
-          working_directory: "code/nexus-lab/circleci-101"
+      - maven/with-cache:  # Using the Maven orb to cache dependencies
+          steps:
+            - maven/compile
 
   lint:
     docker:
@@ -23,13 +24,11 @@ jobs:
           command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
 
   unit_test:
-    docker:
-      - image: cimg/openjdk:11.0
+    executor:
+      name: maven/default
     steps:
       - checkout
-      - maven/test:  # Using Java orb for running unit tests
-          command: "mvn test"
-          working_directory: "code/nexus-lab/circleci-101"
+      - maven/test  # Using the Maven orb for running unit tests
 
   deploy_mock:
     docker:
