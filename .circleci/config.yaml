@@ -1,7 +1,6 @@
 version: 2.1
 
-# orbs:
-  # node: circleci/node@4.7.0
+
 
 jobs:
   build:
@@ -14,14 +13,15 @@ jobs:
           command: cd code/nexus-lab/circleci-101 && mvn clean package spring-boot:repackage
 
   lint:
-    docker:
-      - image: cimg/openjdk:11.0
-    steps:
-      - checkout
-      - run:
-          name: Lint the Code
-          command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
-
+      steps:
+        - checkout
+        - maven/with_cache:
+            app_src_directory:
+              - code/nexus-lab/circleci-101
+            steps:
+              - run:
+                  name: Lint the Code
+                  command: mvn checkstyle:check
   unit_test:
     docker:
       - image: cimg/openjdk:11.0
