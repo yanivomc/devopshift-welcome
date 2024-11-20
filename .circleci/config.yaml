@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  java: circleci/openjdk@1.0.0  # Java orb for Maven build and tests
+  java: circleci/maven@2.0.0  # Java orb for Maven build and tests
 
 jobs:
   build:
