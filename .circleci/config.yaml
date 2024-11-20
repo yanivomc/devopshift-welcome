@@ -48,23 +48,23 @@ workflows:
       - lint:
           requires:
             - build
-      - unit_test:
+      - unit_test: # using docker executor for running unit tests
+          requires:
+            - build
+      - maven/test: # using maven orb for running unit tests 
+          executor: 
+            name: maven/default
+            tag: '17.0'
+          maven_command: mvn
+          command: test 
+          settings_file: settings.xml
+          verify_dependencies: false
+          app_src_directory: ./code/nexus-lab/circleci-101
+          test_results_path: ./target/surefire-reports
           requires:
             - build
       - deploy_mock:
           requires:
             - lint
             - unit_test
-  maven:
-    jobs:
-      - maven/build:
-          executor: 
-            name: maven/default
-            tag: '17.0'
-          maven_command: mvn
-          command: clean package spring-boot:repackage 
-          settings_file: settings.xml
-          verify_dependencies: false
-          app_src_directory: ./code/nexus-lab/circleci-101
-          # working_directory: ./code/nexus-lab/circleci-101
-
+      
