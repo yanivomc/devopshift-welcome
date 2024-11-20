@@ -13,23 +13,22 @@ jobs:
           command: cd code/nexus-lab/circleci-101 && mvn clean package spring-boot:repackage
 
   lint:
-      steps:
-        - checkout
-        - maven/with_cache:
-            app_src_directory:
-              - code/nexus-lab/circleci-101
-            steps:
-              - run:
-                  name: Lint the Code
-                  command: mvn checkstyle:check
-  unit_test:
     docker:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
-          name: Run Unit Tests
-          command: cd code/nexus-lab/circleci-101 && mvn test
+          name: Lint the Code
+          app_src_directory: ./code/nexus-lab/circleci-101
+          command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
+
+  unit_test:
+    steps:
+      - maven_test:
+          app_src_directory: ./code/nexus-lab/circleci-101
+          working_directory: ./code/nexus-lab/circleci-101
+          
+          
 
   deploy_mock:
     docker:
