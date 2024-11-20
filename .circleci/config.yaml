@@ -9,7 +9,7 @@ jobs:
       - image: cimg/openjdk:11.0  # Java build environment
     steps:
       - checkout
-      - java/maven:  # Using the Java orb for building
+      - maven/test:  # Using the Java orb for building
           command: "mvn clean package spring-boot:repackage"
           working_directory: "code/nexus-lab/circleci-101"
 
@@ -27,7 +27,7 @@ jobs:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
-      - java/maven:  # Using Java orb for running unit tests
+      - maven/test:  # Using Java orb for running unit tests
           command: "mvn test"
           working_directory: "code/nexus-lab/circleci-101"
 
