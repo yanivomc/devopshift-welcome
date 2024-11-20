@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@2.0.0  # Maven orb for Java build and tests
+  node: circleci/node@4.7.0    # JavaScript linting orb
 
 jobs:
   build:
@@ -9,14 +10,12 @@ jobs:
       name: maven/default
     steps:
       - checkout
-      - maven/install-deps:
-          working_directory: code/nexus-lab/circleci-101
-      - maven/test:
-          working_directory: code/nexus-lab/circleci-101
-      - run:
-          name: Package the Application
-          command: mvn clean package spring-boot:repackage
-          working_directory: code/nexus-lab/circleci-101
+      - maven/with-cache:  # This will cache dependencies to speed up builds
+          steps:
+            - run:
+                name: Build the Project
+                command: mvn clean package spring-boot:repackage
+                working_directory: code/nexus-lab/circleci-101
 
   lint:
     docker:
@@ -32,8 +31,10 @@ jobs:
       name: maven/default
     steps:
       - checkout
-      - maven/test:
-          working_directory: code/nexus-lab/circleci-101
+      - maven/with-cache:  # Use caching for tests
+          steps:
+            - maven/test:
+                working_directory: code/nexus-lab/circleci-101
 
   deploy_mock:
     docker:
