@@ -67,5 +67,5 @@ workflows:
           settings_file: settings.xml
           verify_dependencies: false
           app_src_directory: ./code/nexus-lab/circleci-101
-          working_directory: ./code/nexus-lab/circleci-101
+          # working_directory: ./code/nexus-lab/circleci-101
 
