@@ -50,7 +50,7 @@ workflows:
       - unit_test:
           requires:
             - build
-      -  aven_test:
+      -  maven_test:
           jobs:
             - maven/test:
                 requires:
