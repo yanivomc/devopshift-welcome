@@ -29,10 +29,12 @@ jobs:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvnn deploy_mock:
+          command: mvn test
+
+  deploy_mock:
     docker:
       - image: circleci/openjdk:11-jdk
-  steps:
+    steps:
       - run:
           name: Mock Deployment
           command: echo "Deployment complete."
