@@ -1,0 +1,54 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.7.0
+
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:11-jdk  # Java build environment
+    steps:
+      - checkout
+      - run:
+          name: Build the Project
+          command: mvn clean package spring-boot:repackage
+
+  lint:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    steps:
+      - checkout
+      - run:
+          name: Lint the Code
+          command: mvn checkstyle:check
+
+  unit_test:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: mvnn deploy_mock:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    steps:
+      - run:
+          name: Mock Deployment
+          command: echo "Deployment complete."
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - unit_test:
+          requires:
+            - build
+      - deploy_mock:
+          requires:
+            - lint
+            - unit_test
