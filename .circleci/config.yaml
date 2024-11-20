@@ -32,6 +32,8 @@ jobs:
   #         command: cd code/nexus-lab/circleci-101 && mvn test
 
   unit_test:
+    docker:
+    - image: cimg/openjdk:11.0
     steps:
       - checkout
       - maven/test:
