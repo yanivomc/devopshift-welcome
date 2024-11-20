@@ -6,34 +6,34 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:11-jdk  # Java build environment
+      - image: cimg/openjdk:11.0  # Java build environment
     steps:
       - checkout
       - run:
           name: Build the Project
-          command: mvn clean package spring-boot:repackage
+          command: cd code/nexus-lab/circleci-101 && mvn clean package spring-boot:repackage
 
   lint:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
           name: Lint the Code
-          command: mvn checkstyle:check
+          command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
 
   unit_test:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: cimg/openjdk:11.0
     steps:
       - checkout
       - run:
           name: Run Unit Tests
-          command: mvn test
+          command: cd code/nexus-lab/circleci-101 && mvn test
 
   deploy_mock:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: cimg/openjdk:11.0
     steps:
       - run:
           name: Mock Deployment
