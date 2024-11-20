@@ -57,7 +57,7 @@ workflows:
             - unit_test
   maven:
     jobs:
-      - maven/test:
+      - maven/build:
           executor: 
             name: maven/default
             tag: '17.0'
