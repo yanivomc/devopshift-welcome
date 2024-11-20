@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   maven: circleci/maven@2.0.0  # Maven orb for Java build and tests
-  node: circleci/node@4.7.0    # JavaScript linting orb
+
 
 jobs:
   build:
@@ -10,9 +10,8 @@ jobs:
       name: maven/default
     steps:
       - checkout
-      - maven/with-cache:  # Using the Maven orb to cache dependencies
-          steps:
-            - maven/compile
+      - maven/compile:
+          working_directory: code/nexus-lab/circleci-101
 
   lint:
     docker:
@@ -28,7 +27,8 @@ jobs:
       name: maven/default
     steps:
       - checkout
-      - maven/test  # Using the Maven orb for running unit tests
+      - maven/test:
+          working_directory: code/nexus-lab/circleci-101
 
   deploy_mock:
     docker:
