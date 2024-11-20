@@ -1,8 +1,7 @@
 version: 2.1
 
 orbs:
-  maven: circleci/maven@2.0.0  # Maven orb for Java build and tests
-
+  maven: circleci/maven@3.0.0  # Maven orb for Java build and tests
 
 jobs:
   build:
@@ -10,7 +9,13 @@ jobs:
       name: maven/default
     steps:
       - checkout
-      - maven/compile:
+      - maven/install-deps:
+          working_directory: code/nexus-lab/circleci-101
+      - maven/test:
+          working_directory: code/nexus-lab/circleci-101
+      - run:
+          name: Package the Application
+          command: mvn clean package spring-boot:repackage
           working_directory: code/nexus-lab/circleci-101
 
   lint:
