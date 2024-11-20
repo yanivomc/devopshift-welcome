@@ -22,14 +22,21 @@ jobs:
           app_src_directory: ./code/nexus-lab/circleci-101
           command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
 
+  # unit_test:
+  #   docker:
+  #     - image: cimg/openjdk:11.0
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Run Unit Tests
+  #         command: cd code/nexus-lab/circleci-101 && mvn test
+
   unit_test:
-    docker:
-      - image: cimg/openjdk:11.0
     steps:
       - checkout
-      - run:
+      - maven/test:
           name: Run Unit Tests
-          command: cd code/nexus-lab/circleci-101 && mvn test
+          app_src_directory: ./code/nexus-lab/circleci-101
 
   deploy_mock:
     docker:
@@ -50,11 +57,6 @@ workflows:
       - unit_test:
           requires:
             - build
-      -  maven_test:
-          jobs:
-            - maven/test:
-                requires:
-                  - build
       - deploy_mock:
           requires:
             - lint
