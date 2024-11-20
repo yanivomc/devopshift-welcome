@@ -17,7 +17,6 @@ jobs:
     docker:
       - image: cimg/openjdk:11.0
     steps:
-      - checkout
       - run:
           name: Lint the Code
           command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
@@ -26,7 +25,6 @@ jobs:
     docker:
       - image: cimg/openjdk:11.0
     steps:
-      - checkout
       - run:
           name: Run Unit Tests
           command: cd code/nexus-lab/circleci-101 && mvn test
