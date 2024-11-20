@@ -20,7 +20,6 @@ jobs:
       - checkout
       - run:
           name: Lint the Code
-          app_src_directory: ./code/nexus-lab/circleci-101
           command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
 
   unit_test:
@@ -63,7 +62,7 @@ workflows:
             name: maven/default
             tag: '17.0'
           maven_command: mvn
-          command: clean 
+          command: clean package spring-boot:repackage 
           settings_file: settings.xml
           verify_dependencies: false
           app_src_directory: ./code/nexus-lab/circleci-101
