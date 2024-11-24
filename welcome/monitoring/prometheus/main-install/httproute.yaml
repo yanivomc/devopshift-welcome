@@ -4,7 +4,7 @@ metadata:
   name: prometheus
 spec:
   parentRefs:
-  - name: fefaker-gateway
+  - name: global-gateway
   rules:
   - matches:
     - path:
