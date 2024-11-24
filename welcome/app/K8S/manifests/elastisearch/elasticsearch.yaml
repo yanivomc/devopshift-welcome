@@ -4,7 +4,7 @@ metadata:
   name: quickstart
   namespace: default
 spec:
-  version: 8.2.0
+  version: 8.16.0
   nodeSets:
   - name: default
     count: 1

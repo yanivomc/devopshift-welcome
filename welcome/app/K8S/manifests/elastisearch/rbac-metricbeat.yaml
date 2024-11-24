@@ -84,7 +84,7 @@ subjects:
 #   namespace: default
 # spec:
 #   type: metricbeat
-#   version: 8.2.0
+#   version: 8.16.0
 #   elasticsearchRef:
 #     name: quickstart
 #   kibanaRef:

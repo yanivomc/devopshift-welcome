@@ -47,7 +47,7 @@ Validate: Wait a minute or until the pods are in state running
 ```bash
 kubectl get Elasticsearch
 NAME         HEALTH   NODES   VERSION   PHASE   AGE
-quickstart   green    1       8.2.0     Ready   3m13s
+quickstart   green    1       8.16.0     Ready   3m13s
 ```
 
 # deploy-kibana
@@ -59,7 +59,7 @@ Validate: Wait a minute or until the pods are in state running
 ```bash
 kubectl get kibana
 NAME         HEALTH   NODES   VERSION   AGE
-quickstart   green    1       8.2.0     74s
+quickstart   green    1       8.16.0     74s
 ```
 
 ## Access-Kibana
