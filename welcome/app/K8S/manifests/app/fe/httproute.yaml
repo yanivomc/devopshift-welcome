@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fefaker
+spec:
+  parentRefs:
+  - name: fefaker-gateway
+  rules:
+  - matches:
+    - path:
+        type: Exact
+        value: /metrics/
+    backendRefs:
+    - name: fe-service
+      port: 80
