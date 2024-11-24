@@ -7,11 +7,17 @@ spec:
   version: 8.16.0
   nodeSets:
   - name: default
-    count: 1
+    count: 3  # You can adjust this number based on your requirements
     config:
-      xpack.security.enabled: false
-      node.store.allow_mmap: false
-  http:
-    tls:
-      selfSignedCertificate:
-        disabled: true
+      node.store.allow_mmap: false  # Disable mmap if required by the underlying storage
+      xpack.security.enabled: true  # Default in 8.x, make sure this matches your needs
+      xpack.security.transport.ssl.enabled: true  # Transport layer encryption
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi  # Ensure you have enough storage requested

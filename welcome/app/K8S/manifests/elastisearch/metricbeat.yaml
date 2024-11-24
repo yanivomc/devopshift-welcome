@@ -12,10 +12,15 @@ spec:
     name: quickstart
   config:
     setup.kibana:
-      host: "http://quickstart-kb-http.default.svc:5601"
+      host: "http://quickstart-kb-http.default.svc:5601/kibana"  # Changed to HTTPS
+      ssl.verification_mode: "none"  # Disable SSL verification for self-signed certificates
     setup.dashboards:
       enabled: true
       directory: /usr/share/metricbeat/kibana
+    output.elasticsearch:
+      hosts: ["https://quickstart-es-http.default.svc.cluster.local:9200"]  # Changed to HTTPS
+      ssl:
+        verification_mode: "none"  # Disable SSL verification for self-signed certificates
     metricbeat:
       autodiscover:
         providers:
@@ -57,7 +62,7 @@ spec:
         hosts:
         - https://${HOST_IP}:10250
         bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        ssl.verification_mode: "none"
+        ssl.verification_mode: "none"  # Ensure that Metricbeat doesn’t fail on verification
       - module: kubernetes
         metricsets:
         - state_node

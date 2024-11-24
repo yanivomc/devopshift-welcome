@@ -10,9 +10,11 @@ spec:
     name: quickstart
   config:
     server.host: "0.0.0.0"
-    server.basePath: "/kibana"  # Add this line
-    server.rewriteBasePath: true  # Add this line to make Kibana use /kibana as its base path
-    elasticsearch.hosts: ["http://quickstart-es-http.default.svc.cluster.local:9200"]
+    server.basePath: "/kibana"  # Makes Kibana available under /kibana
+    server.rewriteBasePath: true  # Rewrites URLs to use /kibana
+    elasticsearch.hosts: ["https://quickstart-es-http.default.svc.cluster.local:9200"]  # Use HTTPS for the Elasticsearch host
+    elasticsearch.ssl.verificationMode: "none"  # Disable SSL verification for self-signed certificates
+
   http:
     tls:
       selfSignedCertificate:

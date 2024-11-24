@@ -20,9 +20,13 @@ spec:
       json.keys_under_root: true
       json.add_error_key: true
     output.elasticsearch:
-      hosts: ["http://quickstart-es-http.default.svc.cluster.local:9200"]
+      hosts: ["https://quickstart-es-http.default.svc.cluster.local:9200"]  # Change to HTTPS
       indices:
         - index: "filebeat-fe-%{[agent.version]}-%{+yyyy.MM.dd}"
+      ssl:
+        verification_mode: "none"  # Use this for self-signed certificates
+        # Optional: Use a specific certificate if needed
+        # certificate_authorities: ["/etc/certs/ca.crt"] 
   daemonSet:
     podTemplate:
       spec:
@@ -39,6 +43,15 @@ spec:
             mountPath: /var/log/pods
           - name: varlibdockercontainers
             mountPath: /var/lib/docker/containers
+          env:
+          - name: ELASTICSEARCH_USERNAME
+            value: elastic
+          
+          - name: ELASTICSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: quickstart-es-elastic-user  # Reference to the Elasticsearch secret
+                key: elastic
         volumes:
         - name: varlogcontainers
           hostPath:
