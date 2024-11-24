@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: prometheus
   name: prometheus
-  namespace: istio-system
+  
   annotations:
     {}
 ---
@@ -29,7 +29,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: prometheus
   name: prometheus
-  namespace: istio-system
+  
 data:
   allow-snippet-annotations: "false"
   alerting_rules.yml: |
@@ -492,7 +492,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: prometheus
-    namespace: istio-system
+    
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -511,7 +511,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: prometheus
   name: prometheus
-  namespace: istio-system
+  
 spec:
   ports:
     - name: http
@@ -523,7 +523,7 @@ spec:
     app.kubernetes.io/name: prometheus
     app.kubernetes.io/instance: prometheus
   sessionAffinity: None
-  type: "ClusterIP"
+  type: LoadBalancer
 ---
 # Source: prometheus/templates/deploy.yaml
 apiVersion: apps/v1
@@ -538,7 +538,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: prometheus
   name: prometheus
-  namespace: istio-system
+  
 spec:
   selector:
     matchLabels:
