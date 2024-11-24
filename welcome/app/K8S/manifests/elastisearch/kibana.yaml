@@ -17,5 +17,22 @@ spec:
         disabled: true
     service:
       spec:
-        type: LoadBalancer # default is ClusterIP
+        type: ClusterIP
 
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kibana-httproute
+  namespace: default  
+spec:
+  parentRefs:
+    - name: global-gateway  # Make sure this matches your defined Gateway resource
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /kibana
+      backendRefs:
+        - name: quickstart-kb-http  # The name of the Kibana service created by ECK. Usually, it's "<kibana-name>-kb-http"
+          port: 5601                # Default Kibana port
