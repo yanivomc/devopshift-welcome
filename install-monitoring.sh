@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOTFOLDER="/home/ubuntu/workarea/devopshift/welcome/istio/"
+ROOTFOLDER="/home/ubuntu/workarea/devopshift/welcome/monitoring/"
 
 # Function to prompt user for installation choice
 function prompt_installation_choice() {
@@ -55,7 +55,7 @@ function install_kiali() {
 function install_prometheus() {
     echo "Installing Prometheus..."
     run_command "kubectl apply -f ${ROOTFOLDER}/prometheus/prometheus-deployments.yaml" "Apply the Prometheus deployment manifest"
-    run_command "kubectl get pods -n istio-system" "Verify the Prometheus deployment"
+    run_command "kubectl get pods " "Verify the Prometheus deployment"
 }
 
 # Function to install Prometheus
