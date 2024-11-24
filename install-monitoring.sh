@@ -54,7 +54,7 @@ function install_kiali() {
 # Function to install Prometheus
 function install_prometheus() {
     echo "Installing Prometheus..."
-    run_command "kubectl apply -f ${ROOTFOLDER}/prometheus/prometheus-deployments.yaml" "Apply the Prometheus deployment manifest"
+    run_command "kubectl apply -f ${ROOTFOLDER}/prometheus/main-install/ ." "Apply the Prometheus deployment manifest"
     run_command "kubectl get pods " "Verify the Prometheus deployment"
 }
 
@@ -127,8 +127,8 @@ if [ "$choice" -eq 1 ]; then
     expose_services
     validate_installation
 elif [ "$choice" -eq 2 ]; then
-    install_istio
-    validate_installation
+    install_prometheus
+    # validate_installation
 else
     echo "Invalid choice. Exiting."
     exit 1
