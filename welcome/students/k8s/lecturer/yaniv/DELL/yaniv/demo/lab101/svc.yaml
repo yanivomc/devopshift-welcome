@@ -1,0 +1,16 @@
+kind: Service      # Create new service
+apiVersion: v1     
+metadata:
+  name: spring-svc
+  labels:
+    app: nginx
+spec:
+  selector:
+   app: nginx   # Run on any pod(s) with label - app: myapp
+  type: LoadBalancer
+  ports:          # Map incoming port to target port
+  - name: http-web    # Setting multiple ports listterns 
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+    
