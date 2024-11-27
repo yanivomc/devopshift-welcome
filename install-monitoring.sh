@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#Installing motniroing tools
 ROOTFOLDER="/home/ubuntu/workarea/devopshift/welcome/monitoring/"
 
 # Function to prompt user for installation choice
