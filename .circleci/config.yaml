@@ -1,6 +1,0 @@
-version: 2.1
-
-orbs:
-  maven: circleci/maven@2.0.0  # Maven orb for building and testing Java projects
-
-# Define the jobs that run in the build pipeline
