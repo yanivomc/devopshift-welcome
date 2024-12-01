@@ -23,10 +23,13 @@ jobs:
               "blocks": [
                 {
                   "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Mock Build Completed Successfully*"
-                  }
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Build Passed*",
+                      "emoji": true
+                    }
+                  ]
                 }
               ]
             }
