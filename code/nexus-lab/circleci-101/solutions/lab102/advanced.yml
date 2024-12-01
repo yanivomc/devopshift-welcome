@@ -1,0 +1,77 @@
+# Lab Option 2: Advanced Level
+
+version: 2.1
+
+parameters:
+  deploy_target:
+    type: string
+    default: "development"
+    enum: ["staging", "production", "development"]
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Build Project
+          command: npm run build
+
+  test:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: Run Tests - Environment 1
+          command: echo "Running tests in environment 1"
+      - run:
+          name: Run Tests - Environment 2
+          command: echo "Running tests in environment 2"
+
+  deploy:
+    docker:
+      - image: circleci/node:14
+    parameters:
+      deploy_target:
+        type: string
+    steps:
+      - run:
+          name: Deploy
+          command: |
+            echo "Deploying to << parameters.deploy_target >> environment."
+      - when:
+          condition:
+            equal: ["<< parameters.deploy_target >>", "production"]
+          steps:
+            - run:
+                name: Production Verification
+                command: echo "Performing additional verification for production..."
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - feature/*
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+            tags:
+              only:
+                - v*
+          deploy_target: "production"

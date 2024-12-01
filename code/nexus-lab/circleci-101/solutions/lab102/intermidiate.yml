@@ -1,0 +1,59 @@
+# Lab Option 1: Intermediate Level
+
+version: 2.1
+
+parameters:
+  environment:
+    type: string
+    default: "staging"
+    enum: ["staging", "production"]
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            echo "Installing dependencies..."
+            npm install
+      - run:
+          name: Run Unit Tests
+          command: |
+            echo "Running tests on branch: $CIRCLE_BRANCH"
+            npm test
+
+  deploy:
+    docker:
+      - image: circleci/node:14
+    parameters:
+      environment:
+        type: string
+    steps:
+      - run:
+          name: Deploy
+          command: |
+            echo "Deploying to << parameters.environment >> environment."
+      - when:
+          condition:
+            equal: ["<< parameters.environment >>", "production"]
+          steps:
+            - run:
+                name: Production Verification
+                command: echo "Performing production-specific verification..."
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+          environment: "production"
