@@ -6,6 +6,7 @@ pipeline {
         PROJECT_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard"
         FLASK_APP = 'run.py'
         FLASK_ENV = 'development'
+        DOCKERFILESRC = '${WORKSPACE}/welcome/jenkins/samples/solutions/simplepipline/dockersamples/'
     }
 
     stages {
@@ -16,17 +17,17 @@ pipeline {
             }
         }
 
-        stage('Setup Python Environment and Install Dependencies') {
+        stage('Setup Python Environment - build') {
             steps {
                 dir("${PROJECT_HOME}") {
                     script {
                         // Install virtualenv if not available
-                        sh '''#!/bin/bash
-                        if ! command -v virtualenv &> /dev/null; then
-                            echo "Installing virtualenv..."
-                            pip install virtualenv
-                        fi
-                        
+                         echo "Builder"
+                         sh '''#!/bin/bash
+                                
+                                docker build --target build -t yaniv -f $DOCKERFILESRC
+                                docker ps 
+                                docker kill redis
                         '''
                     }
                 }
@@ -59,8 +60,7 @@ pipeline {
                          sh '''#!/bin/bash
                                 
                                 docker run -tid --rm --name redis redis:latest
-                                docker ps
-                                 
+                                docker ps 
                                 docker kill redis
                         '''
                     }
