@@ -53,10 +53,16 @@ pipeline {
                         }
                     }
                 }
-                stage('Hello World') {
+                stage('REDIS TESTING') {
                     steps {
                         echo "Hello World"
-                        sh 'sleep 10s'
+                         sh '''#!/bin/bash
+                                
+                                docker run -tid --rm --name redis redis:latest
+                                docker ps
+                                 
+                                docker kill redis
+                        '''
                     }
                 }
             }
