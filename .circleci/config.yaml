@@ -1,27 +1,21 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.9.3
+  slack: circleci/slack@4.5.0
 
 jobs:
-  mock-build:
+  build:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/node:14
     steps:
+      - checkout
       - run:
           name: Mock Build Step
           command: |
             echo "Starting the mock build..."
-            sleep 5
+            sleep 10
             echo "Build complete."
-
-workflows:
-  build-and-notify:
-    jobs:
-      - mock-build
       - slack/notify:
-          requires:
-            - mock-build
           event: pass
           template: basic_success_1
           custom: |
@@ -36,3 +30,9 @@ workflows:
                 }
               ]
             }
+
+workflows:
+  version: 2
+  simple-build-notify:
+    jobs:
+      - build
