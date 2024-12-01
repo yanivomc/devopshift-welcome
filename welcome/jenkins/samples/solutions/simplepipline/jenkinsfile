@@ -26,8 +26,7 @@ pipeline {
                          sh '''#!/bin/bash
                                 
                                 docker build --target build -t yaniv -f $DOCKERFILESRC .
-                                docker ps 
-                                docker kill redis
+
                         '''
                     }
                 }
