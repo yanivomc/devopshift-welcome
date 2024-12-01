@@ -1,72 +1,34 @@
+# Lab Option 2: Advanced Level
 
 version: 2.1
 
 orbs:
- maven: circleci/maven@2.0.0  # Maven orb for building and testing Java projects
+  slack: circleci/slack@4.5.0
 
 jobs:
- build:
-   docker:
-     - image: cimg/openjdk:11.0  # Java build environment
-   steps:
-     - checkout
-     - run:
-         name: Build the Project
-         command: cd code/nexus-lab/circleci-101 && mvn clean package spring-boot:repackage
-
- lint:
-   docker:
-     - image: cimg/openjdk:11.0
-   steps:
-     - checkout
-     - run:
-         name: Lint the Code
-         command: cd code/nexus-lab/circleci-101 && mvn checkstyle:check
-
- unit_test:
-   docker:
-     - image: cimg/openjdk:11.0
-   steps:
-     - checkout
-     - run:
-         name: Run Unit Tests
-         command: cd code/nexus-lab/circleci-101 && mvn test
-
-
- deploy_mock:
-   docker:
-     - image: cimg/openjdk:11.0
-   steps:
-     - run:
-         name: Mock Deployment
-         command: echo "Deployment complete."
+  build:
+    docker:
+      - image: circleci/node:14
+    steps:
+      - checkout
+      - run:
+          name: Mock Build Step
+          command: |
+            echo "Starting the mock build..."
+            sleep 10
+            echo "Build complete."
 
 workflows:
- version: 2
- build_and_deploy:
-   jobs:
-     - build
-     - lint:
-         requires:
-           - build
-     - unit_test: # using docker executor for running unit tests
-         requires:
-           - build
-     - maven/test: # using maven orb for running unit tests
-         executor:
-           name: maven/default
-           tag: '17.0'
-         maven_command: mvn
-         command: test
-         settings_file: settings.xml
-         verify_dependencies: false
-         app_src_directory: ./code/nexus-lab/circleci-101
-         test_results_path: ./target/surefire-reports
-         requires:
-           - build
-     - deploy_mock:
-         requires:
-           - lint
-           - unit_test
-    
-
+  version: 2
+  simple-build-notify:
+    jobs:
+      - build
+      - slack/notify:
+          requires:
+            - build
+          template: basic_success_1
+          attachments: |
+            [{
+              "color": "#36a64f",
+              "text": "Build completed successfully for $CIRCLE_PROJECT_REPONAME on branch $CIRCLE_BRANCH"
+            }]
