@@ -33,24 +33,33 @@ pipeline {
             }
         }
 
-        stage('Install dependencies'){
-             steps {
-                dir("${PROJECT_HOME}") {
-                    script {
-                        // Install virtualenv if not available
-                        sh '''#!/bin/bash
-                        # Delete previously built virtualenv and create a new one
-                        rm -rf $PYENV_HOME
-                        virtualenv $PYENV_HOME
-                        source $PYENV_HOME/bin/activate
+        stage('Parallel Execution') {
+            parallel {
+                stage('Install dependencies') {
+                    steps {
+                        dir("${PROJECT_HOME}") {
+                            script {
+                                // Install virtualenv if not available
+                                sh '''#!/bin/bash
+                                # Delete previously built virtualenv and create a new one
+                                rm -rf $PYENV_HOME
+                                virtualenv $PYENV_HOME
+                                source $PYENV_HOME/bin/activate
 
-                        # Install required Python packages
-                        pip install -r requirements.txt
-                        '''
+                                # Install required Python packages
+                                pip install -r requirements.txt
+                                '''
+                            }
+                        }
                     }
                 }
-
-        }
+                stage('Hello World') {
+                    steps {
+                        echo "Hello World"
+                        sh 'sleep 10s'
+                    }
+                }
+            }
         }
 
         stage('Run Flask Application') {
