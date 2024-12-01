@@ -26,15 +26,37 @@ pipeline {
                             echo "Installing virtualenv..."
                             pip install virtualenv
                         fi
-
-                        # Delete previously built virtualenv and create a new one
-                        rm -rf $PYENV_HOME
-                        virtualenv $PYENV_HOME
-                        source $PYENV_HOME/bin/activate
-
-                        # Install required Python packages
-                        pip install -r requirements.txt
+                        
                         '''
+                    }
+                }
+            }
+        }
+
+        stage('Parallel Execution') {
+            parallel {
+                stage('Install dependencies') {
+                    steps {
+                        dir("${PROJECT_HOME}") {
+                            script {
+                                // Install virtualenv if not available
+                                sh '''#!/bin/bash
+                                # Delete previously built virtualenv and create a new one
+                                rm -rf $PYENV_HOME
+                                virtualenv $PYENV_HOME
+                                source $PYENV_HOME/bin/activate
+
+                                # Install required Python packages
+                                pip install -r requirements.txt
+                                '''
+                            }
+                        }
+                    }
+                }
+                stage('Hello World') {
+                    steps {
+                        echo "Hello World"
+                        sh 'sleep 10s'
                     }
                 }
             }
@@ -81,54 +103,6 @@ pipeline {
                         } else {
                             echo "Flask application is running successfully."
                         }
-                    }
-                }
-            }
-        }
-        stage('Manual QA Approval') {
-            steps {
-                script {
-                    // Wait for user interaction and store the result
-                    def userInput = input message: 'Is the application running successfully? ',
-                                         parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'use the URL: http://REMOTEIP:5005 and Choose an option')]
-                    // Set a variable based on user input
-                    env.USER_CHOICE = userInput
-                }
-            }
-        }
-        stage('Automated Tests') {
-            // Run this stage ONLY! if the user chooses 'Proceed'
-
-            when {
-                expression { env.USER_CHOICE == 'Proceed' }
-            }
-            steps {
-                script {
-echo 'Running automated tests...'
-                }
-            }
-        }
-
-        stage('Failed Manual QA Approval') {
-            // Run this stage ONLY if the user chooses 'Abort'
-            when {
-                expression { env.USER_CHOICE == 'Abort' }
-            }
-            steps {
-                script {
-                    error 'Pipeline aborted by the user'
-                }
-            }
-        }
-
-        // Run this stage regardless of the user choice but we will check the user choice in the stage and print a message
-        stage('Finalize the Pipeline') {
-            steps {
-                script {
-                    if (env.USER_CHOICE == 'Proceed') {
-                        echo 'Manual QA and automated tests approved, pipeline completed successfully'
-                    } else {
-                        echo 'Pipeline aborted by the user'
                     }
                 }
             }
