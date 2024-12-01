@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.5.0
+  slack: circleci/slack@4.9.3
 
 jobs:
   build:
     docker:
-      - image: circleci/node:14
+      - image: cimg/base:current
     steps:
       - checkout
       - run:
