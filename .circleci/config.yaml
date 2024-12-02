@@ -53,5 +53,5 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - workshop/circleci
           environment: "production"
