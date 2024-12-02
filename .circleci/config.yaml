@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: "test Cases"
-          command: echo "Running node matrix "
+          command: echo "Running node matrix - << parameters.node_version >> "
 
 workflows:
   version: 2
