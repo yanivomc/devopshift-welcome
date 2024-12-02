@@ -1,57 +1,39 @@
 version: 2.1
 
-parameters:
-  environment:
-    type: string
-    default: "staging"
-    enum: ["staging", "production"]
+orbs:
+  slack: circleci/slack@4.9.3
 
 jobs:
   build:
     docker:
-      - image: circleci/node:14
+      - image: cimg/base:current
     steps:
       - checkout
       - run:
-          name: Install Dependencies
+          name: Mock Build Step
           command: |
-            echo "Installing dependencies..."
-            echo "npm install"
-      - run:
-          name: Run Unit Tests
-          command: |
-            echo "Running tests on branch: $CIRCLE_BRANCH"
-            echo "npm test"
-
-  deploy:
-    docker:
-      - image: circleci/node:14
-    parameters:
-      environment:
-        type: string
-    steps:
-      - run:
-          name: Deploy
-          command: |
-            echo "Deploying to << parameters.environment >> environment."
-      - when:
-          condition:
-            equal: ["<< parameters.environment >>", "production"]
-          steps:
-            - run:
-                name: Production Verification
-                command: echo "Performing production-specific verification..."
+            echo "Starting the mock build..."
+            sleep 10
+            echo "Build complete."
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Mock Build Completed Successfully by yaniv*"
+                  }
+                }
+              ]
+            }
 
 workflows:
   version: 2
-  build-deploy:
+  simple-build-notify:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - workshop/circleci
-          environment: "production"
+      - build:
+          context: slack-secrets
