@@ -83,9 +83,11 @@ jobs:
         type: string
     steps:
       - checkout
-      - docker/publish:
+      - docker/build:
           image: myorg/myimage:<< parameters.node_version >>
-          extra_build_args: "--build-arg NODE_VERSION=<< parameters.node_version >>"
+          extra_build_args: '--build-arg=FOO=bar --build-arg=BAZ=qux'
+      - docker/push:
+          image: myorg/myimage:<< parameters.node_version >>
       - slack/notify:
           event: pass
           template: basic_success_1
