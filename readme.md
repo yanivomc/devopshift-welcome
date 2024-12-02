@@ -2,6 +2,6 @@ git remote set-url origin https://YOUR-USERNAME:YOUR-TOKEN@github.com/YOURREPO.g
 
 EX.
 
-git remote set-url origin https://yanivomc:yourSecretkEY878765@github.com/yanivomc/devopshift-welcome.git
+git remote set-url origin https://yanivomc:SECRET@github.com/yanivomc/devopshift-welcome.git
 
 Once completed - you may now push code to your repo
