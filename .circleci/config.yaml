@@ -112,32 +112,32 @@ workflows:
       - lint:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16"]
           requires:
             - checkout-code
       - build:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16"]
           requires:
             - lint
       - test:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16"]
               test_case: ["unit", "integration", "e2e"]
           requires:
             - build
       - security-test:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16"]
           requires:
             - build
       - docker-build-push:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16"]
           requires:
             - test
             - security-test
