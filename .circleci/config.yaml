@@ -81,7 +81,6 @@ jobs:
             sleep 2
             echo "Security tests completed."
 
-
   build-and-push:
     executor: docker/docker
     parameters:
@@ -93,17 +92,11 @@ jobs:
       - docker/check
       - docker/build:
           image: yanivomc/orb-test:<< parameters.node_version >>-<< pipeline.git.branch >>
-          extra-build-args: '--build-arg=NODE_VERSION=<< parameters.node_version >>'
+          extra_build_args:
+            NODE_VERSION: << parameters.node_version >>
           path: ./code/nexus-lab/circleci-101/solutions/lab102/end2end
-
-
-
       - docker/push:
-          # digest-path: /tmp/digest.txt
           image: yanivomc/orb-test:<< parameters.node_version >>-<< pipeline.git.branch >>
-      # - run:
-      #     command: |
-      #       echo "Digest is: $(</tmp/digest.txt)"
       - slack/notify:
           event: pass
           template: basic_success_1
@@ -150,7 +143,7 @@ workflows:
               node_version: << pipeline.parameters.node_versions >>
           requires:
             - build
-      - docker-build-push:
+      - build-and-push:
           matrix:
             parameters:
               node_version: << pipeline.parameters.node_versions >>
