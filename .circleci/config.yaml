@@ -1,7 +1,19 @@
+# Final Lab: Conditional Logic, Matrix Jobs, and Orbs (Slack and Docker Build/Push)
+
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.9.3
+  docker: circleci/docker@2.8.1
+
 jobs:
-  test:
+  checkout-code:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+
+  lint:
     docker:
       - image: circleci/node:<< parameters.node_version >>
     parameters:
@@ -10,14 +22,125 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "test Cases"
-          command: echo "Running node matrix - << parameters.node_version >> "
+          name: Lint Code
+          command: |
+            echo "Mock: Linting code for Node.js version << parameters.node_version >>..."
+            sleep 2
+            echo "Linting completed."
+
+  build:
+    docker:
+      - image: circleci/node:<< parameters.node_version >>
+    parameters:
+      node_version:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Build Application
+          command: |
+            echo "Mock: Building application for Node.js version << parameters.node_version >>..."
+            sleep 5
+            echo "Build completed."
+
+  test:
+    docker:
+      - image: circleci/node:<< parameters.node_version >>
+    parameters:
+      node_version:
+        type: string
+      test_case:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Run Test Case
+          command: |
+            echo "Mock: Running << parameters.test_case >> tests for Node.js version << parameters.node_version >>..."
+            sleep 5
+            echo "Tests completed."
+
+  security-test:
+    docker:
+      - image: circleci/node:<< parameters.node_version >>
+    parameters:
+      node_version:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Run Security Tests
+          command: |
+            echo "Mock: Running security tests for Node.js version << parameters.node_version >>..."
+            sleep 5
+            echo "Security tests completed."
+
+  docker-build-push:
+    docker:
+      - image: cimg/base:current
+    parameters:
+      node_version:
+        type: string
+    steps:
+      - checkout
+      - docker/build:
+          image: yanivomc/nodeapp:node-<< parameters.node_version >>
+          extra_build_args: '--build-arg=NODE_VERSION=<< parameters.node_version >>'
+      - docker/push:
+          image: yanivomc/nodeapp:node-<< parameters.node_version >>
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Docker Image Build and Push Completed Successfully for Node.js version << parameters.node_version >>*"
+                  }
+                }
+              ]
+            }
 
 workflows:
   version: 2
-  test-matrix:
+  complex-pipeline:
     jobs:
+      - checkout-code
+      - lint:
+          matrix:
+            parameters:
+              node_version: ["14", "16"]
+          requires:
+            - checkout-code
+      - build:
+          matrix:
+            parameters:
+              node_version: ["14", "16"]
+          requires:
+            - lint
       - test:
           matrix:
             parameters:
-              node_version: ["14", "16", "15"]
+              node_version: ["14", "16"]
+              test_case: ["unit", "integration", "e2e"]
+          requires:
+            - build
+      - security-test:
+          matrix:
+            parameters:
+              node_version: ["14", "16"]
+          requires:
+            - build
+      - docker-build-push:
+          matrix:
+            parameters:
+              node_version: ["14", "16"]
+          requires:
+            - test
+            - security-test
+          filters:
+            branches:
+              only: workshop/circleci
