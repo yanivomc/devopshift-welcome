@@ -20,4 +20,4 @@ workflows:
       - test:
           matrix:
             parameters:
-              node_version: ["14", "16", "18"]
+              node_version: ["14", "16", "15"]
