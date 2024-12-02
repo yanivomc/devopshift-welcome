@@ -85,8 +85,8 @@ jobs:
       - checkout
       - docker/build:
           image: myorg/myimage:<< parameters.node_version >>
-          extra_build_args:
-            - "--build-arg NODE_VERSION=<< parameters.node_version >>"
+          # extra_build_args:
+            # - "--build-arg NODE_VERSION=<< parameters.node_version >>"
       - docker/push:
           image: myorg/myimage:<< parameters.node_version >>
       - slack/notify:
