@@ -1,3 +1,5 @@
+# Final Lab: Conditional Logic, Matrix Jobs, and Orbs (Slack and Docker Build/Push)
+
 version: 2.1
 
 orbs:
@@ -23,7 +25,7 @@ jobs:
           name: Lint Code
           command: |
             echo "Mock: Linting code for Node.js version << parameters.node_version >>..."
-            sleep 2
+            sleep 5
             echo "Linting completed."
 
   build:
@@ -38,7 +40,7 @@ jobs:
           name: Build Application
           command: |
             echo "Mock: Building application for Node.js version << parameters.node_version >>..."
-            sleep 2
+            sleep 5
             echo "Build completed."
 
   test:
@@ -55,7 +57,7 @@ jobs:
           name: Run Test Case
           command: |
             echo "Mock: Running << parameters.test_case >> tests for Node.js version << parameters.node_version >>..."
-            sleep 2
+            sleep 5
             echo "Tests completed."
 
   security-test:
@@ -70,25 +72,26 @@ jobs:
           name: Run Security Tests
           command: |
             echo "Mock: Running security tests for Node.js version << parameters.node_version >>..."
-            sleep 2
+            sleep 5
             echo "Security tests completed."
 
-  build-and-push:
-    executor: docker/docker
+  docker-build-push:
+    docker:
+      - image: cimg/base:current
     parameters:
       node_version:
         type: string
     steps:
-      - setup_remote_docker
       - checkout
-      - docker/check
+      - docker/login:
+          username: CIRCLECI_DOCKER_USER
+          password: CIRCLECI_DOCKER_PASSWORD
       - docker/build:
           image: myorg/myimage:<< parameters.node_version >>
           extra_build_args:
             - "--build-arg NODE_VERSION=<< parameters.node_version >>"
-          path: ./code/nexus-lab/circleci-101/solutions/lab102/end2end
       - docker/push:
-          image: yanivomc/orb-test:<< parameters.node_version >>-<< pipeline.git.branch >>
+          image: myorg/myimage:<< parameters.node_version >>
       - slack/notify:
           event: pass
           template: basic_success_1
@@ -135,7 +138,7 @@ workflows:
               node_version: ["14", "16", "18"]
           requires:
             - build
-      - build-and-push:
+      - docker-build-push:
           matrix:
             parameters:
               node_version: ["14", "16", "18"]
