@@ -1,39 +1,23 @@
 version: 2.1
 
-orbs:
-  slack: circleci/slack@4.9.3
-
 jobs:
-  build:
+  test:
     docker:
-      - image: cimg/base:current
+      - image: circleci/node:<< parameters.node_version >>
+    parameters:
+      node_version:
+        type: string
     steps:
       - checkout
       - run:
-          name: Mock Build Step
-          command: |
-            echo "Starting the mock build..."
-            sleep 10
-            echo "Build complete."
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Mock Build Completed Successfully by yaniv*"
-                  }
-                }
-              ]
-            }
+          name: "test Cases"
+          command: echo "Running node matrix "
 
 workflows:
   version: 2
-  simple-build-notify:
+  test-matrix:
     jobs:
-      - build:
-          context: slack-secrets
+      - test:
+          matrix:
+            parameters:
+              node_version: ["14", "16", "18"]
