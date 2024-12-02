@@ -4,14 +4,6 @@ orbs:
   slack: circleci/slack@4.9.3
   docker: circleci/docker@2.8.1
 
-parameters:
-  node_versions:
-    type: array
-    default: ["14", "16", "18"]
-  test_cases:
-    type: array
-    default: ["unit", "integration", "e2e"]
-
 jobs:
   checkout-code:
     docker:
@@ -121,32 +113,32 @@ workflows:
       - lint:
           matrix:
             parameters:
-              node_version: << pipeline.parameters.node_versions >>
+              node_version: ["14", "16", "18"]
           requires:
             - checkout-code
       - build:
           matrix:
             parameters:
-              node_version: << pipeline.parameters.node_versions >>
+              node_version: ["14", "16", "18"]
           requires:
             - lint
       - test:
           matrix:
             parameters:
-              node_version: << pipeline.parameters.node_versions >>
-              test_case: << pipeline.parameters.test_cases >>
+              node_version: ["14", "16", "18"]
+              test_case: ["unit", "integration", "e2e"]
           requires:
             - build
       - security-test:
           matrix:
             parameters:
-              node_version: << pipeline.parameters.node_versions >>
+              node_version: ["14", "16", "18"]
           requires:
             - build
       - build-and-push:
           matrix:
             parameters:
-              node_version: << pipeline.parameters.node_versions >>
+              node_version: ["14", "16", "18"]
           requires:
             - test
             - security-test
