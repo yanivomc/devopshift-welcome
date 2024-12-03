@@ -1,0 +1,3 @@
+GITBRANCH=workshop/perfect-monitoring
+GITURL=github.com/yanivomc/devopshift-welcome.git
+GITUSERNAME=yanivomc
