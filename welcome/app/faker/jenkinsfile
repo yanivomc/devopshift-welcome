@@ -1,0 +1,104 @@
+pipeline {
+    agent any
+
+    environment {
+        PYTHON_VERSIONS = ['3.8', '3.9'] // Define Python versions for the matrix
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // DockerHub credentials ID
+        REPO_NAME = 'your-dockerhub-username/python-fake-data-app' // DockerHub repository name
+        GITHUB_REPO = '???' // Update with your GitHub repository URL
+        GITHUB_BRANCH = '' // Update with your GitHub repository branch
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the repository containing the Python script and Dockerfile
+                git branch: "${GITHUB_BRANCH}", url: "${GITHUB_REPO}"
+            }
+        }
+
+        stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'python:3.8' // Use any Python version for dependency installation
+                    args '-v $HOME/.cache/pip:/root/.cache/pip'
+                }
+            }
+            steps {
+                sh 'pip install faker'
+            }
+        }
+
+        stage('Test Application') {
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values PYTHON_VERSIONS // Reference the environment variable dynamically
+                    }
+                }
+                stages {
+                    stage('Run Test') {
+                        agent {
+                            docker {
+                                image "python:${PYTHON_VERSION}"
+                                reuseNode true
+                            }
+                        }
+                        steps {
+                            sh 'python app.py'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values PYTHON_VERSIONS // Reference the environment variable dynamically
+                    }
+                }
+                stages {
+                    stage('Build Image') {
+                        steps {
+                            script {
+                                docker.build("${REPO_NAME}:${PYTHON_VERSION}", "--build-arg PYTHON_VERSION=${PYTHON_VERSION} .")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Push to DockerHub') {
+            matrix {
+                axes {
+                    axis {
+                        name 'PYTHON_VERSION'
+                        values PYTHON_VERSIONS // Reference the environment variable dynamically
+                    }
+                }
+                stages {
+                    stage('Push Image') {
+                        steps {
+                            script {
+                                docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+                                    docker.image("${REPO_NAME}:${PYTHON_VERSION}").push()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline completed."
+        }
+    }
+}
