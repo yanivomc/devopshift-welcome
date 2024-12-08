@@ -6,98 +6,41 @@ terraform {
     }
   }
 }
-
-provider "azurerm" {
-  features {}
+provider "aws" {
+  region = var.region
 }
 
-variable "location" {
-  default = "East US"
+variable "region" {
+  default = "us-east-1"
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = "[YOURNAME]-resources"
-  location = var.location
-}
+resource "aws_security_group" "sg" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-
-resource "azurerm_subnet" "subnet" {
-  name                 = "[YOURNAME]-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
-
-resource "azurerm_virtual_network" "vnet" {
-  name                = "[YOURNAME]-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-resource "azurerm_public_ip" "pip" {
-  name                = "[YOURNAME]-pip"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"  # Dynamic IP allocation for Basic SKU
-  sku = "Basic"  # Use Basic SKU (Stock Keeping Unit - azure tiers) for dynamic IP
-}
-
-resource "azurerm_network_interface" "nic" {
-  name                = "[YOURNAME]-nic"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  ip_configuration {
-    name                          = "[YOURNAME]-ipconfig"
-    subnet_id                     = azurerm_subnet.subnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip.id
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
+resource "aws_instance" "vm" {
+  ami           = "ami-0c02fb55956c7d316"
+  instance_type = "t2.micro"
 
-variable "vm_size" {
-  default = "Standard_B1ms"
-}
+  vpc_security_group_ids = [aws_security_group.sg.id]
 
-variable "admin_username" {
-  default = "adminuser"
-}
-
-variable "admin_password" {
-  default = "Password123!"
-}
-
-
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                  = "[YOURNAME]-vm"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.nic.id]
-  size                  = var.vm_size
-
-  os_disk {
-    name              = "[YOURNAME]-os-disk"
-    caching           = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+  tags = {
+    Name = "[YOURNAME]-vm"
   }
-
-  admin_username = var.admin_username
-  admin_password = var.admin_password
-
-  disable_password_authentication = false
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  computer_name = "[YOURNAME]-vm"
 }
+
 
 resource "time_sleep" "wait_for_ip" {
   create_duration = "30s"  # Wait for 30 seconds to allow Azure to allocate the IP
@@ -105,7 +48,7 @@ resource "time_sleep" "wait_for_ip" {
 
 
 output "vm_public_ip" {
-  value       = azurerm_public_ip.pip.ip_address
+  value       = aws_instance.vm.public_ip
   depends_on  = [time_sleep.wait_for_ip]  # Wait for the time_sleep resource to complete
   description = "Public IP address of the VM"
 }

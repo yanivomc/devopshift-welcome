@@ -1,41 +1,23 @@
-# Define the provider and global variables
-provider "azurerm" {
-  features {}
+provider "aws" {
+  region = var.region
 }
 
-variable "yourname" {
-  default     = "[YOURNAME]"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+variable "region" {
+  default = "us-east-1"
 }
 
 variable "vm_name" {
-  default     = "vm-[YOURNAME]"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+  default = "vm-[YOURNAME]"
 }
 
 variable "admin_username" {
-  default     = "adminuser"
-  description = "Username for the admin user on the VM"
+  default = "adminuser"
 }
 
 variable "admin_password" {
-  default     = "Password123!"
-  description = "Password for the admin user on the VM"
-}
-
-variable "location" {
-  default     = "East US"
-  description = "Azure region where resources will be deployed"
+  default = "Password123!"
 }
 
 variable "vm_size" {
-  default     = "Standard_B1ms"
-  description = "Size of the virtual machine"
-}
-
-
-# Resource Group
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-${var.yourname}"
-  location = var.location
+  default = "t2.micro"
 }

@@ -1,36 +1,39 @@
+resource "aws_instance" "vm" {
+  ami                         = "ami-0c02fb55956c7d316"
+  instance_type               = var.vm_size
+  vpc_security_group_ids      = [aws_security_group.sg.id]
 
-# Linux Virtual Machine configuration
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                  = var.vm_name
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.nic.id]
-  size                  = var.vm_size
-
-  os_disk {
-    name                 = "os-disk-${var.yourname}"
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+  tags = {
+    Name = var.vm_name
   }
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
+  # ec2 does not allow password login by default - threfore we need to create a new user and password using cloud-init
+  user_data = <<-EOF
+    #cloud-config
+    users:
+      - name: ${var.admin_username}
+        groups: sudo
+        shell: /bin/bash
+        sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+        lock_passwd: false
+        passwd: $(echo ${var.admin_password} | openssl passwd -6 -stdin)
+    EOF
 
-  disable_password_authentication = false
-  computer_name                   = var.vm_name
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update",
+      "sudo apt install -y apache2",
+      "echo '<h1>Welcome to the Web Server!</h1>' | sudo tee /var/www/html/welcome.html",
+      "sudo systemctl start apache2",
+      "sudo systemctl enable apache2"
+    ]
   }
-
-  # Ignore changes to the network interface to avoid unnecessary recreation of the VM
-  lifecycle {
-    ignore_changes = [network_interface_ids]
-  }
-
-  depends_on = [azurerm_network_interface.nic, azurerm_public_ip.pip]
 }
 
+output "vm_public_ip" {
+  value       = aws_instance.vm.public_ip
+}
+
+output "vm_http_url" {
+  value       = "http://${aws_instance.vm.public_ip}/welcome.html"
+}

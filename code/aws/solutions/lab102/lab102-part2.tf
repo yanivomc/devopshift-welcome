@@ -1,123 +1,53 @@
-terraform {
-  required_providers {
-    time = {
-      source = "hashicorp/time"
-      version = "0.7.2"  # Ensure you're using the latest version
-    }
+provider "aws" {
+  region = var.region
+}
+
+variable "region" {
+  default = "us-east-1"
+}
+
+resource "aws_security_group" "sg" {
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
-provider "azurerm" {
-  features {}
-}
+resource "aws_instance" "vm" {
+  ami           = "ami-0c02fb55956c7d316"
+  instance_type = "t2.micro"
 
-variable "location" {
-  default = "East US"
-}
+  vpc_security_group_ids = [aws_security_group.sg.id]
 
-resource "azurerm_resource_group" "rg" {
-  name     = "[YOURNAME]-resources"
-  location = var.location
-}
-
-
-resource "azurerm_subnet" "subnet" {
-  name                 = "[YOURNAME]-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
-
-resource "azurerm_virtual_network" "vnet" {
-  name                = "[YOURNAME]-vnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-resource "azurerm_public_ip" "pip" {
-  name                = "[YOURNAME]-pip"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"  # Dynamic IP allocation for Basic SKU
-  sku = "Basic"  # Use Basic SKU (Stock Keeping Unit - azure tiers) for dynamic IP
-}
-
-resource "azurerm_network_interface" "nic" {
-  name                = "[YOURNAME]-nic"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  ip_configuration {
-    name                          = "[YOURNAME]-ipconfig"
-    subnet_id                     = azurerm_subnet.subnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip.id
+  tags = {
+    Name = "[YOURNAME]-vm"
   }
 }
 
-
-variable "vm_size" {
-  default = "Standard_B1ms"
-}
-
-variable "admin_username" {
-  default = "adminuser"
-}
-
-variable "admin_password" {
-  default = "Password123!"
-}
-
-
-resource "azurerm_linux_virtual_machine" "vm" {
-  name                  = "[YOURNAME]-vm"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.nic.id]
-  size                  = var.vm_size
-
-  os_disk {
-    name              = "[YOURNAME]-os-disk"
-    caching           = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  admin_username = var.admin_username
-  admin_password = var.admin_password
-
-  disable_password_authentication = false
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-
-  computer_name = "[YOURNAME]-vm"
-}
-
-resource "time_sleep" "wait_for_ip" {
-  create_duration = "30s"  # Wait for 30 seconds to allow Azure to allocate the IP
-}
-
-resource "null_resource" "validate_ip" {
+resource "null_resource" "check_public_ip" {
   provisioner "local-exec" {
-        command = <<EOT
-      if [ -z "${azurerm_public_ip.pip.ip_address}" ]; then
+    command = <<EOT
+      if [ -z "${aws_instance.vm.public_ip}" ]; then
         echo "ERROR: Public IP address was not assigned." >&2
         exit 1
       fi
     EOT
   }
-  depends_on = [ time_sleep.wait_for_ip ]
+
+  depends_on = [aws_instance.vm]
 }
 
 output "vm_public_ip" {
-  value       = azurerm_public_ip.pip.ip_address
-  depends_on  = [null_resource.validate_ip ]  
+  value       = aws_instance.vm.public_ip
+  depends_on  = [null_resource.check_public_ip]
   description = "Public IP address of the VM"
 }
-
