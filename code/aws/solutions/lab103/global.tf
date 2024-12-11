@@ -3,15 +3,20 @@ provider "aws" {
 }
 
 variable "region" {
-  default = "us-east-1"
+  default = "us-west-2"
 }
 
+
+variable "ami" {
+  default = "ami-04feae287ec8b0244"
+  
+}
 variable "vm_name" {
   default = "vm-[YOURNAME]"
 }
 
 variable "admin_username" {
-  default = "adminuser"
+  default = "admin-user"
 }
 
 variable "admin_password" {

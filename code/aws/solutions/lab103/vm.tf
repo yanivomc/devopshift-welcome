@@ -1,5 +1,5 @@
 resource "aws_instance" "vm" {
-  ami                         = "ami-0c02fb55956c7d316"
+  ami                         = var.ami
   instance_type               = var.vm_size
   vpc_security_group_ids      = [aws_security_group.sg.id]
 
@@ -7,7 +7,6 @@ resource "aws_instance" "vm" {
     Name = var.vm_name
   }
 
-  # ec2 does not allow password login by default - threfore we need to create a new user and password using cloud-init
   user_data = <<-EOF
     #cloud-config
     users:
@@ -27,13 +26,21 @@ resource "aws_instance" "vm" {
       "sudo systemctl start apache2",
       "sudo systemctl enable apache2"
     ]
+
+    connection {
+      type     = "ssh"
+      user     = "ubuntu"
+      password = var.admin_password
+      host     = self.public_ip
+      timeout  = "1m"
+    }
   }
 }
 
 output "vm_public_ip" {
-  value       = aws_instance.vm.public_ip
+  value = aws_instance.vm.public_ip
 }
 
 output "vm_http_url" {
-  value       = "http://${aws_instance.vm.public_ip}/welcome.html"
+  value = "http://${aws_instance.vm.public_ip}/welcome.html"
 }
