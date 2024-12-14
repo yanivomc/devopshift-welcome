@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/node:<< parameters.node_version >>
+    parameters:
+      node_version:
+        type: string
+      test_case:
+        type: string
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: echo "Installing Dependencies for Node.js version << parameters.node_version >>"
+      - run:
+          name: Run Test Case
+          command: echo "Running << parameters.test_case >> tests"
+
+workflows:
+  version: 2
+  test-matrix:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              node_version: ["14", "16", "18"]
+              test_case: ["unit", "integration", "e2e"]
