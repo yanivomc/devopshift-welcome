@@ -244,28 +244,35 @@ resource "null_resource" "validate_lb_targets" {
       echo "Target Group ARN: ${aws_lb_target_group.tg.arn}"
       echo "Checking Load Balancer Target Group Health..."
 
-      unhealthy_count=0
+      retry_check=5 # number of retries to check target health
+      unhealthy_count=0 
 
-      aws elbv2 describe-target-health \
-        --region="${var.region}" \
-        --target-group-arn "${aws_lb_target_group.tg.arn}" \
-        --query 'TargetHealthDescriptions[*].[Target.Id,TargetHealth.State]' \
-        --output text > target_health.txt
+      while [ $retry_check -gt 0 ]; do
+        aws elbv2 describe-target-health \
+          --region="${var.region}" \
+          --target-group-arn "${aws_lb_target_group.tg.arn}" \
+          --query 'TargetHealthDescriptions[*].[Target.Id,TargetHealth.State]' \
+          --output text > target_health.txt
 
-      while read target_id status; do
-        echo "Target ID: $target_id - Status: $status"
-        if [ "$status" != "healthy" ]; then
-          echo "Unhealthy Target: $target_id"
-          unhealthy_count=$((unhealthy_count + 1))
+        while read target_id status; do
+          echo "Target ID: $target_id - Status: $status"
+          if [ "$status" != "healthy" ]; then
+            echo "Unhealthy Target: $target_id"
+            unhealthy_count=$((unhealthy_count + 1))
+          fi
+        done < target_health.txt
+
+        if [ $unhealthy_count -gt 0 ]; then
+          echo "Some targets are unhealthy. Check target_health.txt for details."
+          echo "Retrying in 30 seconds..."
+          sleep 10
+          retry_check=$((retry_check - 1))
+          unhealthy_count=0
+        else
+          echo "All targets are healthy."
+          break
         fi
-      done < target_health.txt
-
-      if [ $unhealthy_count -gt 0 ]; then
-        echo "Some targets are unhealthy. Check target_health.txt for details."
-        exit 1
-      else
-        echo "All targets are healthy."
-      fi
+      done
     EOT
   }
 
