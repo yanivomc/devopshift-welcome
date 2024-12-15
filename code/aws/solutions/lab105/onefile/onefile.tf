@@ -287,7 +287,7 @@ resource "null_resource" "validate_lb_targets" {
 # OUTPUTS
 # OUTPUT: ALB DNS NAME
 output "alb_dns_name" {
-  value       = "Please browse: http://${aws_lb.alb.dns_name}/welcome.html"
+  value       = "Please allow couple of mintues for DNS propogation on first run before you  browse: http://${aws_lb.alb.dns_name}/welcome.html"
   description = "DNS Name of the Load Balancer"
 }
 
