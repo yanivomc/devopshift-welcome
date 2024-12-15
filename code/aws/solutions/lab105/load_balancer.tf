@@ -1,45 +1,114 @@
-resource "azurerm_public_ip" "lb_pip" {
-  name                = "lb-pip-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+# TARGET GROUP
+resource "aws_lb_target_group" "tg" {
+  name     = "alb-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = data.aws_vpc.default.id
 
-resource "azurerm_lb" "lb" {
-  name                = "lb-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku                 = "Standard"
+  health_check {
+    enabled             = true
+    interval            = 30
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 5
+  }
 
-  frontend_ip_configuration {
-    name                 = "LoadBalancerFrontEnd"
-    public_ip_address_id = azurerm_public_ip.lb_pip.id
+  tags = {
+    Name = "alb-tg"
   }
 }
 
-resource "azurerm_lb_backend_address_pool" "lb_pool" {
-  loadbalancer_id = azurerm_lb.lb.id
-  name            = "backend-pool-${var.yourname}"
+
+
+# REGISTER EC2 INSTANCES TO TARGET GROUP
+resource "aws_lb_target_group_attachment" "tg_attachment" {
+  for_each = { for idx, instance in aws_instance.ec2 : idx => instance }
+
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = each.value.id
+  port             = 80
 }
 
-resource "azurerm_lb_probe" "lb_probe" {
-  loadbalancer_id     = azurerm_lb.lb.id
-  name                = "http-probe-${var.yourname}"
-  protocol            = "Http"
-  port                = 80
-  request_path        = "/welcome.html"
-  interval_in_seconds = 15
-  number_of_probes    = 3
+# APPLICATION LOAD BALANCER
+resource "aws_lb" "alb" {
+  name               = "app-load-balancer"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb_sg.id]
+  subnets            = data.aws_subnets.default.ids
+
+  enable_deletion_protection = false
+
+  tags = {
+    Name = "application-lb"
+  }
 }
 
-resource "azurerm_lb_rule" "lb_rule" {
-  loadbalancer_id                = azurerm_lb.lb.id
-  name                           = "http-rule-${var.yourname}"
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 80
-  frontend_ip_configuration_name = "LoadBalancerFrontEnd"
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.lb_pool.id]
-  probe_id                       = azurerm_lb_probe.lb_probe.id
+# LISTENER
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tg.arn
+  }
+}
+
+
+
+
+
+
+# NULL RESOURCE TO CHECK TARGET HEALTH
+resource "null_resource" "validate_lb_targets" {
+  
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "*** VALIDATING TARGET HEALTH ***"
+      echo "Target Group ARN: ${aws_lb_target_group.tg.arn}"
+      echo "Checking Load Balancer Target Group Health..."
+
+      retry_check=5 # number of retries to check target health
+      unhealthy_count=0 
+
+      while [ $retry_check -gt 0 ]; do
+        aws elbv2 describe-target-health \
+          --region="${var.region}" \
+          --target-group-arn "${aws_lb_target_group.tg.arn}" \
+          --query 'TargetHealthDescriptions[*].[Target.Id,TargetHealth.State]' \
+          --output text > target_health.txt
+
+        while read target_id status; do
+          echo "Target ID: $target_id - Status: $status"
+          if [ "$status" != "healthy" ]; then
+            echo "Unhealthy Target: $target_id"
+            unhealthy_count=$((unhealthy_count + 1))
+          fi
+        done < target_health.txt
+
+        if [ $unhealthy_count -gt 0 ]; then
+          echo "Some targets are unhealthy. Check target_health.txt for details."
+          echo "Retrying in 30 seconds..."
+          sleep 10
+          retry_check=$((retry_check - 1))
+          unhealthy_count=0
+        else
+          echo "All targets are healthy."
+          break
+        fi
+      done
+    EOT
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  # depends_on = [aws_lb_target_group_attachment.tg_attachment]
+  depends_on = [ null_resource.provision_apache ]
 }

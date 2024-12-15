@@ -1,40 +1,38 @@
-// File 1: provider.tf
-provider "azurerm" {
-  features {}
+# VARIABLES
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  default     = 2
 }
 
-// File 2: variables.tf
-variable "yourname" {
-  default     = "[YOURNAME]"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+variable "region" {
+  default     = "us-west-2"
+  description = "AWS Region"
 }
 
+
+
+variable "ami" {
+  default = "ami-04feae287ec8b0244"
+  
+}
 variable "vm_name" {
-  default     = "vm-[YOURNAME]"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+  default = "vm-yaniv"
 }
 
 variable "admin_username" {
-  default     = "adminuser"
-  description = "Username for the admin user on the VM"
+  default = "admin-user"
 }
 
 variable "admin_password" {
-  default     = "Password123!"
-  description = "Password for the admin user on the VM"
-}
-
-variable "location" {
-  default     = "East US"
-  description = "Azure region where resources will be deployed"
+  default = "Password123!"
 }
 
 variable "vm_size" {
-  default     = "Standard_B1ms"
-  description = "Size of the virtual machine"
+  default = "t2.micro"
 }
+# *********
 
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-${var.yourname}"
-  location = var.location
+# PROVIDER
+provider "aws" {
+  region = var.region
 }
