@@ -1,247 +1,300 @@
-# Define the provider and global variables
-provider "azurerm" {
-  features {}
+# VARIABLES
+variable "instance_count" {
+  description = "Number of EC2 instances to create"
+  default     = 2
 }
 
-variable "yourname" {
-  default     = "yanivc"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+variable "region" {
+  default     = "us-west-2"
+  description = "AWS Region"
 }
 
+
+
+variable "ami" {
+  default = "ami-04feae287ec8b0244"
+  
+}
 variable "vm_name" {
-  default     = "vm-yanivc"
-  description = "Change it to your first name and the first letter of your family name: ex. yanivc - for yaniv cohen"
+  default = "vm-[YOURNAME]"
 }
 
 variable "admin_username" {
-  default     = "adminuser"
-  description = "Username for the admin user on the VM"
+  default = "admin-user"
 }
 
 variable "admin_password" {
-  default     = "Password123!"
-  description = "Password for the admin user on the VM"
-}
-
-variable "location" {
-  default     = "East US"
-  description = "Azure region where resources will be deployed"
+  default = "Password123!"
 }
 
 variable "vm_size" {
-  default     = "Standard_B1ms"
-  description = "Size of the virtual machine"
+  default = "t2.micro"
+}
+# *********
+
+# PROVIDER
+provider "aws" {
+  region = var.region
 }
 
-# Resource Group
-resource "azurerm_resource_group" "rg" {
-  name     = "rg-${var.yourname}"
-  location = var.location
-}
+# SECURITY GROUP FOR ALB
+resource "aws_security_group" "alb_sg" {
+  name        = "alb-sg"
+  description = "Security group for ALB"
 
-# Load Balancer Public IP (Shared IP)
-resource "azurerm_public_ip" "lb_pip" {
-  name                = "lb-pip-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+  vpc_id = data.aws_vpc.default.id
 
-# Load Balancer
-resource "azurerm_lb" "lb" {
-  name                = "lb-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku                 = "Standard"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-  frontend_ip_configuration {
-    name                 = "LoadBalancerFrontEnd"
-    public_ip_address_id = azurerm_public_ip.lb_pip.id
+  
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "alb-sg"
   }
 }
 
-# Backend Address Pool for Load Balancer
-resource "azurerm_lb_backend_address_pool" "lb_pool" {
-  loadbalancer_id = azurerm_lb.lb.id
-  name            = "backend-pool-${var.yourname}"
-}
+# SECURITY GROUP FOR EC2
+resource "aws_security_group" "ec2_sg" {
+  name        = "ec2-sg"
+  description = "Security group for EC2 instances"
 
-# Load Balancer Probe to check VM health
-resource "azurerm_lb_probe" "lb_probe" {
-  loadbalancer_id     = azurerm_lb.lb.id
-  name                = "http-probe-${var.yourname}"
-  protocol            = "Http"
-  port                = 80
-  request_path        = "/welcome.html"
-  interval_in_seconds = 15
-  number_of_probes    = 3
-}
+  vpc_id = data.aws_vpc.default.id
 
-# Load Balancer Rule to Distribute Traffic
-resource "azurerm_lb_rule" "lb_rule" {
-  loadbalancer_id                = azurerm_lb.lb.id
-  name                           = "http-rule-${var.yourname}"
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 80
-  frontend_ip_configuration_name = "LoadBalancerFrontEnd"
-  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.lb_pool.id]
-  probe_id                       = azurerm_lb_probe.lb_probe.id
-}
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-# Network Security Group
-resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-# Network Security Rule to Allow SSH and HTTP
-resource "azurerm_network_security_rule" "allow_http_ssh" {
-  name                        = "allow-http-ssh-${var.vm_name}"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_ranges     = ["80", "22"]
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = azurerm_network_security_group.nsg.name
-}
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
-# Public IP for the VMs
-resource "azurerm_public_ip" "vm_pip" {
-  count               = 2
-  name                = "pip-${var.yourname}-${count.index + 1}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
-
-# Network Interface for the VMs
-resource "azurerm_network_interface" "nic" {
-  count               = 2
-  name                = "nic-${var.yourname}-${count.index + 1}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  ip_configuration {
-    name                          = "internal-${var.yourname}-${count.index + 1}"
-    subnet_id                     = azurerm_subnet.subnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.vm_pip[count.index].id
+  tags = {
+    Name = "ec2-sg"
   }
 }
 
-# Associate Network Interface with Load Balancer Backend Pool
-resource "azurerm_network_interface_backend_address_pool_association" "nic_lb_pool_association" {
-  count                    = 2
-  network_interface_id     = azurerm_network_interface.nic[count.index].id
-  ip_configuration_name    = "internal-${var.yourname}-${count.index + 1}"
-  backend_address_pool_id  = azurerm_lb_backend_address_pool.lb_pool.id
+# DATA SOURCE: DEFAULT VPC AND SUBNETS
+data "aws_vpc" "default" {
+  default = true
 }
 
-# Associate NSG with Network Interfaces
-resource "azurerm_network_interface_security_group_association" "nic_nsg_association" {
-  count                    = 2
-  network_interface_id     = azurerm_network_interface.nic[count.index].id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
 }
 
-# Virtual Network for the subnet
-resource "azurerm_virtual_network" "vnet" {
-  name                = "vnet-${var.yourname}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  address_space       = ["10.0.0.0/16"]
-}
+# TARGET GROUP
+resource "aws_lb_target_group" "tg" {
+  name     = "alb-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = data.aws_vpc.default.id
 
-# Subnet within the Virtual Network
-resource "azurerm_subnet" "subnet" {
-  name                 = "subnet-${var.yourname}"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
-}
-
-# Linux Virtual Machine configuration to create multiple VMs
-resource "azurerm_linux_virtual_machine" "vm" {
-  count                 = 2
-  name                  = "${var.vm_name}-${count.index + 1}"
-  location              = var.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  network_interface_ids = [azurerm_network_interface.nic[count.index].id]
-  size                  = var.vm_size
-
-  os_disk {
-    name                 = "os-disk-${var.yourname}-${count.index + 1}"
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+  health_check {
+    enabled             = true
+    interval            = 30
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 5
   }
 
-  admin_username = var.admin_username
-  admin_password = var.admin_password
-
-  disable_password_authentication = false
-  computer_name                   = "${var.vm_name}-${count.index + 1}"
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+  tags = {
+    Name = "alb-tg"
   }
-
-  lifecycle {
-    ignore_changes = [network_interface_ids]
-  }
-
-  depends_on = [azurerm_network_interface.nic, azurerm_public_ip.lb_pip]
 }
+
 
 # Null Resource for Apache Installation
 resource "null_resource" "provision_apache" {
-  count      = 2
-  depends_on = [azurerm_linux_virtual_machine.vm]
+  count         = var.instance_count
+  depends_on = [aws_instance.ec2]
 
   # Trigger to force rerun whenever timestamp changes
+  # This will force terraform to rerun the provisioner and update the welcome.html file if changed
   triggers = {
     always_run = timestamp()
   }
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt update",
-      "sudo apt install -y apache2",
-      "echo '<h1>Welcome to \"${azurerm_linux_virtual_machine.vm[count.index].computer_name}\" Web Server!</h1>' | sudo tee /var/www/html/welcome.html",
+      # Check if update is already done
+      "[ -f /tmp/update_done ] && echo 'Update already completed. Skipping...' || (echo 'Running update for the first time...' && sudo apt update && touch /tmp/update_done)",
+      # check if apache is installed or not
+      "if ! pidof apache2 > /dev/null; then sudo apt install -y apache2; fi" ,
+      # Create / update the welcome.html file
+      "echo '<h1>Welcome to the Web Server ${aws_instance.ec2[count.index].tags.Name}!</h1>' | sudo tee /var/www/html/welcome.html",
       "sudo systemctl start apache2",
       "sudo systemctl enable apache2"
     ]
 
     connection {
       type     = "ssh"
-      user     = var.admin_username
+      user     = "ubuntu"
       password = var.admin_password
-      host     = azurerm_public_ip.vm_pip[count.index].ip_address
+      host     = aws_instance.ec2[count.index].public_ip
       timeout  = "1m"
     }
   }
 }
 
-# Output for Load Balancer Public IP
-output "load_balancer_ip" {
-  value       = azurerm_public_ip.lb_pip.ip_address
-  description = "The public IP address of the load balancer."
+
+
+# EC2 INSTANCES
+resource "aws_instance" "ec2" {
+  count         = var.instance_count
+  ami           = var.ami
+  instance_type = var.vm_size
+  subnet_id     = data.aws_subnets.default.ids[count.index % length(data.aws_subnets.default.ids)]
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+
+  tags = {
+    Name = "ec2-instance-${count.index}"
+  }
+
+  user_data = <<-EOF
+    #cloud-config
+    users:
+      - name: ${var.admin_username}
+        groups: sudo
+        shell: /bin/bash
+        sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+        lock_passwd: false
+        passwd: $(echo ${var.admin_password} | openssl passwd -6 -stdin)
+    EOF
+
 }
 
-# Output the Server Information for Each VM
-output "server_info" {
+# REGISTER EC2 INSTANCES TO TARGET GROUP
+resource "aws_lb_target_group_attachment" "tg_attachment" {
+  for_each = { for idx, instance in aws_instance.ec2 : idx => instance }
+
+  target_group_arn = aws_lb_target_group.tg.arn
+  target_id        = each.value.id
+  port             = 80
+}
+
+# APPLICATION LOAD BALANCER
+resource "aws_lb" "alb" {
+  name               = "app-load-balancer"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb_sg.id]
+  subnets            = data.aws_subnets.default.ids
+
+  enable_deletion_protection = false
+
+  tags = {
+    Name = "application-lb"
+  }
+}
+
+# LISTENER
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tg.arn
+  }
+}
+
+
+
+
+
+
+# NULL RESOURCE TO CHECK TARGET HEALTH
+resource "null_resource" "validate_lb_targets" {
+  
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "*** VALIDATING TARGET HEALTH ***"
+      echo "Target Group ARN: ${aws_lb_target_group.tg.arn}"
+      echo "Checking Load Balancer Target Group Health..."
+
+      unhealthy_count=0
+
+      aws elbv2 describe-target-health \
+        --region="${var.region}" \
+        --target-group-arn "${aws_lb_target_group.tg.arn}" \
+        --query 'TargetHealthDescriptions[*].[Target.Id,TargetHealth.State]' \
+        --output text > target_health.txt
+
+      while read target_id status; do
+        echo "Target ID: $target_id - Status: $status"
+        if [ "$status" != "healthy" ]; then
+          echo "Unhealthy Target: $target_id"
+          unhealthy_count=$((unhealthy_count + 1))
+        fi
+      done < target_health.txt
+
+      if [ $unhealthy_count -gt 0 ]; then
+        echo "Some targets are unhealthy. Check target_health.txt for details."
+        exit 1
+      else
+        echo "All targets are healthy."
+      fi
+    EOT
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  # depends_on = [aws_lb_target_group_attachment.tg_attachment]
+  depends_on = [ null_resource.provision_apache ]
+}
+
+# OUTPUTS
+# OUTPUT: ALB DNS NAME
+output "alb_dns_name" {
+  value       = "Please browse: http://${aws_lb.alb.dns_name}/welcome.html"
+  description = "DNS Name of the Load Balancer"
+}
+
+output "per_server_info" {
   value = [
-    for i in range(2) : "Please browse: http://${azurerm_public_ip.lb_pip.ip_address}/welcome.html. Server: ${azurerm_linux_virtual_machine.vm[i].computer_name}"
+    for idx, instance in aws_instance.ec2 : 
+    "Please browse: http://${instance.public_ip}/welcome.html. Server: ${instance.tags.Name}"
   ]
   description = "Instructions to access the web server through the load balancer."
+}
+
+
+# OUTPUT: INSTRUCTIONS FOR VALIDATION
+output "validation_message" {
+  value       = "Run terraform apply to validate the health of ALB targets using AWS CLI. Check the console output."
+  description = "Instructions for validating target health."
 }

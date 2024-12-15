@@ -44,3 +44,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 code/aws/solutions/lab103/.terraform.lock.hcl
+**target_health.txt
+**/.terraform.lock.hcl
