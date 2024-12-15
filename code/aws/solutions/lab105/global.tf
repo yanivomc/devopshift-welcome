@@ -16,7 +16,7 @@ variable "ami" {
   
 }
 variable "vm_name" {
-  default = "vm-yaniv"
+  default = vm-[CHANGE TO YOUR NAME]
 }
 
 variable "admin_username" {
