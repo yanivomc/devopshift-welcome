@@ -1,0 +1,41 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.9.3
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: Mock Build Step
+          command: |
+            echo "Starting the mock build..."
+            sleep 10
+            echo "Build complete."
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Mock Build Completed Successfully*"
+                  }
+                }
+              ]
+            }
+
+workflows:
+  version: 2
+  simple-build-notify:
+    jobs:
+      - build:
+          context: slack-secrets
+
+

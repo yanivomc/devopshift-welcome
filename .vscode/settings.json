@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "file:///Users/yanivos/.vscode/extensions/atlassian.atlascode-3.0.12/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
+        "https://json.schemastore.org/circleciconfig.json": "file:///Users/yanivos/work/repos/devopshift-welcome/.circleci/config.yaml"
+    }
+}
