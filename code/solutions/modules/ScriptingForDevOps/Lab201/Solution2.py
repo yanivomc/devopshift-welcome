@@ -1,25 +1,11 @@
-import subprocess
-
-service_name = "nginx"
+# Task 2: Backing Up a Configuration File
+import shutil
 
 try:
-    # Check service status
-    result = subprocess.run(["systemctl", "status", service_name], capture_output=True, text=True)
-
-    if result.returncode == 0:
-        print(f"Service {service_name} is running.")
-    else:
-        print(f"Service {service_name} is not running.")
-
-        # Restart the service
-        restart_result = subprocess.run(["sudo", "systemctl", "restart", service_name], capture_output=True, text=True)
-
-        if restart_result.returncode == 0:
-            print(f"Service {service_name} restarted successfully.")
-        else:
-            print(f"Failed to restart {service_name}: {restart_result.stderr}")
-
+    # Back up the configuration file
+    shutil.copy("nginx.conf", "nginx.conf.bak")
+    print("Backup created: nginx.conf.bak")
 except FileNotFoundError:
-    print("Error: systemctl command not found.")
+    print("Configuration file not found.")
 except PermissionError:
-    print("Error: Permission denied. Try running the script with elevated privileges.")
+    print("Permission denied while creating the backup.")
