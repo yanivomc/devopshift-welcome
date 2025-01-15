@@ -1,11 +1,15 @@
-# Task 1: Reading a Log File
+import subprocess
+
 try:
-    error_count = 0
-    with open("server.log", "r") as file:
-        for line in file:
-            print(line.strip())  # Remove extra whitespace
-            if "ERROR" in line:
-                error_count += 1
-    print(f"Total ERROR entries: {error_count}")
+    # List files in /var/log
+    result = subprocess.run(["ls", "-l", "/var/log"], capture_output=True, text=True)
+
+    if result.returncode == 0:
+        print(result.stdout)  # Print the output if the command succeeds
+    else:
+        print(f"Error: {result.stderr}")
+
 except FileNotFoundError:
-    print("Log file not found.")
+    print("Error: Directory not found.")
+except PermissionError:
+    print("Error: Permission denied.")
