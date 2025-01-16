@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    environment {
+        CREDENTIALS_ID = 'my-credentials-id'
+        K8S_ENDPOINT_URL = 'https://kubernetes.example.com'
+        DATABASE_ENDPOINT = 'mysql://db.example.com:3306'
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building application...'
+                echo "Using credentials ID: ${CREDENTIALS_ID}"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                echo "Connecting to Kubernetes at: ${K8S_ENDPOINT_URL}"
+                echo "Connecting to database at: ${DATABASE_ENDPOINT}"
+            }
+        }
+    }
+}
