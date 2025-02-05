@@ -6,6 +6,7 @@ variable "region" {
   default = "us-east-1"
 }
 
+############# Get image ID
 data "aws_ami" "terraformami" {
   owners = ["self"]
   filter {
@@ -25,7 +26,23 @@ output "yanivsami" {
 }
 
 output "terraformimage" {
-  value = data.aws_ami.terraformami
+  value = data.aws_ami.terraformami.id
 }
 
 
+####
+variable "vm_name" {
+  default = "vm-yanivc"
+}
+
+variable "admin_username" {
+  default = "admin-user"
+}
+
+variable "admin_password" {
+  default = "Password123!"
+}
+
+variable "vm_size" {
+  default = "t2.micro"
+}

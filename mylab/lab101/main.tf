@@ -7,6 +7,7 @@ variable "region" {
 }
 
 
+
 # Mocked IP var
 variable "emptyip" {
     default = ""
