@@ -3,6 +3,10 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "emptyip" {
+    default = "192.168.1.1"
+}
+
 resource "aws_security_group" "sg" {
   
 ingress {
@@ -41,16 +45,16 @@ resource "null_resource" "run_script" {
   }
 }
 
-# resource "null_resource" "check_public_ip" {
-#   provisioner "local-exec" {
-#     command = <<EOT
-#       if [ -z "${aws_instance.vm.public_ip}" ]; then
-#         echo "ERROR: Public IP address was not assigned." >&2
-#         exit 1
-#       fi
-#     EOT
-#   }
+resource "null_resource" "check_public_ip" {
+  provisioner "local-exec" {
+    command = <<EOT
+      if [ -z "${aws_instance.vm.public_ip}" ]; then
+        echo "ERROR: Public IP address was not assigned." >&2
+        exit 1
+      fi
+    EOT
+  }
 
-#   depends_on = [aws_instance.vm]
-# }
+  depends_on = [aws_instance.vm]
+}
 
