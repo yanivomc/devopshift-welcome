@@ -7,7 +7,10 @@ variable "region" {
 }
 
 
-
+# Mocked IP var
+variable "emptyip" {
+    default = ""
+}
 
 resource "aws_security_group" "sg" {
   ingress {
@@ -42,10 +45,21 @@ resource "aws_instance" "vm" {
 output "vm_public_ip" {
   value       = aws_instance.vm.public_ip
   description = "Public IP address of the VM"
+  depends_on = [ null_resource.check_public_ip ]
 }
 
-resource "null_resource" "run_script" {
+resource "null_resource" "check_public_ip" {
   provisioner "local-exec" {
-    command = "echo 'testing ssh and doing something' || exit 0"
+    command = <<EOT
+      if [ -z "${aws_instance.vm.public_ip}" ]; then
+        echo "ERROR: Public IP address was not assigned." >&2
+        exit 1
+        else
+        echo "We got the IP! ${aws_instance.vm.public_ip}"
+      fi
+    EOT
   }
+
+  depends_on = [aws_instance.vm]
 }
+

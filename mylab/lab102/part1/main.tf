@@ -1,5 +1,6 @@
+# Mocked IP var
 variable "emptyip" {
-    default = "192.168.1.1"
+    default = ""
 }
 
 resource "null_resource" "check_public_ip" {
