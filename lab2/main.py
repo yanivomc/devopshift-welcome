@@ -14,15 +14,14 @@ class JasonFormatter(logging.Formatter):
 log_level = os.environ.get("LOG_LEVEL", "DEBUG")
 log_format = os.environ.get("LOG_FORMAT", "TEXT")
 
-# logging.basicConfig(level="INFO")
 handler = logging.StreamHandler(sys.stdout)
 logger = logging.getLogger("myapp")
 logger.addHandler(handler)
 logger.setLevel(log_level)
 if log_format == "JSON":
     handler.setFormatter(JasonFormatter())
-
-
+else:
+    handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
 class InvalidServerError(Exception):
     pass
 
@@ -50,6 +49,6 @@ while True:
         server_name.strip()
         try:
             status = check_service_status(server_name)
-            logger.info("Valid Server name")
+            logger.info("Valid Server name.")
         except ValueError as err:
-            logger.error("Invalid Server name")
+            logger.error("Invalid Server name.")
