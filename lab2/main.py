@@ -17,9 +17,12 @@ def check_service_status(server_name):
     except InvalidServerError:
         raise ValueError
 if __name__ == "__main__":
-    while True:
+    server_name = ""
+    while server_name != "exit":
             server_name = input("Enter a server name:\n")
             server_name.strip()
+            if server_name == "exit":
+                break
             try:
                 status = check_service_status(server_name)
                 logger.info("Valid Server name.")
