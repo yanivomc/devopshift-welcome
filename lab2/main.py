@@ -4,7 +4,11 @@ import json
 import os
 class JasonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord):
-        log = {"time":record.created, "module": record.module}
+        log = {
+               "timestamp": self.formatTime(record),
+               "level": record.levelname,
+               "message": record.getMessage()
+               }
         return json.dumps(log)
 
 log_level = os.environ.get("LOG_LEVEL", "DEBUG")
@@ -17,8 +21,6 @@ logger.addHandler(handler)
 logger.setLevel(log_level)
 if log_format == "JSON":
     handler.setFormatter(JasonFormatter())
-
-
 
 
 class InvalidServerError(Exception):
