@@ -14,14 +14,19 @@ class JasonFormatter(logging.Formatter):
 log_level = os.environ.get("LOG_LEVEL", "DEBUG")
 log_format = os.environ.get("LOG_FORMAT", "TEXT")
 
-handler = logging.StreamHandler(sys.stdout)
+stdout_handler = logging.StreamHandler(sys.stdout)
 logger = logging.getLogger("myapp")
-logger.addHandler(handler)
+file_handler = logging.FileHandler("myapp.log")
+logger.addHandler(stdout_handler)
+logger.addHandler(file_handler)
 logger.setLevel(log_level)
 if log_format == "JSON":
-    handler.setFormatter(JasonFormatter())
+    stdout_handler.setFormatter(JasonFormatter())
+    file_handler.setFormatter(JasonFormatter())
 else:
-    handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
+    stdout_handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
+    file_handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
+
 class InvalidServerError(Exception):
     pass
 
