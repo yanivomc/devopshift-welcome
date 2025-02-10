@@ -1,8 +1,7 @@
+import logging
+logging.basicConfig(level="INFO")
 class InvalidServerError(Exception):
     pass
-
-
-
 
 valid_server = {
     "nginx", "docker", "apache", "tomcat", "mysql", "mariadb", "postgresql", "mongodb", "redis", "memcached",
@@ -19,20 +18,26 @@ valid_server = {
     "argo-workflows-applicationset-operator", "argo-tunnel-applicationset-operator", "argo-registry-applicationset-operator",
     "argo-mlflow-applicationset-operator"
 }
-while True:
+
+
+def check_service_status(server_name):
     try:
-        server = input("Enter a server name: ")
-        server.strip()
-        if server == "":
+        if server_name == "":
             raise InvalidServerError("Server name is empty.")
-        if not server.isalnum():
+        if not server_name.isalnum():
             raise InvalidServerError("Server name must be alphanumeric.")
-        if server not in valid_server:
+        if server_name not in valid_server:
             raise InvalidServerError("Server is not recognized.")
         else:
-            print("Server is running.")
-    except ValueError as err:
-        print(err)
+            return "Runing"
+    except InvalidServerError:
+        raise ValueError
 
-
-
+while True:
+        server_name = input("Enter a server name: ")
+        server_name.strip()
+        try:
+            status = check_service_status(server_name)
+            logging.info("User type valid server name.")
+        except ValueError as err:
+            logging.error("User type invalid server name.")
