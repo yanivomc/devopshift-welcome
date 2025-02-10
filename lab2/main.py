@@ -16,12 +16,12 @@ def check_service_status(server_name):
             return "Runing"
     except InvalidServerError:
         raise ValueError
-
-while True:
-        server_name = input("Enter a server name:\n")
-        server_name.strip()
-        try:
-            status = check_service_status(server_name)
-            logger.info("Valid Server name.")
-        except ValueError as err:
-            logger.error("Invalid Server name.")
+if __name__ == "__main__":
+    while True:
+            server_name = input("Enter a server name:\n")
+            server_name.strip()
+            try:
+                status = check_service_status(server_name)
+                logger.info("Valid Server name.")
+            except ValueError as err:
+                logger.error("Invalid Server name.")
