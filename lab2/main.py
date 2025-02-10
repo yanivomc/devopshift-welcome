@@ -1,36 +1,32 @@
 import logging
 import sys
 import json
+import os
 class JasonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord):
         log = {"time":record.created, "module": record.module}
         return json.dumps(log)
 
+log_level = os.environ.get("LOG_LEVEL", "DEBUG")
+log_format = os.environ.get("LOG_FORMAT", "TEXT")
 
 # logging.basicConfig(level="INFO")
 handler = logging.StreamHandler(sys.stdout)
 logger = logging.getLogger("myapp")
 logger.addHandler(handler)
-logger.setLevel("INFO")
-handler.setFormatter(JasonFormatter())
+logger.setLevel(log_level)
+if log_format == "JSON":
+    handler.setFormatter(JasonFormatter())
+
+
+
 
 class InvalidServerError(Exception):
     pass
 
 valid_server = {
     "nginx", "docker", "apache", "tomcat", "mysql", "mariadb", "postgresql", "mongodb", "redis", "memcached",
-    "rabbitmq", "kafka", "zookeeper", "elasticsearch", "logstash", "kibana", "prometheus", "grafana", "jenkins",
-    "gitlab", "nexus", "sonarqube", "harbor", "minio", "portainer", "traefik", "consul", "vault", "nomad", "packer",
-    "terraform", "ansible", "vagrant", "docker-compose", "kubernetes", "helm", "istio", "prometheus-operator",
-    "grafana-operator", "kiali", "jaeger", "loki", "fluentd", "nginx-ingress", "cert-manager", "external-dns",
-    "argocd", "tekton", "jenkins-x", "spinnaker", "argo-rollouts", "argo-cd", "argo-events", "argo-workflows",
-    "argo-tunnel", "argo-registry", "argo-mlflow", "argo-cd-operator", "argo-rollouts-operator", "argo-events-operator",
-    "argo-workflows-operator", "argo-tunnel-operator", "argo-registry-operator", "argo-mlflow-operator",
-    "argo-cd-applicationset", "argo-rollouts-applicationset", "argo-events-applicationset", "argo-workflows-applicationset",
-    "argo-tunnel-applicationset", "argo-registry-applicationset", "argo-mlflow-applicationset",
-    "argo-cd-applicationset-operator", "argo-rollouts-applicationset-operator", "argo-events-applicationset-operator",
-    "argo-workflows-applicationset-operator", "argo-tunnel-applicationset-operator", "argo-registry-applicationset-operator",
-    "argo-mlflow-applicationset-operator"
+    "terraform", "ansible", "vagrant", "docker-compose", "kubernetes", "helm", "istio", "prometheus-operator"
 }
 
 
