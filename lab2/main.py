@@ -20,7 +20,7 @@ if __name__ == "__main__":
     server_name = ""
     while server_name != "exit":
             server_name = input("Enter a server name:\n")
-            server_name.strip()
+            server_name = server_name.strip().lower()
             if server_name == "exit":
                 break
             try:
