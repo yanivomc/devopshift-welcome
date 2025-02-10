@@ -1,0 +1,2 @@
+class InvalidServerError(Exception):
+    pass

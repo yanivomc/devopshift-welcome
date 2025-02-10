@@ -1,40 +1,8 @@
-import logging
-import sys
-import json
-import os
-class JasonFormatter(logging.Formatter):
-    def format(self, record: logging.LogRecord):
-        log = {
-               "timestamp": self.formatTime(record),
-               "level": record.levelname,
-               "message": record.getMessage()
-               }
-        return json.dumps(log)
+from log import setup_logging
+from invalid_server_error import InvalidServerError
+from valid_servers import valid_servers
 
-log_level = os.environ.get("LOG_LEVEL", "DEBUG")
-log_format = os.environ.get("LOG_FORMAT", "TEXT")
-
-stdout_handler = logging.StreamHandler(sys.stdout)
-logger = logging.getLogger("myapp")
-file_handler = logging.FileHandler("myapp.log")
-logger.addHandler(stdout_handler)
-logger.addHandler(file_handler)
-logger.setLevel(log_level)
-if log_format == "JSON":
-    stdout_handler.setFormatter(JasonFormatter())
-    file_handler.setFormatter(JasonFormatter())
-else:
-    stdout_handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
-    file_handler.setFormatter(logging.Formatter("%(asctime)s:%(name)s:%(levelname)s:%(module)s:%(lineno)d:%(funcName)s:%(message)s"))
-
-class InvalidServerError(Exception):
-    pass
-
-valid_server = {
-    "nginx", "docker", "apache", "tomcat", "mysql", "mariadb", "postgresql", "mongodb", "redis", "memcached",
-    "terraform", "ansible", "vagrant", "docker-compose", "kubernetes", "helm", "istio", "prometheus-operator"
-}
-
+logger = setup_logging()
 
 def check_service_status(server_name):
     try:
@@ -42,7 +10,7 @@ def check_service_status(server_name):
             raise InvalidServerError("Server name is empty.")
         if not server_name.isalnum():
             raise InvalidServerError("Server name must be alphanumeric.")
-        if server_name not in valid_server:
+        if server_name not in valid_servers:
             raise InvalidServerError("Server is not recognized.")
         else:
             return "Runing"
