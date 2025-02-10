@@ -1,5 +1,19 @@
 import logging
-logging.basicConfig(level="INFO")
+import sys
+import json
+class JasonFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord):
+        log = {"time":record.created, "module": record.module}
+        return json.dumps(log)
+
+
+# logging.basicConfig(level="INFO")
+handler = logging.StreamHandler(sys.stdout)
+logger = logging.getLogger("myapp")
+logger.addHandler(handler)
+logger.setLevel("INFO")
+handler.setFormatter(JasonFormatter())
+
 class InvalidServerError(Exception):
     pass
 
@@ -34,10 +48,10 @@ def check_service_status(server_name):
         raise ValueError
 
 while True:
-        server_name = input("Enter a server name: ")
+        server_name = input("Enter a server name:\n")
         server_name.strip()
         try:
             status = check_service_status(server_name)
-            logging.info("User type valid server name.")
+            logger.info("Valid Server name")
         except ValueError as err:
-            logging.error("User type invalid server name.")
+            logger.error("Invalid Server name")
