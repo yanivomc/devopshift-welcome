@@ -1,0 +1,5 @@
+2025-02-10 15:25:39,050:myapp:INFO:main:57:<module>:Valid Server name.
+2025-02-10 15:25:50,234:myapp:ERROR:main:59:<module>:Invalid Server name.
+2025-02-10 16:01:15,471:myapp:INFO:main:25:<module>:Valid Server name.
+2025-02-10 16:01:19,268:myapp:ERROR:main:27:<module>:Invalid Server name.
+2025-02-10 16:01:23,829:myapp:ERROR:main:27:<module>:Invalid Server name.
