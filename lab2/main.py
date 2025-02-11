@@ -13,7 +13,7 @@ def check_service_status(server_name):
         if server_name not in valid_servers:
             raise InvalidServerError("Server is not recognized.")
         else:
-            return "Runing"
+            return "Running"
     except InvalidServerError:
         raise ValueError
 if __name__ == "__main__":
