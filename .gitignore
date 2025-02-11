@@ -45,3 +45,6 @@ override.tf.json
 terraform.rckeys/
 
 lab2/myapp.log
+
+.venv
+.venv/*
