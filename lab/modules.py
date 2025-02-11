@@ -34,5 +34,3 @@ def add_new_server(new_server: Server):
         f.write("\n")
         f.write(new_server.model_dump_json())
         
-
-print(read_server_list())

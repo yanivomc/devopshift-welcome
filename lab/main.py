@@ -15,14 +15,15 @@ class ServerStatusResponse:
 
 @app.get("/server")
 def get_server(server_name: str) -> ServerStatusResponse:
-    server_status = False
     for server in servers:
         if server.name == server_name:
-            return ServerStatusResponse(server_name, server_status)
+            return ServerStatusResponse(server_name, server.online)
     return ServerStatusResponse(server_name, server_name + " Does not exist.")
 
  
 @app.post("/server")
 def add_server(server_name: str) -> ServerStatusResponse:
-    modules.add_new_server(modules.Server(name=server_name, online=True, cpus=6, ram=10))
+    new_server = modules.Server(name=server_name, online=True, cpus=6, ram=10)
+    modules.add_new_server(new_server)
+    servers.append(new_server)
     return ServerStatusResponse(server_name, " Server was added and now is running.")
