@@ -7,7 +7,7 @@ def list_bucket(s3_client):
         for bucket in response["Buckets"]:
             print(f"Buckets: {bucket['Name']}")
     except KeyError:
-        print("no bucket was found")
+        print("No buckets were found")
 def create_bucket(s3_client):
     bucket_name = input("Please chose a name for the new bucket: ")
     response = s3_client.create_bucket(
