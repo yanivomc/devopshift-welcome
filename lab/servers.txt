@@ -1,0 +1,4 @@
+{"name": "nginx", "online": true, "cpus": 2, "ram": 4}
+{"name":"wow","online":true,"cpus":6,"ram":10}
+{"name":"wow","online":true,"cpus":6,"ram":10}
+{"name":"yonatan","online":true,"cpus":6,"ram":10}
