@@ -30,7 +30,7 @@ metadata:
     app: details
     version: v1
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: details
