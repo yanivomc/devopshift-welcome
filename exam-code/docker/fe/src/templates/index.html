@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Tracker</title>
+    <script>
+        async function fetchPrice() {
+            const response = await fetch('/fetch_price');
+            const data = await response.json();
+            let output = "";
+            if (Array.isArray(data)) {
+                data.forEach(entry => {
+                    output += `<p>${entry.coin.toUpperCase()}: $${entry.price} - Saved to databse: ${entry.saved}</p>`;
+                });
+            } else {
+                output = `<p>Error fetching prices.</p>`;
+            }
+            document.getElementById("prices").innerHTML = output;
+        }
+    </script>
+</head>
+<body>
+    <h1>Crypto Price Tracker</h1>
+    <button onclick="fetchPrice()">Fetch Prices</button>
+    <div id="prices"></div>
+</body>
+</html>
