@@ -1,36 +1,9 @@
 services:
   web:
-    build: ./fe
-    image: "yanivomc/fe-exam:latest"
-    ports:
-      - "5002:5002"
-    depends_on:
-      - backend-service
-    networks:
-      - internal
+
 
   backend-service:
-    build: ./be
-    image: "yanivomc/be-exam:latest"
-    networks:
-      - internal
-    environment:
-      - MYSQL_HOST=mysqldb
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=123456
+
 
   mysqldb:
-      image: mysql:5.7
-      networks:
-        - internal
-      environment:
-        MYSQL_ROOT_PASSWORD: 123456
-        # create database name crypto_db
-        MYSQL_DATABASE: crypto_db
-
-networks:
-  internal:
-    driver: bridge
-
-
-  
+      
