@@ -21,6 +21,9 @@ metadata:
 ---
 apiVersion: apps/v1
 kind: Deployment
+annotations:
+  argocd.argoproj.io/sync-wave: "1"
+
 metadata:
   name: details-v1
   labels:
