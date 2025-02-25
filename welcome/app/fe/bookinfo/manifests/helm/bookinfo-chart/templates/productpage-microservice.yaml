@@ -23,6 +23,8 @@ metadata:
 ---
 apiVersion: apps/v1
 kind: Deployment
+annotations:
+  argocd.argoproj.io/sync-wave: "3"
 metadata:
   name: productpage-v1
   labels:
