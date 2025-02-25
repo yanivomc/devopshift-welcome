@@ -21,14 +21,14 @@ metadata:
 ---
 apiVersion: apps/v1
 kind: Deployment
-annotations:
-  argocd.argoproj.io/sync-wave: "1"
-
 metadata:
   name: details-v1
   labels:
     app: details
     version: v1
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
