@@ -1,0 +1,72 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.10'
+        }
+    }
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
+        DOCKER_REGISTRY = 'yanivomc'
+        REPO_NAME = 'fe-exam'  // Change to 'be-exam' for backend pipeline
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+        HELM_REGISTRY = 'oci://your-helm-registry'
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-org/your-repo.git'
+            }
+        }
+        
+        stage('Lint & Security Scan') {
+            steps {
+                sh 'pip install flake8 bandit'
+                sh 'flake8 .'
+                sh 'bandit -r .'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG ."
+                sh "docker tag $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG $DOCKER_REGISTRY/$REPO_NAME:latest"
+            }
+        }
+        
+        stage('Run Tests in Container') {
+            steps {
+                sh "docker run --rm $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG pytest tests/"
+            }
+        }
+        
+        stage('Integration Test with Docker Compose') {
+            steps {
+                sh 'docker-compose up -d'
+                sleep time: 10, unit: 'SECONDS'  // Wait for services to start
+                sh 'curl -f http://localhost:5002 || exit 1'  // Adjust port for backend if needed
+                sh 'docker-compose down'
+            }
+        }
+        
+        stage('Push to Docker Hub') {
+            steps {
+                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                sh "docker push $DOCKER_REGISTRY/$REPO_NAME:$IMAGE_TAG"
+                sh "docker push $DOCKER_REGISTRY/$REPO_NAME:latest"
+            }
+        }
+        
+        stage('Update Helm OCI Chart') {
+            steps {
+                sh 'helm registry login $HELM_REGISTRY --username $DOCKERHUB_CREDENTIALS_USR --password $DOCKERHUB_CREDENTIALS_PSW'
+                sh "helm package helm-chart && helm push helm-chart-*.tgz $HELM_REGISTRY"
+            }
+        }
+    }
+}
