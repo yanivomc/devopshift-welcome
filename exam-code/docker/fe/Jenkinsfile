@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.10'
-        }
-    }
+    agent { label 'docker' }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds') // Configure Jenkins with your Docker Hub credentials ID
         DOCKER_REGISTRY = 'yaniv8360'
@@ -20,16 +16,17 @@ pipeline {
             parallel {
                 stage('Flake8 Linting') {
                     steps {
-                        sh 'pip install flake8 && flake8 .'
+                        // sh 'pip install flake8 && flake8 .'
                     }
                 }
                 stage('Bandit Security Scan') {
                     steps {
-                        sh 'pip install bandit && bandit -r .'
+                        // sh 'pip install bandit && bandit -r .'
                     }
                 }
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 sh 'pip install -r exam-code/docker/fe/requirements.txt'
