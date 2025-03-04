@@ -16,12 +16,12 @@ pipeline {
             parallel {
                 stage('Flake8 Linting') {
                     steps {
-                        // sh 'pip install flake8 && flake8 .'
+                        echo 'pip install flake8 && flake8 .'
                     }
                 }
                 stage('Bandit Security Scan') {
                     steps {
-                        // sh 'pip install bandit && bandit -r .'
+                        echo 'pip install bandit && bandit -r .'
                     }
                 }
             }

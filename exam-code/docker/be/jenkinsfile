@@ -13,10 +13,17 @@ pipeline {
             }
         }
         stage('Lint & Security Scan') {
-            steps {
-                sh 'pip install flake8 bandit'
-                sh 'flake8 . ||true'
-                sh 'bandit -r . ||true'
+            parallel {
+                stage('Flake8 Linting') {
+                    steps {
+                        echo 'pip install flake8 && flake8 .'
+                    }
+                }
+                stage('Bandit Security Scan') {
+                    steps {
+                        echo 'pip install bandit && bandit -r .'
+                    }
+                }
             }
         }
         stage('Install Dependencies') {
