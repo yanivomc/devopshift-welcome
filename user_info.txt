@@ -1,0 +1,3 @@
+GITBRANCH=argo-jenkins-exam
+GITURL=github.com/yaniv8360/devopshift-welcome.git
+GITUSERNAME=yaniv8360

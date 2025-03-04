@@ -26,6 +26,7 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: 123456
         # create database name crypto_db
+        # morning commit
         MYSQL_DATABASE: crypto_db
 
 networks:
