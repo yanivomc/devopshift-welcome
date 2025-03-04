@@ -5,14 +5,71 @@ pipeline {
         }
     }
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
-        DOCKER_REGISTRY = 'yanivomc'
-        REPO_NAME = 'fe-exam'  // Change to 'be-exam' for backend pipeline
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds') // Configure Jenkins with your Docker Hub credentials ID
+        DOCKER_REGISTRY = 'yaniv8360'
+        REPO_NAME = 'fe-exam'  // Change to 'be-exam' when creating the backend pipeline
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-        
     }
     stages {
-        
-        
-        
+        stage('Clone Repository') {
+            steps {
+                git branch: 'argo-jenkins-exam', url: 'https://github.com/yaniv8360/devopshift-welcome.git'
+            }
         }
+        stage('Lint & Security Scan') {
+            parallel {
+                stage('Flake8 Linting') {
+                    steps {
+                        sh 'pip install flake8 && flake8 .'
+                    }
+                }
+                stage('Bandit Security Scan') {
+                    steps {
+                        sh 'pip install bandit && bandit -r .'
+                    }
+                }
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r exam-code/docker/fe/requirements.txt'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                    cd exam-code/docker/fe/
+                    docker build -t yaniv8360/fe-exam:${IMAGE_TAG} .
+                    docker tag yaniv8360/fe-exam:${IMAGE_TAG} yaniv8360/fe-exam:latest
+                """
+            }
+        }
+        stage('Run Tests in Container') {
+            steps {
+                sh "docker run --rm yaniv8360/fe-exam:${IMAGE_TAG} pytest tests/"
+            }
+        }
+        stage('Integration Test with Docker Compose') {
+            steps {
+                sh '''
+                    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+                    docker-compose -f exam-code/docker/docker-compose.yaml down ||true
+                    sleep 5
+                    docker-compose -f exam-code/docker/docker-compose.yaml up -d
+
+                '''
+                    sleep time: 20, unit: 'SECONDS'
+                    sh 'docker ps | grep -q 5002 && echo "Port 5002 is mapped and the container is running." || exit 1 '
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                sh """
+                    echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    docker push yaniv8360/fe-exam:${IMAGE_TAG}
+                    docker push yaniv8360/fe-exam:latest
+                """
+            }
+        }
+    }
+}
