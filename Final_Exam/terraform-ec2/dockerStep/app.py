@@ -33,7 +33,9 @@ def home():
            })
 
    # Fetch VPCs, Load Balancers and AMIs (Note: Dummy variables vpcs, lbs, amis used here)
-   # These may cause errors, but that's expected at this stage.
+   vpcs = ec2_client.describe_vpcs()
+   lbs = elb_client.describe_load_balancers()
+   amis = ec2_client.describe_images(Owners=["self"])
    vpc_data = [{"VPC ID": vpc["VpcId"], "CIDR": vpc["CidrBlock"]} for vpc in []]
    lb_data = [{"LB Name": lb["LoadBalancerName"], "DNS Name": lb["DNSName"]} for lb in []]
    ami_data = [{"AMI ID": ami["ImageId"], "Name": ami.get("Name", "N/A")} for ami in []]
