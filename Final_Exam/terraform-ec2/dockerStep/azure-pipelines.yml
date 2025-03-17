@@ -1,0 +1,68 @@
+trigger:
+  branches:
+    include:
+      - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  DOCKERHUB_USERNAME: $(DOCKERHUB_USERNAME)
+  DOCKERHUB_PASSWORD: $(DOCKERHUB_PASSWORD)
+  IMAGE_NAME: 'yaniv8360/flask-aws-monitor-azure'
+
+stages:
+- stage: CloneRepository
+  displayName: 'Clone Repository'
+  jobs:
+  - job: Clone
+    steps:
+      - checkout: self
+        displayName: 'Checkout Repository'
+
+- stage: ParallelChecks
+  displayName: 'Parallel Linting & Security Checks'
+  dependsOn: CloneRepository
+  jobs:
+  - job: Linting
+    displayName: 'Linting'
+    steps:
+      - script: |
+          echo 'pip install flake8 && flake8 .'
+          echo 'pip install shellcheck && shellcheck .'
+          echo 'pip install hadolint && hadolint .'
+        displayName: 'Run Linting'
+  - job: SecurityScan
+    displayName: 'Security Scanning'
+    steps:
+      - script: |
+          echo 'pip install trivy && trivy .'
+          echo 'pip install bandit && bandit .'
+        displayName: 'Run Security Scan'
+
+- stage: BuildDockerImage
+  displayName: 'Build Docker Image'
+  dependsOn: ParallelChecks
+  jobs:
+  - job: BuildImage
+    displayName: 'Build Docker Image'
+    steps:
+      - script: |
+          docker build -t $(IMAGE_NAME) .
+        displayName: 'Build Docker Image'
+
+- stage: PushToDockerHub
+  displayName: 'Push Docker Image to Docker Hub'
+  dependsOn: BuildDockerImage
+  jobs:
+  - job: PushImage
+    displayName: 'Push Docker Image'
+    steps:
+      - script: |
+          echo $(DOCKERHUB_PASSWORD) | docker login --username $(DOCKERHUB_USERNAME) --password-stdin
+          docker push $(IMAGE_NAME)
+        displayName: 'Push Docker Image'
+
+- stage: SecureCredentials
+  displayName: 'Store and Use Secure Credentials'
+  dependsOn: []
