@@ -52,19 +52,12 @@ resource "aws_subnet" "main" {
     Name = "yaniv-roticsfe-subnet"
   }
 }
-resource "aws_internet_gateway" "gw" {
-  vpc_id = "vpc-044604d0bfb707142"
-  
-  tags = {
-    Name = "yaniv-roticsfe-igw"
-  }
-}
 resource "aws_route_table" "main" {
   vpc_id = "vpc-044604d0bfb707142"
   
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    gateway_id = "igw-0c3d8c45c5bd39e34"
   }
   
   tags = {
@@ -75,12 +68,15 @@ resource "aws_route_table_association" "main" {
   subnet_id      = aws_subnet.main.id
   route_table_id = aws_route_table.main.id
 }
+data "aws_ssm_parameter" "ubuntu_ami" {
+  name = "/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id"
+}
 resource "aws_instance" "builder" {
-  ami                    = "ami-0c55b62526969262c"
+  ami                    = data.aws_ssm_parameter.ubuntu_ami.value
   instance_type          = "t3.medium"
   key_name               = aws_key_pair.builder_key.key_name
   vpc_security_group_ids = [aws_security_group.builder_sg.id]
-  subnet_id              = "172.31.144.0/20"
+  subnet_id              = aws_subnet.main.id
   associate_public_ip_address = true
 
   tags = {
