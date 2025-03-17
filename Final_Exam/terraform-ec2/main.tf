@@ -45,7 +45,6 @@ resource "aws_security_group" "builder_sg" {
 resource "aws_subnet" "main" {
   vpc_id                  = "vpc-044604d0bfb707142"
   cidr_block              = "172.31.144.0/20"
-  availability_zone       = "us-east-1e"
   map_public_ip_on_launch = true
   
   tags = {
