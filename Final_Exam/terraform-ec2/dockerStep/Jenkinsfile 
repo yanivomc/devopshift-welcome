@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-creds')
+        IMAGE_NAME = 'yaniv8360/flask-aws-monitor'
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'dev', url: 'https://github.com/yaniv8360/devops-final-project.git'
+            }
+        }
+        
+        stage('Lint & Security Scan') {
+            parallel {
+                stage('Flake8 Linting') {
+                    steps {
+                        echo 'pip install flake8 && flake8 .'
+                    }
+                }
+                stage('Bandit Security Scan') {
+                    steps {
+                        echo 'pip install bandit && bandit -r .'
+                    }
+                }
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r dockerStep/requirements.txt'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                    cd dockerStep/
+                    docker build -t yaniv8360/flask-aws-monitor:${IMAGE_TAG} .
+                    docker tag yaniv8360/flask-aws-monitor:${IMAGE_TAG} yaniv8360/flask-aws-monitor:latest
+                """
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                sh """
+                    echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin
+                    docker push yaniv8360/flask-aws-monitor:${IMAGE_TAG}
+                    docker push yaniv8360/flask-aws-monitor:latest
+                """
+            }
+        }
+    }
+}
