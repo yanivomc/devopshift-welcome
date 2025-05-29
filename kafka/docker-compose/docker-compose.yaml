@@ -1,7 +1,7 @@
 version: '3'
 services:
   kafka1:
-    image: confluentinc/cp-kafka:7.3.2
+    image: yanivomc/kafkabroker:latest
     container_name: kafka1
     environment:
       KAFKA_NODE_ID: 1
@@ -18,7 +18,7 @@ services:
       - ./run_workaround.sh:/tmp/run_workaround.sh
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
   kafka2:
-    image: confluentinc/cp-kafka:7.3.2
+    image: yanivomc/kafkabroker:latest
     container_name: kafka2
     environment:
       KAFKA_NODE_ID: 2
@@ -33,7 +33,7 @@ services:
       - ./run_workaround.sh:/tmp/run_workaround.sh
     command: "bash -c '/tmp/run_workaround.sh && /etc/confluent/docker/run'"
   kafka3:
-    image: confluentinc/cp-kafka:7.3.2
+    image: yanivomc/kafkabroker:latest
     container_name: kafka3
     environment:
       KAFKA_NODE_ID: 3
