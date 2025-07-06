@@ -38,5 +38,5 @@ locals {
 
 output "Add_Another_Output_Using_For_each" {
     description = "Use for_each to create a list of mock services based on the create_database value"
-    value = [ for db_value in local.database_value : "Value: ${db_value}"]
+    value = [ for db_value in local.database_value : "Create: ${db_value}"]
 }
