@@ -49,6 +49,23 @@ resource "time_sleep" "wait_for_ip" {
 
 
 
+#  This command checks if the public IP address (${aws_instance.vm.public_ip}) is empty (-z).
+resource "null_resource" "check_public_ip" {
+
+  #  If it is empty, it outputs an error message and terminates with an exit code status 1, causing Terraform to stop with an error.
+  provisioner "local-exec" {
+    command = <<EOT
+      if [ -z "${aws_instance.vm.public_ip}" ]; then
+        echo "ERROR: Public IP address was not assigned." >&2
+        exit 1
+      fi
+    EOT
+  }
+
+  depends_on = [aws_instance.vm]
+}
+
+
 
 
 
