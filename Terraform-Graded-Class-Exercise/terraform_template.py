@@ -13,8 +13,8 @@ instance_types = {
 
 
 
-AVAILABILITY_ZONES = ["us-east-1a", "us-east-1b"]
-ALLOWED_REGION = "us-east-1"
+AVAILABILITY_ZONES = ["us-east-2a", "us-east-2b"]
+ALLOWED_REGION = "us-east-2"
 
 
 
@@ -139,14 +139,6 @@ output "load_balancer_dns" {
 
 
 
-
-
-# terraform_template = """
-
-
-
-
-# """
 
 
 
