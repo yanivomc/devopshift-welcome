@@ -1,98 +1,77 @@
 
+provider "aws" {
+  region = "us-east-2"
+}
 
-    provider "aws" {
-    region = "us-east-2"
-    }
+variable "vpc_id" {
+  default = "vpc-0a691b1cda1dea4be"
+}
 
-    resource "aws_instance" "web_server" {
-     ami = "ami-0abcdef1234567890"
-     instance_type = "t3.small"
-     subnet_id         = aws_subnet.public[0].id
-     availability_zone = "us-east-2"
-     vpc_security_group_ids = [aws_security_group.lb_sg.id]
+variable "subnet_ids" {
+  default = ["subnet-09a9b4fe4e74051b3", "subnet-05860172a9327d826"]
+}
 
-     tags = {
-       Name = "WebServer"
-     }
-    }
+resource "aws_instance" "web_server" {
+  ami                    = "ami-0c995fbcf99222492"
+  instance_type          = "t3.small"
+  availability_zone      = "us-east-2"
+  subnet_id              = var.subnet_ids[0]
+  vpc_security_group_ids = [aws_security_group.lb_sg.id]
 
-    resource "aws_lb" "application_lb" {
-     name = "Maor-lb"
-     internal = false
-     load_balancer_type = "application"
-     security_groups = [aws_security_group.lb_sg.id]
-     subnets = aws_subnet.public[*].id
-    }
+  tags = {
+    Name = "WebServer"
+  }
+}
 
-    resource "aws_security_group" "lb_sg" {
-     name        = "lb_security_group"
-     description = "Allow HTTP inbound traffic"
-     vpc_id      = aws_vpc.main.id
+resource "aws_security_group" "lb_sg" {
+  name        = "lb_security_group_Maor-lb"
+  description = "Allow HTTP inbound traffic"
+  vpc_id      = var.vpc_id
 
-     ingress {
-       from_port   = 80
-       to_port     = 80
-       protocol    = "tcp"
-       cidr_blocks = ["0.0.0.0/0"]
-     }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
-     egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-     }
-    }
+resource "aws_lb" "application_lb" {
+  name               = "Maor-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = var.subnet_ids
+}
 
-    resource "aws_lb_listener" "http_listener" {
-     load_balancer_arn = aws_lb.application_lb.arn
-     port              = 80
-     protocol          = "HTTP"
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.application_lb.arn
+  port              = 80
+  protocol          = "HTTP"
 
-     default_action {
-       type             = "forward"
-       target_group_arn = aws_lb_target_group.web_target_group.arn
-     }
-    }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web_target_group.arn
+  }
+}
 
-    resource "aws_lb_target_group" "web_target_group" {
-     name     = "web-target-group"
-     port     = 80
-     protocol = "HTTP"
-     vpc_id   = aws_vpc.main.id
+resource "aws_lb_target_group" "web_target_group" {
+  name     = "web-target-group-Maor-lb"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+}
 
-     health_check {
-        healthy_threshold   = 2
-        unhealthy_threshold = 2
-        timeout             = 5
-        interval            = 30
-        path                = "/"
-        protocol            = "HTTP"
-     }
-    }
-
-    resource "aws_lb_target_group_attachment" "web_instance_attachment" {
-     target_group_arn = aws_lb_target_group.web_target_group.arn
-     target_id        = aws_instance.web_server.id
-     port             = 80
-    }
-
-    resource "aws_subnet" "public" {
-     count = 2
-     vpc_id = aws_vpc.main.id
-     cidr_block = "10.0.${count.index}.0/24"
-     availability_zone = element(["us-east-2a", "us-east-2b"], count.index)
-    }
+resource "aws_lb_target_group_attachment" "web_instance_attachment" {
+  target_group_arn = aws_lb_target_group.web_target_group.arn
+  target_id        = aws_instance.web_server.id
+}
 
 
-    resource "aws_vpc" "main" {
-     cidr_block = "10.0.0.0/16"
-    }
-    
-    output "instance_id" {
-      value = aws_instance.web_server.id
-    }
-    
-    output "lb_dns_name" {
-      value = aws_lb.application_lb.dns_name
-    }
+output "instance_id" {
+  value = aws_instance.web_server.id
+}
+
+output "load_balancer_dns" {
+  value = aws_lb.application_lb.dns_name
+}
