@@ -8,5 +8,6 @@ output "ec2_public_ip" {
 }
 
 output "vpc_id" {
-  value = aws_vpc.lab_vpc.id
+  value = module.vpc.public_subnet_id
+  # value = aws_vpc.lab_vpc.id
 }

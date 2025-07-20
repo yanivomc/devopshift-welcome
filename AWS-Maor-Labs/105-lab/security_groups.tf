@@ -1,6 +1,5 @@
-# security_groups.tf
 resource "aws_security_group" "ec2_sg" {
-  vpc_id = aws_vpc.lab_vpc.id
+  vpc_id = module.vpc.vpc_id
   name   = "ec2-security-group"
 
   ingress {
@@ -24,3 +23,5 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
