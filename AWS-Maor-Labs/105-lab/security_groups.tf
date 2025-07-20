@@ -1,3 +1,4 @@
+# security_groups.tf
 resource "aws_security_group" "ec2_sg" {
   vpc_id = aws_vpc.lab_vpc.id
   name   = "ec2-security-group"
@@ -23,5 +24,3 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-
