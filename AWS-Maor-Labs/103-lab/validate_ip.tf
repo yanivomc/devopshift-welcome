@@ -9,7 +9,7 @@ resource "time_sleep" "wait_for_ip" {
 resource "null_resource" "validate_ip" {
  provisioner "local-exec" {
    command = <<EOT
-     retries=6
+     retries=4
      interval=30
      for i in $(seq 1 $retries); do
        if [ -z "${aws_instance.vm.public_ip}" ]; then
