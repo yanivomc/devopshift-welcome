@@ -20,7 +20,7 @@ services:
 
 
     jenkins-slave:
-        build: ./slave
+        build: ./jenkins/slave
         image: jenkins-jb/slave:2.0
         # Removed container name to support scale out option 
         #container_name: jenkins-slave 
