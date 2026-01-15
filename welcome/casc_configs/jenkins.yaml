@@ -34,4 +34,4 @@ jenkins:
                 - "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
               environmentsString: |
                 JENKINS_URL=http://jenkins:8080
-            pullStrategy: ALWAYS
+            # pullStrategy: ALWAYS
