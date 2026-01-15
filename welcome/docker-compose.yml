@@ -1,6 +1,6 @@
 services:
     jenkins:
-        build: ./master
+        build: ./jenkins/master
         image: jenkins-jb/master:1.0
         container_name: jenkins
         volumes:
@@ -14,7 +14,7 @@ services:
         networks: 
             - jb
     jenkins-slave:
-        build: ./slave
+        build: ./jenkins/slave
         image: jenkins-jb/slave:2.0
         # Removed container name to support scale out option 
         #container_name: jenkins-slave 
