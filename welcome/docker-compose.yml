@@ -1,27 +1,35 @@
 services:
     jenkins:
-        build: ./jenkins/master
+        build: ./master
         image: jenkins-jb/master:1.0
         container_name: jenkins
+        volumes:
+          - ./casc_configs/jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml
+          - ./volume/jenkinsmaster:/var/jenkins_home
+          - /var/run/docker.sock:/var/run/docker.sock
         ports:
             - '8080:8080'
+            - '8081:8080'
             - '50000:50000'
         networks: 
             - jb
     jenkins-slave:
-        build: ./jenkins/slave
-        image: jenkins-jb/slave:1.0
+        build: ./slave
+        image: jenkins-jb/slave:2.0
         # Removed container name to support scale out option 
         #container_name: jenkins-slave 
         restart: always
         environment:
             - 'JENKINS_URL=http://jenkins:8080'
+            - 'SLAVE_NAME=agent2'
+            - 'JENKINS_USER=admin'
+            - 'JENKINS_PASS=admin1234'
         ports:
             - "5005-5010:5005-5010"
 
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock  # Expose the docker daemon in the container
-            - ./volume:/home/jenkins # Avoid mysql volume mount issue
+            - ./volume:/home/jenkins
         networks: 
         - jb
         depends_on:
