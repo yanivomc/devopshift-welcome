@@ -17,5 +17,33 @@ services:
         networks: 
           - jb
 
+
+
+    jenkins-slave:
+        build: ./slave
+        image: jenkins-jb/slave:2.0
+        # Removed container name to support scale out option 
+        #container_name: jenkins-slave 
+        restart: always
+        environment:
+            - 'JENKINS_URL=http://jenkins:8080'
+            - 'SLAVE_NAME=agent2'
+            - 'JENKINS_USER=admin'
+            - 'JENKINS_PASS=admin1234'
+            - 'SLAVE_LABELS=docker'
+            - 'SLAVE_EXECUTORS=8'
+
+
+        # ports:
+        #     - "5005-5010:5005-5010"
+
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock  # Expose the docker daemon in the container
+            - ./volume:/home/jenkins/volume  # Persist data in the slave
+        networks: 
+        - jb
+        depends_on:
+            - jenkins
+
 networks: 
   jb:
