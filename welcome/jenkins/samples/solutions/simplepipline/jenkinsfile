@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'docker' }
 
     environment {
         PYENV_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard/.pyenv"

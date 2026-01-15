@@ -17,8 +17,7 @@ jenkins:
     - docker:
         name: "docker-cloud"
         dockerApi:
-          dockerHost:
-            uri: "unix:///var/run/docker.sock"
+          dockerHost: "unix:///var/run/docker.sock"
         templates:
           - name: "dynamic-agent"
             labelString: "docker docker-dynamic linux"
@@ -33,4 +32,4 @@ jenkins:
                 - "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
               environmentsString: |
                 JENKINS_URL=http://jenkins:8080
-            # pullStrategy: ALWAYS
+              pullStrategy: PULL_ALWAYS
