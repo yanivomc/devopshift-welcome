@@ -26,8 +26,7 @@ jenkins:
             remoteFs: "/home/jenkins"
             instanceCapStr: "10"
             connector:
-              attach:
-                user: "jenkins"
+              attach: {}
             dockerTemplateBase:
               image: "yanivomc/jenkins-jb-slave:2.0"
               mounts:
