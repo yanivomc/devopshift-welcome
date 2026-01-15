@@ -43,7 +43,7 @@ RUN /bin/jenkins-plugin-cli --plugin-download-directory /usr/share/jenkins/ref/p
  
 # Setting up environment variables for Jenkins admin user
 ENV JENKINS_USER admin
-ENV JENKINS_PASS admin
+ENV JENKINS_PASS admin1234
  
 # Skip the initial setup wizard
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false 
@@ -51,5 +51,6 @@ ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 # Start-up scripts to set number of executors and creating the admin user
 COPY executors.groovy /usr/share/jenkins/ref/init.groovy.d/
 COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
+COPY jenkinsScriptsAdd.groovy /usr/share/jenkins/ref/init.groovy.d/
  
 VOLUME /var/jenkins_home

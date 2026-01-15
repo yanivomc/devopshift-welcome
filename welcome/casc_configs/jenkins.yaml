@@ -1,0 +1,37 @@
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "${ADMIN_PASSWORD:-admin1234}"
+  authorizationStrategy:
+    globalMatrix:
+      entries:
+        - user:
+            name: "admin"
+            permissions:
+              - "Overall/Administer"
+              - "Overall/Read"
+  clouds:
+    - docker:
+        name: "docker-cloud"
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+        templates:
+          - name: "dynamic-agent"
+            labelString: "docker-dynamic linux"
+            mode: NORMAL
+            remoteFs: "/home/jenkins"
+            instanceCapStr: "10"
+            connector:
+              attach:
+                user: "jenkins"
+            dockerTemplateBase:
+              image: "yanivomc/jenkins-jb-slave:2.0"
+              mounts:
+                - "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
+              environmentsString: |
+                JENKINS_URL=http://jenkins:8080
+            pullStrategy: PULL_NEVER
