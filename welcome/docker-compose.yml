@@ -1,7 +1,7 @@
 services:
     jenkins:
         build: ./jenkins/master
-        image: jenkins-jb/master:1.0
+        image: yanivomc/jenkins-jb-master:1.0
         container_name: jenkins
         volumes:
           - ./casc_configs/jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml
@@ -15,7 +15,7 @@ services:
             - jb
     jenkins-slave:
         build: ./jenkins/slave
-        image: jenkins-jb/slave:2.0
+        image: yanivomc/jenkins-jb-slave:2.0
         # Removed container name to support scale out option 
         #container_name: jenkins-slave 
         restart: always
