@@ -1,0 +1,156 @@
+pipeline {
+    agent any
+
+    environment {
+        PYENV_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard/.pyenv"
+        PROJECT_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard"
+        FLASK_APP = 'run.py'
+        FLASK_ENV = 'development'
+    }
+
+    stages {
+
+        stage('Wait for User Approval') {
+            steps {
+                script {
+                    // Wait for user interaction and store the result
+                    def userInput = input message: 'Is the application running successfully?',
+                                         parameters: [choice(name: 'Proceed', choices: 'Proceed\nAbort', description: 'Choose an option')]
+                    // Set a variable based on user input
+                    env.USER_CHOICE = userInput
+                }
+            }
+        }
+
+        stage('Continue the pipeline') {
+            // Run this stage ONLY! if the user chooses 'Proceed'
+
+            when {
+                expression { env.USER_CHOICE == 'Proceed' }
+            }
+            steps {
+                script {
+                    echo 'Continuing the pipeline...'
+                }
+            }
+        }
+
+        stage('Abort the Pipeline') {
+            // Run this stage ONLY! if the user chooses 'Abort'
+            when {
+                expression { env.USER_CHOICE == 'Abort' }
+            }
+            steps {
+                script {
+                    error 'Pipeline aborted by the user'
+                }
+            }
+        }
+        
+        stage('Clone Flask Project') {
+            steps {
+                  script {
+                    // Wait for user interaction and store the result
+                    def userInput = input message: 'please enter your git repo to clone',
+                                         parameters: [string(defaultValue: 'None', description: 'my repo url from Git',name: 'Vitaly')]
+                    // Set a variable based on user input
+                    env.GIT_REPO_URL = userInput
+                }
+                // Use the Git plugin to clone the repository
+                git branch: 'jenkins-workshop', url: env.GIT_REPO_URL
+            }
+        }
+
+        stage('Setup Python Environment and Install Dependencies') {
+            steps {
+                dir("${PROJECT_HOME}") {
+                    script {
+                        // Install virtualenv if not available
+                        sh '''#!/bin/bash
+                        if ! command -v virtualenv &> /dev/null; then
+                            echo "Installing virtualenv..."
+                            pip install virtualenv
+                        fi
+
+                        # Delete previously built virtualenv and create a new one
+                        rm -rf $PYENV_HOME
+                        virtualenv $PYENV_HOME
+                        source $PYENV_HOME/bin/activate
+
+                        # Install required Python packages
+                        pip install -r requirements.txt
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Run Flask Application') {
+            steps {
+                dir("${PROJECT_HOME}") {
+                    script {
+                        // Run Flask app within the virtual environment
+                        sh '''#!/bin/bash
+                        source $PYENV_HOME/bin/activate
+                        tasks=$(pgrep -f "flask run")
+                        if [ -n "$tasks" ]; then
+                            echo "Stopping existing Flask application..."
+                            for pid in $tasks; do
+                                kill -9 $pid
+                                echo "Killed process $pid"
+                            done
+                        fi
+
+                        echo "Starting Flask application on 0.0.0.0:5005..."
+                        nohup flask run --host=0.0.0.0 --port=5005 > flask_app.log 2>&1 &
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Verify Application') {
+            steps {
+                dir("${PROJECT_HOME}") {
+                    script {
+                        // Sleep to allow Flask to start
+                        sleep 5
+
+                        // Verify Flask application is running
+                        def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
+                        if (!tasks) {
+                            // Print error message and show the flask_app.log file content
+                            echo "There is a problem with our flask application - printing log below"
+                            sh 'cat flask_app.log'
+                            error "Flask application is not running!"
+                        } else {
+                            echo "Flask application is running successfully."
+                        }
+                    }
+                }
+            }
+        }
+
+        // Run this stage regardless of the user choice but we will check the user choice in the stage and print a message
+        stage('Finalize the Pipeline') {
+            steps {
+                script {
+                    if (env.USER_CHOICE == 'Proceed') {
+                        echo 'Pipeline completed successfully'
+                    } else {
+                        echo 'Pipeline aborted by the user'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            dir("${PROJECT_HOME}") {
+                echo 'Cleaning up workspace...'
+                sh 'rm -rf $PYENV_HOME'
+            }
+        }
+    }
+}
