@@ -61,13 +61,3 @@ To prevent cost overruns or complex infrastructure issues, the following service
 *   Elasticache, OpenSearch, Redshift.
 
 ---
-
-## 🛠️ For Administrators
-If policies are updated, run the bootstrap script to sync the environment:
-```bash
-# Sync specific account
-python3 scripts/bootstrap_account.py <ACCOUNT_ID>
-
-# Sync an entire Organizational Unit (OU)
-python3 scripts/bootstrap_account.py <OU_ID>
-```
