@@ -15,7 +15,7 @@ Students can manage EMR clusters for big data processing.
 ### ⚠️ Strict Cluster Limits
 To prevent high costs, the following limits are enforced by policy:
 *   **Max Instances:** A cluster cannot exceed **3 nodes** (1 Master + 2 Workers).
-*   **Small Instances Only:** Only small instance types (`t2.micro`, `t3.medium`, etc.) are allowed for the cluster nodes.
+*   **Small Instances Only:** Only the **C-family (large)** instance types (e.g., `c4.large`, `c5.large`) are allowed for the cluster nodes. T-series instances are not supported by EMR.
 *   **Automatic Failure:** Any attempt to create a cluster with more than 3 nodes or larger instance types will result in an "Access Denied" error.
 
 ---
