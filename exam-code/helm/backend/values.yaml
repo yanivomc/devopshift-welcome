@@ -1,0 +1,24 @@
+# Number of backend replicas.
+replicaCount: 2
+
+image:
+  repository: be
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5001
+
+containerPort: 5001
+
+# Database connection info and credentials for the backend secret.
+mysql:
+  host: mysqldb
+  user: "CHANGE_ME"
+  password: "CHANGE_ME"
+  database: "CHANGE_ME"
+
+# Name of the secret created for backend DB credentials.
+secret:
+  name: backend-secrets

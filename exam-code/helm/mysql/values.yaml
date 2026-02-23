@@ -1,0 +1,24 @@
+# Number of mysql replicas.
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: "5.7"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3306
+
+containerPort: 3306
+
+# Database credentials for the mysql secret.
+auth:
+  rootPassword: "CHANGE_ME"
+  database: "CHANGE_ME"
+  user: "CHANGE_ME"
+  password: "CHANGE_ME"
+
+# Name of the secret created for mysql credentials.
+secret:
+  name: mysql-secrets
