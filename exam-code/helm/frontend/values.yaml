@@ -1,0 +1,12 @@
+replicaCount: 2
+
+image:
+  repository: fe
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 5002
+
+containerPort: 5002
