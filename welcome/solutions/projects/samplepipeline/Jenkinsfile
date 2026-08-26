@@ -2,76 +2,37 @@ pipeline {
     agent any
 
     environment {
-        PYENV_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard/.pyenv"
         PROJECT_HOME = "${WORKSPACE}/welcome/app/flask-volt-dashboard"
-        FLASK_APP = 'run.py'
-        FLASK_ENV = 'development'
     }
 
     stages {
-        stage('Clone Flask Project') {
+        stage('Clone Project') {
             steps {
                 git branch: 'jenkins-workshop', url: 'https://github.com/yanivomc/devopshift-welcome.git'
             }
         }
 
-        stage('Setup Python Environment and Install Dependencies') {
+        stage('Build and Deploy Container') {
             steps {
                 dir("${PROJECT_HOME}") {
-                    script {
-                        sh '''#!/bin/bash
-                        if ! command -v virtualenv &> /dev/null; then
-                            echo "Installing virtualenv..."
-                            pip install virtualenv
-                        fi
-
-                        rm -rf $PYENV_HOME
-                        virtualenv $PYENV_HOME
-                        source $PYENV_HOME/bin/activate
-
-                        pip install -r requirements.txt
-                        '''
-                    }
-                }
-            }
-        }
-
-        stage('Run Flask Application') {
-            steps {
-                dir("${PROJECT_HOME}") {
-                    script {
-                        sh '''#!/bin/bash
-                        source $PYENV_HOME/bin/activate
-                        tasks=$(pgrep -f "flask run")
-                        if [ -n "$tasks" ]; then
-                            echo "Stopping existing Flask application..."
-                            for pid in $tasks; do
-                                kill -9 $pid
-                                echo "Killed process $pid"
-                            done
-                        fi
-
-                        echo "Starting Flask application on 0.0.0.0:5005..."
-                        nohup flask run --host=0.0.0.0 --port=5005 > flask_app.log 2>&1 &
-                        '''
-                    }
+                    sh 'docker compose down'
+                    sh 'docker compose up -d --build'
                 }
             }
         }
 
         stage('Verify Application') {
             steps {
-                dir("${PROJECT_HOME}") {
-                    script {
-                        sleep 5
-                        def tasks = sh(script: "pgrep -f 'flask run'", returnStatus: true) ? '' : sh(script: "pgrep -f 'flask run'", returnStdout: true).trim()
-                        if (!tasks) {
-                            echo "There is a problem with our flask application - printing log below"
-                            sh 'cat flask_app.log'
-                            error "Flask application is not running!"
-                        } else {
-                            echo "Flask application is running successfully."
+                script {
+                    sleep 5
+                    def statusCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:5005", returnStdout: true).trim()
+                    if (statusCode != "200") {
+                        dir("${PROJECT_HOME}") {
+                            sh 'docker compose logs'
                         }
+                        error "Flask application container failed to respond (HTTP status: ${statusCode})"
+                    } else {
+                        echo "Flask application container is up and running successfully!"
                     }
                 }
             }
@@ -80,38 +41,23 @@ pipeline {
         stage('Wait for User Approval') {
             steps {
                 script {
-                    def userInput = input message: 'Is the application running successfully?',
+                    def userInput = input message: 'Is the containerized application running successfully?',
                                           parameters: [choice(name: 'Continue', choices: 'Continue\nCancel', description: 'Choose an option')]
                     env.USER_CHOICE = userInput
                 }
             }
         }
 
-        stage('Continue the pipeline') {
-            when {
-                expression { env.USER_CHOICE == 'Continue' }
-            }
-            steps {
-                echo 'Continuing the pipeline...'
-            }
-        }
-
-        stage('Cancel the Pipeline') {
-            when {
-                expression { env.USER_CHOICE == 'Cancel' }
-            }
-            steps {
-                error 'Pipeline Cancelled by the user'
-            }
-        }
-
-        stage('Finalize the Pipeline') {
+        stage('Finalize') {
             steps {
                 script {
                     if (env.USER_CHOICE == 'Continue') {
-                        echo 'Pipeline completed successfully'
+                        echo 'Pipeline completed successfully.'
                     } else {
-                        echo 'Pipeline Cancelled by the user'
+                        dir("${PROJECT_HOME}") {
+                            sh 'docker compose down'
+                        }
+                        error 'Pipeline cancelled by user.'
                     }
                 }
             }
@@ -119,10 +65,9 @@ pipeline {
     }
 
     post {
-        always {
+        failure {
             dir("${PROJECT_HOME}") {
-                echo 'Cleaning up workspace...'
-                sh 'rm -rf $PYENV_HOME'
+                sh 'docker compose down'
             }
         }
     }
