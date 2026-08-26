@@ -65,14 +65,14 @@ pipeline {
     }
 
     post {
+        always {
+            archiveArtifacts artifacts: '**/container_output.log', allowEmptyArchive: true
+        }
         failure {
             dir("${PROJECT_HOME}") {
                 sh 'docker compose down'
-        	    }
-		}
-	always {
-            archiveArtifacts artifacts: 'welcome/app/flask-volt-dashboard/container_output.log', allowEmptyArchive: true
+       		     }
        		 }
-        }
+   	 }	
     }
 }
